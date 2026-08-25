@@ -1,18 +1,25 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 88 updates the responsive panel width model.
+Version 89 compensates panel spacing for CSS perspective.
 
-Width behavior:
-- at viewport widths <= 760 px, panel/control width = 80vw
-- at viewport widths >= 1920 px, panel/control width = 75vw
-- between 760 px and 1920 px, the vw percentage is linearly interpolated
-- max-width remains 1440 px
-- box-sizing remains border-box, so the 1440 px cap includes padding and border
-- orbit geometry still measures the actual rendered card width
+Problem:
+- a fixed world-space or x-offset gap does not stay visually constant
+- as a card rotates, its projected width changes because of both rotateY
+  foreshortening and CSS perspective magnification
+- this made the visible edge gap expand/contract during transitions
 
-Interpolation:
-- t = (viewportWidth - 760) / (1920 - 760)
-- widthRatio = 80 + (75 - 80) * t   for 760 < viewportWidth < 1920
+Fix:
+- each frame estimates every visible card's projected width:
+  projectedWidth ≈ panelWidth * |cos(theta)| * P/(P-z)
+- cards are then laid out cumulatively in screen space with a fixed visible gap
+- desired screen-space centers are converted back to world-space x positions
+  before applying the existing CSS 3D transform
 
-All prism geometry, particle behavior, scrolling fixes, snapping, timing, and
-stable visible card-gap behavior remain unchanged.
+Gap targets:
+- desktop/tablet: 32 px
+- mobile: 18 px
+
+Responsive panel width from v88 is retained:
+- 80vw at <=760px
+- linearly interpolated to 75vw at 1920px
+- max-width 1440px

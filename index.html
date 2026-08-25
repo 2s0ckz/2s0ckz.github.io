@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v88-interpolated-panel-width" />
+  <meta name="site-build" content="v89-perspective-compensated-gap" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -381,56 +381,124 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       let nearest = { distance: Infinity, index: 0 };
 
-      cards.forEach((card, index) => {
-        // Every device uses the same regular-polygon angular geometry.
-        // For six faces, neighboring face normals differ by 60°, which means
-        // the visible interior angle where the faces meet is 120°.
+      // Build per-card geometry first so we can compensate for perspective
+      // when assigning horizontal positions.
+      const states = cards.map((card, index) => {
         const rawTheta = (index - phase) * step;
         const theta = wrappedAngle(rawTheta);
         const isMobile = window.innerWidth <= 760;
 
-        // TRUE VIEWER-CENTERED REGULAR-POLYGON CYLINDER:
-        // The CSS perspective distance is matched to the cylinder radius.
-        // That puts the virtual camera at the cylinder center rather than
-        // somewhere outside it — especially important on mobile.
-        let x = radius * Math.sin(theta);
-
-        // Use the true regular-prism depth with no visual compression.
+        // True regular-prism depth and exact face orientation.
         const z = radius * (1 - Math.cos(theta));
-
-        // Keep a roughly constant visible gap in screen space instead of
-        // increasing polygon radius. This avoids perspective making the gap
-        // look larger and larger during a transition.
-        const visualGap = window.innerWidth <= 760 ? 18 : 32;
-        if (theta > 1e-6) x += visualGap * 0.5;
-        if (theta < -1e-6) x -= visualGap * 0.5;
-
-        if (Math.abs(theta) < 1e-6) x = 0;
-
-        // Exact face orientation is retained, so the six-panel interior angle
-        // remains mathematically 120 degrees.
         const rotateY = -theta * 180 / Math.PI;
-        const scale = 1;
 
-        // On mobile, panels beyond the +/-90-degree camera horizon would pass
-        // behind the CSS camera plane and visually flip. Hide them instead.
         const behindCamera =
           Math.abs(theta) >= (Math.PI * 0.49);
 
-        // Only fade very peripheral/back-facing panels a little.
+        // Approximate projected card width under CSS perspective.
+        // P/(P-z) is the perspective magnification and cos(theta) is the
+        // horizontal foreshortening of the rotated face.
+        const perspectiveDistance = radius;
+        const denom = Math.max(1, perspectiveDistance - z);
+        const magnification = perspectiveDistance / denom;
+        const projectedWidth =
+          panelWidth * Math.max(0.08, Math.abs(Math.cos(theta))) * magnification;
+
+        return {
+          card,
+          index,
+          theta,
+          z,
+          rotateY,
+          behindCamera,
+          projectedWidth,
+          delta: index - phase
+        };
+      });
+
+      // Wrap each delta into the nearest logical neighborhood around phase.
+      states.forEach(state => {
+        let d = state.delta;
+        while (d > count / 2) d -= count;
+        while (d < -count / 2) d += count;
+        state.delta = d;
+      });
+
+      // Sort left-to-right by logical delta, then assign desired SCREEN-SPACE
+      // centers cumulatively so adjacent visible edges have a constant gap.
+      const gapPx = window.innerWidth <= 760 ? 18 : 32;
+      const visibleStates = states
+        .filter(s => !s.behindCamera)
+        .sort((a, b) => a.delta - b.delta);
+
+      // Find the state nearest the center and anchor it at screen x = 0.
+      let centerPos = 0;
+      let bestAbs = Infinity;
+      visibleStates.forEach((s, i) => {
+        const a = Math.abs(s.delta);
+        if (a < bestAbs) {
+          bestAbs = a;
+          centerPos = i;
+        }
+      });
+
+      if (visibleStates.length) {
+        visibleStates[centerPos].screenX = 0;
+
+        // Place panels to the right.
+        for (let i = centerPos + 1; i < visibleStates.length; i++) {
+          const prevState = visibleStates[i - 1];
+          const state = visibleStates[i];
+          state.screenX =
+            prevState.screenX +
+            prevState.projectedWidth * 0.5 +
+            gapPx +
+            state.projectedWidth * 0.5;
+        }
+
+        // Place panels to the left.
+        for (let i = centerPos - 1; i >= 0; i--) {
+          const nextState = visibleStates[i + 1];
+          const state = visibleStates[i];
+          state.screenX =
+            nextState.screenX -
+            nextState.projectedWidth * 0.5 -
+            gapPx -
+            state.projectedWidth * 0.5;
+        }
+      }
+
+      let nearest = { distance: Infinity, index: 0 };
+
+      states.forEach(state => {
+        const {
+          card, index, theta, z, rotateY, behindCamera
+        } = state;
+
+        // Convert desired projected screen x back into world-space x so CSS
+        // perspective lands the card center at that screen position.
+        const perspectiveDistance = radius;
+        const denom = Math.max(1, perspectiveDistance - z);
+        const x =
+          behindCamera
+            ? 0
+            : (state.screenX || 0) * denom / perspectiveDistance;
+
         const peripheral = Math.min(1, Math.abs(theta) / Math.PI);
         const opacity = behindCamera
           ? 0
           : 1 - peripheral * 0.22;
 
         card.style.transform =
-          `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
+          `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(1)`;
         card.style.opacity = opacity.toFixed(3);
         card.style.pointerEvents = behindCamera ? 'none' : 'auto';
         card.style.zIndex = String(1000 - Math.round(Math.abs(theta) * 100));
 
         const centerDistance = Math.abs(theta);
-        if (centerDistance < nearest.distance) nearest = { distance: centerDistance, index };
+        if (centerDistance < nearest.distance) {
+          nearest = { distance: centerDistance, index };
+        }
       });
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -675,7 +743,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v88 orbit</div>
-  <script src="particles.js?v=88"></script>
+  <div class="build-marker" aria-hidden="true">v89 orbit</div>
+  <script src="particles.js?v=89"></script>
 </body>
 </html>
