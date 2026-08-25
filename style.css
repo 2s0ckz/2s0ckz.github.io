@@ -60,7 +60,7 @@ a:focus-visible {
 
 /* Background CT reconstruction arcs.
    This layer is fixed, full-viewport, and contributes zero document height.
-   JS constrains every ring + echo entirely to the side gutters. */
+   JS distributes rings across the full viewport while preventing overlap. */
 .ct-arc-field {
   position: fixed;
   inset: 0;
@@ -93,7 +93,7 @@ a:focus-visible {
   background: transparent;
 }
 
-/* The personal page remains a 1440px centered column. */
+/* The personal page remains a 1440px centered column above the background geometry. */
 .page-shell {
   position: relative;
   z-index: 2;

@@ -1,13 +1,14 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 16 is a clean rebuild of the arc layer and stylesheet.
+Version 17 expands the background CT geometry.
 
-- all arc elements removed from the content panel
-- exactly one background arc field
-- maximum four arcs; JavaScript only shows as many as the content height requires
-- arcs and their outer echoes are constrained entirely to the side gutters
-- background arc opacity reduced by ~33%
-- arc parallax remains 50% of page scroll speed
-- fixed decorative layers contribute zero page height
-- page shell has no bottom padding, so the document ends with the content panel
-- particle canvas remains transparent and in front of the arcs
+- up to eight available arc motifs
+- JavaScript shows only as many as the actual content-derived virtual height needs
+- varying sizes and varied horizontal positions across the full viewport
+- arcs are no longer restricted to the page edges
+- collision detection includes the outer echo rings, preventing overlap
+- arcs that would extend beyond the content-derived virtual range are omitted
+- opacity remains at the reduced v16 level
+- parallax remains exactly 50% of page scroll speed
+- decorative layers remain fixed and add zero document height
+- no arc elements exist inside the content panel

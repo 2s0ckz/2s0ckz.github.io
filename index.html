@@ -3,14 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v16-clean-gutter-arcs" />
+  <meta name="site-build" content="v17-varied-arcs" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=16" />
+  <link rel="stylesheet" href="style.css?v=17" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
     <div class="ct-recon-arc arc-1"></div>
+    <div class="ct-recon-arc arc-2"></div>
+    <div class="ct-recon-arc arc-3"></div>
+    <div class="ct-recon-arc arc-4"></div>
+    <div class="ct-recon-arc arc-5"></div>
+    <div class="ct-recon-arc arc-6"></div>
+    <div class="ct-recon-arc arc-7"></div>
+    <div class="ct-recon-arc arc-8"></div>
+  </div>
     <div class="ct-recon-arc arc-2"></div>
     <div class="ct-recon-arc arc-3"></div>
     <div class="ct-recon-arc arc-4"></div>
@@ -136,7 +144,6 @@
 </footer>
 </section>
   </main>
-
   <script>
   (() => {
     const field = document.querySelector('.ct-arc-field');
@@ -146,67 +153,103 @@
     const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
     let ticking = false;
 
+    // A deterministic sequence gives variety without changing on every resize.
+    const xFractions = [0.08, 0.78, 0.28, 0.91, 0.56, 0.14, 0.70, 0.40];
+    const baseSizes = [250, 390, 215, 320, 275, 430, 235, 345];
+
     function layoutArcs() {
+      const viewportW = window.innerWidth;
       const viewportH = window.innerHeight;
       const scrollY = window.scrollY || window.pageYOffset || 0;
+
       const panelRect = panel.getBoundingClientRect();
       const panelTopDoc = panelRect.top + scrollY;
       const panelBottomDoc = panelTopDoc + panel.offsetHeight;
       const maxScroll = Math.max(0, panelBottomDoc - viewportH);
 
-      // A fixed field translated at half speed only needs this much
-      // virtual vertical coverage to span the real page.
+      // Since the field moves at half scroll speed, this is the full vertical
+      // background range that can ever become visible.
       const virtualHeight = viewportH + maxScroll * 0.5;
 
-      // Only use as many arcs as the actual content length warrants.
-      const count = Math.max(2, Math.min(arcs.length, Math.ceil(virtualHeight / 1050)));
+      // More arcs than v16, but still tied strictly to actual content length.
+      const desiredCount = Math.max(
+        3,
+        Math.min(arcs.length, Math.ceil(virtualHeight / 620))
+      );
 
-      // Real side-gutter width between viewport edge and the 1440px panel.
-      const gutter = panelRect.left;
+      // Hide everything first.
+      arcs.forEach(arc => {
+        arc.style.display = 'none';
+      });
 
-      // If there isn't enough gutter, hide the arcs rather than allowing
-      // them to appear inside/behind the content box.
-      if (gutter < 100) {
-        arcs.forEach(arc => arc.style.display = 'none');
-        return;
-      }
+      const placed = [];
+      const echoPadding = 100;
+      const edgePadding = 18;
 
-      const baseSizes = [300, 410, 245, 340];
+      // Candidate Y slots are evenly distributed through only the visible
+      // virtual range. No decorative element participates in document flow.
+      const usableTop = 100;
+      const usableBottom = Math.max(usableTop, virtualHeight - 120);
 
-      arcs.forEach((arc, i) => {
-        if (i >= count) {
-          arc.style.display = 'none';
-          return;
+      for (let i = 0; i < desiredCount; i++) {
+        const arc = arcs[i];
+        let size = baseSizes[i % baseSizes.length];
+
+        // Scale down gracefully on narrower windows.
+        size = Math.min(size, Math.max(150, viewportW * 0.28));
+
+        const outerRadius = size / 2 + echoPadding;
+        let centerX = viewportW * xFractions[i % xFractions.length];
+        let centerY =
+          desiredCount === 1
+            ? virtualHeight * 0.5
+            : usableTop + (usableBottom - usableTop) * (i / (desiredCount - 1));
+
+        // Keep the complete echo system inside the browser horizontally.
+        centerX = Math.max(
+          outerRadius + edgePadding,
+          Math.min(viewportW - outerRadius - edgePadding, centerX)
+        );
+
+        // Resolve collisions. We primarily shift vertically so the intentional
+        // x-position variety is preserved.
+        for (let attempt = 0; attempt < 14; attempt++) {
+          let collision = false;
+
+          for (const other of placed) {
+            const dx = centerX - other.x;
+            const dy = centerY - other.y;
+            const minDist = outerRadius + other.r + 34;
+
+            if ((dx * dx + dy * dy) < minDist * minDist) {
+              collision = true;
+              centerY += Math.max(90, minDist - Math.abs(dy) + 24);
+              break;
+            }
+          }
+
+          if (!collision) break;
+        }
+
+        // If collision resolution pushes this arc beyond the content-derived
+        // virtual range, do not show it. This prevents decorative overflow.
+        if (centerY + outerRadius > virtualHeight + 20) {
+          continue;
         }
 
         arc.style.display = 'block';
-
-        // Keep the full outer echo rings inside the gutter.
-        // Outer box-shadow extends ~92px beyond the base circle.
-        const maxBaseSize = Math.max(120, gutter - 110);
-        const size = Math.min(baseSizes[i], maxBaseSize);
-
         arc.style.width = `${size}px`;
         arc.style.height = `${size}px`;
+        arc.style.left = `${centerX - size / 2}px`;
+        arc.style.right = 'auto';
+        arc.style.top = `${centerY - size / 2}px`;
 
-        const t = count === 1 ? 0.5 : i / (count - 1);
-        const top = 100 + t * Math.max(0, virtualHeight - 220);
-        arc.style.top = `${top}px`;
-
-        // Keep even the outermost echo ring outside the panel edge.
-        const outerRadius = 92;
-        const margin = 18;
-
-        if (i % 2 === 0) {
-          const rightEdge = gutter - outerRadius - margin;
-          arc.style.left = `${rightEdge - size}px`;
-          arc.style.right = 'auto';
-        } else {
-          const leftEdgeFromRight = gutter - outerRadius - margin;
-          arc.style.right = `${leftEdgeFromRight - size}px`;
-          arc.style.left = 'auto';
-        }
-      });
+        placed.push({
+          x: centerX,
+          y: centerY,
+          r: outerRadius
+        });
+      }
     }
 
     function applyParallax() {
@@ -232,6 +275,6 @@
   })();
   </script>
 
-  <script src="particles.js?v=16"></script>
+  <script src="particles.js?v=17"></script>
 </body>
 </html>
