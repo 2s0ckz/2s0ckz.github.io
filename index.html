@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v100-v97-arrows-text-selection" />
+  <meta name="site-build" content="v102-side-orbit-arrows" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -101,28 +101,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .item p + p { margin-top:8px; }
 .date { margin-bottom:9px!important; color:var(--muted); font-size:.74rem!important; letter-spacing:.1em; text-transform:uppercase; }
 .muted { color:var(--muted); }
-.orbit-controls {
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:var(--panel-width-vw);
-  max-width:1440px;
-  margin:0 auto 2px;
-  z-index:30;
-  pointer-events:none;
-}
-.orbit-controls button { pointer-events:auto; width:46px; height:38px; border:1px solid var(--line); border-radius:8px; background:rgba(12,15,26,.76);
-  color:var(--text); font:inherit; cursor:pointer; }
 .orbit-controls button:hover,.orbit-controls button:focus-visible { color:var(--accent); border-color:rgba(232,191,40,.4); outline:none; }
 .orbit-controls span { color:rgba(169,200,200,.58); text-align:center; font-size:.69rem; letter-spacing:.18em; text-transform:uppercase; }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
-  .orbit-controls {
-    width:var(--panel-width-vw);
-    max-width:1440px;
-  }
   .orbit-card::after {
     content:"";
     display:block;
@@ -163,8 +146,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .orbit-heading p { font-size:.6rem; letter-spacing:.09em; }
   
   
-  .orbit-controls { padding-bottom:0; }
-}
+  }
 @media (prefers-reduced-motion:reduce) { .orbit-card,a { transition:none; } }
 
 #particleCanvas {
@@ -202,6 +184,68 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   cursor:pointer;
 }
 
+
+.orbit-side-arrow {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:30px;
+  height:64%;
+  min-height:180px;
+  max-height:520px;
+  padding:0;
+  margin:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:rgba(169,200,200,.78);
+  font:300 28px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:40;
+  cursor:pointer;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+}
+
+.orbit-side-arrow-left {
+  left:4px;
+}
+
+.orbit-side-arrow-right {
+  right:4px;
+}
+
+.orbit-side-arrow:hover,
+.orbit-side-arrow:focus-visible {
+  color:#E8BF28;
+  background:rgba(255,255,255,.025);
+}
+
+.orbit-side-arrow:active {
+  transform:translateY(-50%) scale(.96);
+}
+
+@media (max-width:760px) {
+  .orbit-side-arrow {
+    width:24px;
+    height:58%;
+    min-height:150px;
+    max-height:420px;
+    font-size:24px;
+  }
+
+  .orbit-side-arrow-left {
+    left:1px;
+  }
+
+  .orbit-side-arrow-right {
+    right:1px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -230,13 +274,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     <div class="orbit-heading">
       
     </div>
+<div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
+      <button class="orbit-side-arrow orbit-side-arrow-left" type="button" aria-label="Previous panel">&lt;</button>
+      <button class="orbit-side-arrow orbit-side-arrow-right" type="button" aria-label="Next panel">&gt;</button>
 
-    <div class="orbit-controls" aria-label="Orbit controls">
-      <button type="button" id="orbitPrev" aria-label="Previous panel">←</button>
-      <span id="orbitStatus" aria-live="polite">About</span>
-      <button type="button" id="orbitNext" aria-label="Next panel">→</button>
-    </div>
-      <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
       <div class="orbit-track" id="orbitTrack">
         <div class="orbit-set" id="orbitSet">
           <article class="orbit-card card-intro" id="about">
@@ -588,27 +629,63 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       const el = event.target instanceof Element ? event.target : null;
       if (!el) return false;
 
-      // Never turn text/links/form controls into orbit drag handles.
+      // Links and controls should always keep their native interaction.
       if (el.closest('a, button, input, textarea, select, option, label, code, pre')) {
         return true;
       }
 
-      // For ordinary text elements, treat the pointer as selection-first when
-      // it is directly over rendered text rather than empty padding/background.
-      const range =
-        document.caretRangeFromPoint?.(event.clientX, event.clientY) ||
-        document.caretPositionFromPoint?.(event.clientX, event.clientY);
-
+      // Only disable orbit dragging when the pointer is actually on top of a
+      // rendered text glyph. Do not treat the padding/background of a text
+      // container as selectable-text territory.
       let node = null;
-      if (range) {
-        node = range.startContainer || range.offsetNode || null;
+      let offset = 0;
+
+      if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(event.clientX, event.clientY);
+        if (pos) {
+          node = pos.offsetNode;
+          offset = pos.offset;
+        }
+      } else if (document.caretRangeFromPoint) {
+        const caret = document.caretRangeFromPoint(event.clientX, event.clientY);
+        if (caret) {
+          node = caret.startContainer;
+          offset = caret.startOffset;
+        }
       }
 
-      if (node && node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
-        return true;
+      if (!node || node.nodeType !== Node.TEXT_NODE || !node.textContent?.trim()) {
+        return false;
       }
 
-      return !!el.closest('p, h1, h2, h3, h4, h5, h6, li, dt, dd, span, strong, em, time');
+      const text = node.textContent;
+      const safeOffset = Math.max(0, Math.min(offset, Math.max(0, text.length - 1)));
+      const range = document.createRange();
+
+      // Measure the character immediately at/next to the caret position.
+      range.setStart(node, safeOffset);
+      range.setEnd(node, Math.min(text.length, safeOffset + 1));
+
+      let rect = range.getBoundingClientRect();
+
+      // At an end-of-node caret, try the preceding character.
+      if ((!rect.width || !rect.height) && safeOffset > 0) {
+        range.setStart(node, safeOffset - 1);
+        range.setEnd(node, safeOffset);
+        rect = range.getBoundingClientRect();
+      }
+
+      // Small tolerance accounts for antialiasing/caret placement, without
+      // turning the surrounding element padding into a no-drag zone.
+      const tolerance = 3;
+      return (
+        rect.width > 0 &&
+        rect.height > 0 &&
+        event.clientX >= rect.left - tolerance &&
+        event.clientX <= rect.right + tolerance &&
+        event.clientY >= rect.top - tolerance &&
+        event.clientY <= rect.bottom + tolerance
+      );
     }
 
     viewport.addEventListener('pointerdown', event => {
@@ -755,7 +832,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v100 orbit</div>
-  <script src="particles.js?v=100"></script>
+  <div class="build-marker" aria-hidden="true">v102 orbit</div>
+  <script src="particles.js?v=102"></script>
 </body>
 </html>

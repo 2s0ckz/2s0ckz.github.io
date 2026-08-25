@@ -1,14 +1,14 @@
-Jordan Houri personal site — v100
+Jordan Houri personal site — v102
 
-CHANGES:
-- arrow styling/spacing restored from v97
-- text remains selectable normally
-- drag disabled when pointer is directly over text/content
-- drag selection suppression only during actual movement
+SIDE ARROWS:
+- top orbit controls removed
+- center control text removed
+- borderless tall narrow left/right arrows
+- arrows live inside orbit viewport margins
 
 SHA-256:
-e47629f35afe30b6e853b95233b3b51e10cde9f09d2f5009f469fc5bee6695db  index.html
+edab06c259829b3836d5fbc6053b3d59a5ec9e7131b44123b9b90c9ca5e3f307  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-7e68895e579b78737a0ba05a10aa4cbaab11a73af10addcdc6143bc64a5e83da  README.md
+dcae431cdca8f87829d41e888e14f25222954a5c84f05d028af46a66ba5eae5b  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

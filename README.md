@@ -1,14 +1,15 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 100:
-- restores arrow styling and spacing from v97
-- removes the v99 global/body text-selection suppression
-- orbit dragging will not start when the pointer is directly over text, links,
-  controls, or other selectable content
-- text inside panels can be highlighted normally
-- orbit dragging still works from empty panel padding/background areas
-- once a real orbit drag has started, pointer movement suppresses selection only
-  for that active drag
+Version 102 replaces the old top orbit controls with minimalist side arrows.
 
-All orbit geometry, particle behavior, responsive sizing, and mobile scrolling
-changes from the current branch are retained.
+Changes:
+- removed the entire top arrow/control row
+- removed the centered panel/status text between those arrows
+- added a tall, narrow `<` control on the left edge of the orbit viewport
+- added a tall, narrow `>` control on the right edge
+- controls are borderless and transparent
+- hover/focus keeps the existing yellow accent
+- controls are positioned inside the viewport and do not change panel geometry
+
+All orbit geometry, responsive sizing, text-selection behavior, mobile scrolling,
+particle behavior, blur, and panel styling remain unchanged.
