@@ -1,16 +1,17 @@
-Jordan Houri personal site — v78
+Jordan Houri personal site — v80
 
-MOBILE CAMERA CENTER FIX:
-- mobile perspective = cylinder radius
-- full exact inside-cylinder x/z geometry restored
-- inward-facing rotateY retained
-- panels beyond mobile camera horizon hidden
-- particle focal distance = shared cylinder radius
-- desktop remains at 1400px perspective
+REGULAR POLYGON CYLINDER:
+- interior angle = π - 2π/N
+- N=6 => 120° interior angle
+- apothem = panelWidth / (2 tan(π/N))
+- same geometry on desktop and mobile
+- perspective = apothem on all devices
+- mobile 45° compression removed
+- particle camera uses same geometry
 
 SHA-256:
-024a337ee2b5a470424581fb1b1974b514e8e347d7491c5b8eff99852da81748  index.html
+57ea9d28f6426ef5bdde70eef7c65babbe6c60e8b68db1fe60f54a3abdb54b5e  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-b86145615b837b13a2fd0d9b608f2201f5eb21be8fcf502b76a861aa92494712  particles.js
-c51d2492a4eed6f2a0df1f4d490850e3a701fda775d58aa06465d57b861fb032  README.md
+a60998b38c11853bd4ee01c73269af872edc238e655986680533850924a41c64  particles.js
+abd1adc86e9f3e907364a37efe8c57480c30767d770b1e645d46da28ec23b0a3  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

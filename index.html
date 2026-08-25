@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v78-mobile-camera-at-cylinder-center" />
+  <meta name="site-build" content="v80-regular-polygon-cylinder" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -285,15 +285,32 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     function geometry() {
       const panelWidth = Math.min(1440, Math.max(320, viewport.clientWidth - 48));
 
-      // A genuinely closed cylinder: N equal panels fill exactly 360 degrees.
+      // Regular N-sided prism geometry.
+      //
+      // Exterior turn between neighboring face normals:
+      //   step = 2π / N
+      //
+      // Interior angle between neighboring faces:
+      //   interior = π - step
+      //
+      // For N=6:
+      //   step = 60°
+      //   interior = 120°
       const step = (Math.PI * 2) / count;
+      const interiorAngle = Math.PI - step;
 
-      // Solve the radius from the chord between adjacent panel centers.
-      // Slight negative gap intentionally lets projected panel edges nearly touch.
-      const desiredCenterChord = Math.max(280, panelWidth - 36);
-      const radius = desiredCenterChord / (2 * Math.sin(step / 2));
+      // Treat each content panel as one side of the regular polygon.
+      // The center of each face sits one apothem from the viewer.
+      //
+      // sideLength = 2 * apothem * tan(π/N)
+      // apothem = sideLength / (2 * tan(π/N))
+      //
+      // A tiny overlap keeps antialiasing from exposing seams between faces.
+      const effectiveSideLength = Math.max(280, panelWidth - 2);
+      const radius =
+        effectiveSideLength / (2 * Math.tan(Math.PI / count));
 
-      return { panelWidth, radius, step };
+      return { panelWidth, radius, step, interiorAngle };
     }
 
     function render() {
@@ -305,32 +322,30 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       window.__orbitPhase = phase;
       window.__orbitStep = step;
       window.__orbitRadius = radius;
+      window.__orbitInteriorAngle = Math.PI - step;
       window.__orbitMobile = window.innerWidth <= 760;
 
       // CSS perspective is the camera-to-front-plane distance. For a viewer
       // standing at the center of this cylinder, that distance must equal R.
       // Desktop's existing 1400px setup already closely matches its radius;
       // mobile now uses the exact computed radius instead of an arbitrary 2200px.
-      if (window.__orbitMobile) {
-        viewport.style.perspective = `${radius}px`;
-      } else {
-        viewport.style.perspective = '1400px';
-      }
+      // Put the virtual camera at the center of the regular prism on every device.
+      viewport.style.perspective = `${radius}px`;
 
       let nearest = { distance: Infinity, index: 0 };
 
       cards.forEach((card, index) => {
-        // Continuous closed-ring angle. Crossing index 0 is no different from
-        // crossing any other point on the cylinder.
+        // Every device uses the same regular-polygon angular geometry.
+        // For six faces, neighboring face normals differ by 60°, which means
+        // the visible interior angle where the faces meet is 120°.
         const rawTheta = (index - phase) * step;
         const theta = wrappedAngle(rawTheta);
+        const isMobile = window.innerWidth <= 760;
 
-        // TRUE VIEWER-CENTERED INSIDE CYLINDER:
+        // TRUE VIEWER-CENTERED REGULAR-POLYGON CYLINDER:
         // The CSS perspective distance is matched to the cylinder radius.
         // That puts the virtual camera at the cylinder center rather than
         // somewhere outside it — especially important on mobile.
-        const isMobile = window.innerWidth <= 760;
-
         let x = radius * Math.sin(theta);
         const z = radius * (1 - Math.cos(theta));
 
@@ -342,19 +357,19 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
         // On mobile, panels beyond the +/-90-degree camera horizon would pass
         // behind the CSS camera plane and visually flip. Hide them instead.
-        const behindMobileCamera =
-          isMobile && Math.abs(theta) >= (Math.PI * 0.49);
+        const behindCamera =
+          Math.abs(theta) >= (Math.PI * 0.49);
 
         // Only fade very peripheral/back-facing panels a little.
         const peripheral = Math.min(1, Math.abs(theta) / Math.PI);
-        const opacity = behindMobileCamera
+        const opacity = behindCamera
           ? 0
           : 1 - peripheral * 0.22;
 
         card.style.transform =
           `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
         card.style.opacity = opacity.toFixed(3);
-        card.style.pointerEvents = behindMobileCamera ? 'none' : 'auto';
+        card.style.pointerEvents = behindCamera ? 'none' : 'auto';
         card.style.zIndex = String(1000 - Math.round(Math.abs(theta) * 100));
 
         const centerDistance = Math.abs(theta);
@@ -549,7 +564,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v78 orbit</div>
-  <script src="particles.js?v=78"></script>
+  <div class="build-marker" aria-hidden="true">v80 orbit</div>
+  <script src="particles.js?v=80"></script>
 </body>
 </html>
