@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
+  <title>Jordan Houri</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="particle-background" aria-hidden="true"></canvas>
+
+  <main class="page-shell">
+    <section class="content-panel">
+      <header class="hero" id="about">
+        <div class="hero-copy">
+          <p class="eyebrow">Medical Physics · Radiation Science · Computational Imaging</p>
+          <h1>Jordan Houri</h1>
+          <p class="lede">
+            Physician-scientist in training working at the intersection of medical physics,
+            computational imaging, Monte Carlo modeling, radiation biology, and human spaceflight.
+          </p>
+
+          <div class="link-row" aria-label="Primary links">
+            <a href="mailto:jordanhouri@gmail.com">Email</a>
+            <a href="assets/Jordan_Houri_CV.pdf">CV</a>
+            <a href="#publications">Publications</a>
+            <a href="#press">Press</a>
+          </div>
+        </div>
+      </header>
+
+      <nav class="section-nav" aria-label="Page sections">
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#experience">Research</a>
+        <a href="#selected-work">Selected Work</a>
+        <a href="#publications">Publications</a>
+        <a href="#press">Talks & Press</a>
+      </nav>
+
+      <section class="section two-column" id="education">
+        <div>
+          <p class="section-kicker">Education</p>
+          <h2>Training across medicine and physics</h2>
+        </div>
+
+        <div class="stack">
+          <article class="entry">
+            <div class="entry-top">
+              <h3>Indiana University</h3>
+              <span>2024–Present</span>
+            </div>
+            <p class="entry-role">MD</p>
+            <p>Indianapolis, Indiana</p>
+          </article>
+
+          <article class="entry">
+            <div class="entry-top">
+              <h3>Duke University</h3>
+              <span>2019–2021</span>
+            </div>
+            <p class="entry-role">MS, Medical Physics</p>
+            <p>
+              Thesis: <em>A General-Purpose Simulator for Evaluating Astronaut Radiation Exposure</em>.
+            </p>
+          </article>
+
+          <article class="entry">
+            <div class="entry-top">
+              <h3>University of Oxford</h3>
+              <span>2015–2018</span>
+            </div>
+            <p class="entry-role">BA (Honours), Physics</p>
+            <p>University College, Oxford.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="experience">
+        <p class="section-kicker">Research & Experience</p>
+        <h2>From detector physics to human spaceflight</h2>
+
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-date">2026–Present</div>
+            <div>
+              <h3>Research Assistant · Purdue University</h3>
+              <p>
+                Developing physics-informed constrained optimization methods for mechanical strain
+                tensor reconstruction from hyperspectral neutron computed tomography data in
+                collaboration with Oak Ridge National Laboratory.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-date">2022–2024</div>
+            <div>
+              <h3>Lead Scientist, Space Exploration · StemRad</h3>
+              <p>
+                Led scientific evaluation of the AstroRad radiation-protection vest in deep space
+                during NASA's Artemis I mission, contributed to astronaut human-factors testing
+                aboard the ISS, and managed a collaboration on recycling plastic waste into
+                3D-printable radiation-shielding material.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-date">2021–2022</div>
+            <div>
+              <h3>Computational Scientist · Oak Ridge National Laboratory</h3>
+              <p>
+                Developed a GEANT4-based framework for embedding microscopic multicellular models
+                in voxelized digital human phantoms and modeling fractionated irradiation and tumor
+                cell proliferation over time.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-date">2019–2021</div>
+            <div>
+              <h3>Graduate Student Researcher · Duke RAI Labs</h3>
+              <p>
+                Built computational models for predicting human radiation exposure during space
+                exploration missions at arbitrary locations in the solar system.
+              </p>
+            </div>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-date">2018–2019</div>
+            <div>
+              <h3>Postbaccalaureate Research Fellow · UC San Diego</h3>
+              <p>
+                Developed convolutional neural networks to segment brain metastases in T1 MRI and
+                track lesions longitudinally in stereotactic radiosurgery patients.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="selected-work">
+        <p class="section-kicker">Selected Work</p>
+        <h2>Research themes</h2>
+
+        <div class="project-grid">
+          <article class="project-card">
+            <span class="project-number">01</span>
+            <h3>Artemis I / AstroRad</h3>
+            <p>
+              Evaluation of wearable radiation protection during a lunar mission using dosimetry
+              measurements from the MARE experiment aboard Orion.
+            </p>
+            <div class="tag-row">
+              <span>Space radiation</span>
+              <span>Dosimetry</span>
+              <span>Human spaceflight</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <span class="project-number">02</span>
+            <h3>Astronaut radiation simulation</h3>
+            <p>
+              General-purpose Monte Carlo modeling of astronaut dose using computational human
+              phantoms and mission-dependent particle environments.
+            </p>
+            <div class="tag-row">
+              <span>GEANT4</span>
+              <span>Monte Carlo</span>
+              <span>XCAT</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <span class="project-number">03</span>
+            <h3>Hyperspectral neutron CT</h3>
+            <p>
+              Physics-informed optimization for reconstructing mechanical strain tensors from
+              energy-resolved neutron tomography measurements.
+            </p>
+            <div class="tag-row">
+              <span>Inverse problems</span>
+              <span>CT reconstruction</span>
+              <span>Optimization</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <span class="project-number">04</span>
+            <h3>Brain imaging & radiotherapy</h3>
+            <p>
+              Deep-learning and image-analysis methods for brain metastasis detection, longitudinal
+              tracking, and regional analysis of radiation-associated imaging changes.
+            </p>
+            <div class="tag-row">
+              <span>MRI</span>
+              <span>Deep learning</span>
+              <span>Radiation oncology</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section compact-section">
+        <div>
+          <p class="section-kicker">Technical toolkit</p>
+          <h2>Methods & software</h2>
+        </div>
+        <div class="skills">
+          <span>Python</span>
+          <span>C++</span>
+          <span>MATLAB</span>
+          <span>CUDA</span>
+          <span>Fortran</span>
+          <span>GEANT4</span>
+          <span>MBIRJAX</span>
+          <span>TensorFlow</span>
+          <span>High-performance computing</span>
+          <span>Monte Carlo modeling</span>
+          <span>CT reconstruction</span>
+          <span>Neural networks</span>
+          <span>Radiation dosimetry</span>
+          <span>CAD / 3D printing</span>
+        </div>
+      </section>
+
+      <section class="section" id="publications">
+        <p class="section-kicker">Selected Publications</p>
+        <h2>Peer-reviewed work</h2>
+
+        <div class="publication-list">
+          <article>
+            <span class="pub-year">2026</span>
+            <div>
+              <h3>First Evaluation of Wearable Radiation Protection for Human Deep Space Exploration, as Flown on Artemis I</h3>
+              <p><strong>Houri J</strong>, Berger T, Gaza R, Hussein H, et al. <em>Science Advances</em>. Featured on the journal cover.</p>
+            </div>
+          </article>
+
+          <article>
+            <span class="pub-year">2026</span>
+            <div>
+              <h3>Effect of Anatomical Contextual Information on the Performance of a Convolutional Neural Network Tasked with Brain Metastasis Detection</h3>
+              <p>Truong E, <strong>Houri J</strong>, Hermann G, et al. <em>Advances in Radiation Oncology</em>.</p>
+            </div>
+          </article>
+
+          <article>
+            <span class="pub-year">2024</span>
+            <div>
+              <h3>Space Radiation Measurements During the Artemis I Lunar Mission</h3>
+              <p>George S, Gaza R, Matthiä D, et al., <strong>Houri J</strong>, et al. <em>Nature</em>.</p>
+            </div>
+          </article>
+
+          <article>
+            <span class="pub-year">2023</span>
+            <div>
+              <h3>The Relationship Between Radiation Dose and Bevacizumab-Related Imaging Abnormality in Patients with Brain Tumors</h3>
+              <p>Salans M, <strong>Houri J</strong>, Karunamuni R, et al. <em>PLOS ONE</em>.</p>
+            </div>
+          </article>
+
+          <article>
+            <span class="pub-year">2018</span>
+            <div>
+              <h3>Analyses of Regional Radiosensitivity of White Matter Structures along Tract Axes using Novel White Matter Segmentation and Diffusion Imaging Biomarkers</h3>
+              <p><strong>Houri J</strong>, Karunamuni R, Connor M, et al. <em>Physics and Imaging in Radiation Oncology</em>.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section two-column" id="press">
+        <div>
+          <p class="section-kicker">Talks & Recognition</p>
+          <h2>Selected talks, awards, and media</h2>
+        </div>
+
+        <div class="stack">
+          <article class="entry">
+            <h3>Invited Talks</h3>
+            <ul>
+              <li><em>What You Wear in Space Can Save Your Life: The AstroRad Vest</em> — FISO, 2025</li>
+              <li><em>Modeling and Shielding Human Space Missions</em> — AAPM regional symposium, 2023</li>
+              <li><em>Proton CT Reconstruction based on Scatter Rejection</em> — Loma Linda workshop, 2021</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <h3>Selected Honors</h3>
+            <ul>
+              <li>Jack Bauer Honor Fund Conference Travel Award — Indiana MSTP, 2024</li>
+              <li>Haselby Scholarship — Indiana MSTP, 2024</li>
+              <li>Dean's Research Award — Duke University Graduate School, 2020</li>
+              <li>Academic and Research Excellence Award — Duke Medical Physics, 2020</li>
+            </ul>
+          </article>
+
+          <article class="entry">
+            <h3>Recent Press</h3>
+            <ul>
+              <li>Ars Technica — AstroRad vest and Artemis I, August 2026</li>
+              <li>Science Magazine Podcast — space-radiation vest interview, August 2026</li>
+              <li>Associated Press — Artemis I radiation-vest coverage, August 2026</li>
+              <li>SPACE.com and ScienceNews — Artemis I shielding results, August 2026</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>Jordan Houri · Indianapolis, Indiana</p>
+        <p><a href="mailto:jordanhouri@gmail.com">jordanhouri@gmail.com</a></p>
+      </footer>
+    </section>
+  </main>
+
+  <script src="particles.js"></script>
+</body>
+</html>
