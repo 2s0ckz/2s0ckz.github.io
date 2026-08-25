@@ -1,13 +1,14 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 19 removes the runtime arc limiter entirely.
+Version 20 tunes arc density and size variation.
 
-- exactly six CT arc motifs are always rendered on desktop
-- no collision algorithm can silently discard them
-- manually spaced 2D layout with varied sizes
-- arcs appear across the viewport, including more central positions
-- outer echo radius reduced modestly so the six motifs remain non-overlapping
-- opacity stays at the reduced v16+ level
-- fixed layer contributes zero document height
-- 50% parallax remains
+- density cap: about 3 arcs per 1080 vertical pixels of the parallax field
+- at least 2 arcs on very short pages
+- up to 9 available motifs on longer pages
+- much wider size range: 80px to 400px (5:1 diameter ratio)
+- varied x positions across the full viewport
+- collision-aware placement with no silent dropping
+- opacity unchanged from the dimmed v16+ level
+- fixed field adds zero document height
+- parallax remains exactly 50% of page scroll speed
 - zero arc elements inside the content panel

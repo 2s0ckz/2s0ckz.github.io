@@ -59,9 +59,9 @@ a:focus-visible {
 }
 
 /* Background CT reconstruction arcs.
-   Exactly six motifs are always rendered on desktop.
-   Their positions are deterministic so none are silently dropped.
-   The entire fixed layer parallax-scrolls at 50% page speed. */
+   The fixed full-viewport field is laid out by JavaScript.
+   Density is capped at about three motifs per 1080 vertical pixels.
+   Opacity remains intentionally very low. */
 .ct-arc-field {
   position: fixed;
   inset: 0;
@@ -73,7 +73,7 @@ a:focus-visible {
 
 .ct-recon-arc {
   position: absolute;
-  display: block;
+  display: none;
   border-radius: 50%;
   border: 1px solid rgba(169, 200, 200, 0.0235);
   box-shadow:
@@ -81,51 +81,6 @@ a:focus-visible {
     0 0 0 38px rgba(169, 200, 200, 0.0127),
     0 0 0 62px rgba(169, 200, 200, 0.0087);
 }
-
-/* Staggered 2D layout: varied sizes and positions, including the central field.
-   The outermost echo rings are manually spaced to avoid overlap. */
-.arc-1 {
-  width: 210px;
-  height: 210px;
-  left: 4%;
-  top: 8%;
-}
-
-.arc-2 {
-  width: 150px;
-  height: 150px;
-  left: 38%;
-  top: 13%;
-}
-
-.arc-3 {
-  width: 245px;
-  height: 245px;
-  right: 5%;
-  top: 5%;
-}
-
-.arc-4 {
-  width: 175px;
-  height: 175px;
-  left: 19%;
-  top: 56%;
-}
-
-.arc-5 {
-  width: 225px;
-  height: 225px;
-  left: 54%;
-  top: 52%;
-}
-
-.arc-6 {
-  width: 160px;
-  height: 160px;
-  right: 9%;
-  top: 67%;
-}
-
 
 /* Transparent particles pass in front of the arcs. */
 #particle-background {
@@ -291,12 +246,6 @@ strong {
 }
 
 @media (max-width: 820px) {
-  .arc-1 { width: 120px; height: 120px; left: 3%; top: 8%; }
-  .arc-2 { width: 92px; height: 92px; left: 39%; top: 18%; }
-  .arc-3 { width: 135px; height: 135px; right: 2%; top: 6%; }
-  .arc-4 { width: 100px; height: 100px; left: 12%; top: 59%; }
-  .arc-5 { width: 125px; height: 125px; left: 50%; top: 52%; }
-  .arc-6 { width: 96px; height: 96px; right: 5%; top: 72%; }
   .page-shell {
     width: min(100% - 18px, 1440px);
     padding-top: 10px;

@@ -3,14 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v19-guaranteed-six-arcs" />
+  <meta name="site-build" content="v20-density-size-range" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=19" />
+  <link rel="stylesheet" href="style.css?v=20" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
     <div class="ct-recon-arc arc-1"></div>
+    <div class="ct-recon-arc arc-2"></div>
+    <div class="ct-recon-arc arc-3"></div>
+    <div class="ct-recon-arc arc-4"></div>
+    <div class="ct-recon-arc arc-5"></div>
+    <div class="ct-recon-arc arc-6"></div>
+    <div class="ct-recon-arc arc-7"></div>
+    <div class="ct-recon-arc arc-8"></div>
+    <div class="ct-recon-arc arc-9"></div>
+  </div>
     <div class="ct-recon-arc arc-2"></div>
     <div class="ct-recon-arc arc-3"></div>
     <div class="ct-recon-arc arc-4"></div>
@@ -153,13 +162,150 @@
   <script>
   (() => {
     const field = document.querySelector('.ct-arc-field');
-    if (!field) return;
+    const panel = document.querySelector('.content-panel');
+    if (!field || !panel) return;
 
+    const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
     let ticking = false;
 
-    function update() {
+    // Large deliberate size range: smallest is 1/5 the largest.
+    // 80 px -> 400 px.
+    const sizes = [400, 80, 255, 130, 330, 105, 210, 165, 290];
+
+    // Deterministic positions spread across the full viewport.
+    const xFractions = [0.10, 0.53, 0.86, 0.30, 0.70, 0.93, 0.17, 0.60, 0.40];
+
+    function layoutArcs() {
+      const viewportW = window.innerWidth;
+      const viewportH = window.innerHeight;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+
+      const panelRect = panel.getBoundingClientRect();
+      const panelTopDoc = panelRect.top + scrollY;
+      const panelBottomDoc = panelTopDoc + panel.offsetHeight;
+      const maxScroll = Math.max(0, panelBottomDoc - viewportH);
+
+      // Complete vertical extent the half-speed field can reveal.
+      const virtualHeight = viewportH + maxScroll * 0.5;
+
+      // Density rule: no more than 3 arcs per 1080 vertical px.
+      // Keep at least 2 for very short pages.
+      const densityCount = Math.ceil((virtualHeight / 1080) * 3);
+      const desiredCount = Math.max(2, Math.min(arcs.length, densityCount));
+
+      arcs.forEach(arc => {
+        arc.style.display = 'none';
+      });
+
+      const placed = [];
+      const echoPadding = 62;
+      const separation = 32;
+      const edgePadding = 10;
+
+      for (let i = 0; i < desiredCount; i++) {
+        const arc = arcs[i];
+        let size = sizes[i % sizes.length];
+
+        // Scale only the very largest sizes on narrower screens while
+        // preserving approximately the same 5:1 visual range.
+        const maxAllowed = Math.max(180, viewportW * 0.34);
+        if (size > maxAllowed) size = maxAllowed;
+
+        const outerR = size / 2 + echoPadding;
+
+        let cx = viewportW * xFractions[i % xFractions.length];
+
+        // Spread vertically through the full content-derived parallax range.
+        const t = desiredCount === 1 ? 0.5 : i / (desiredCount - 1);
+        let cy = 100 + t * Math.max(0, virtualHeight - 200);
+
+        cx = Math.max(
+          outerR + edgePadding,
+          Math.min(viewportW - outerR - edgePadding, cx)
+        );
+
+        cy = Math.max(
+          outerR + 10,
+          Math.min(virtualHeight - outerR - 10, cy)
+        );
+
+        // Deterministic collision resolution. No silent dropping.
+        // Nudge alternating horizontally/vertically until clear.
+        for (let attempt = 0; attempt < 30; attempt++) {
+          let collided = false;
+
+          for (const other of placed) {
+            const dx = cx - other.x;
+            const dy = cy - other.y;
+            const minDist = outerR + other.r + separation;
+
+            if ((dx * dx + dy * dy) < minDist * minDist) {
+              collided = true;
+
+              const nudge = 36 + attempt * 7;
+              switch (attempt % 4) {
+                case 0: cx += nudge; break;
+                case 1: cx -= nudge; break;
+                case 2: cy += nudge; break;
+                default: cy -= nudge; break;
+              }
+
+              cx = Math.max(
+                outerR + edgePadding,
+                Math.min(viewportW - outerR - edgePadding, cx)
+              );
+              cy = Math.max(
+                outerR + 10,
+                Math.min(virtualHeight - outerR - 10, cy)
+              );
+
+              break;
+            }
+          }
+
+          if (!collided) break;
+        }
+
+        // Final fallback: if a crowded viewport still causes a collision,
+        // reduce only this motif until it clears, but never remove it.
+        for (let shrink = 0; shrink < 5; shrink++) {
+          const testR = size / 2 + echoPadding;
+          const safe = placed.every(other => {
+            const dx = cx - other.x;
+            const dy = cy - other.y;
+            const minDist = testR + other.r + separation;
+            return (dx * dx + dy * dy) >= minDist * minDist;
+          });
+
+          if (safe) break;
+          size *= 0.88;
+        }
+
+        const finalR = size / 2 + echoPadding;
+
+        arc.style.display = 'block';
+        arc.style.width = `${size}px`;
+        arc.style.height = `${size}px`;
+        arc.style.left = `${cx - size / 2}px`;
+        arc.style.right = 'auto';
+        arc.style.top = `${cy - size / 2}px`;
+
+        placed.push({
+          x: cx,
+          y: cy,
+          r: finalR
+        });
+      }
+    }
+
+    function applyParallax() {
       const scrollY = window.scrollY || window.pageYOffset || 0;
       field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
+    }
+
+    function update() {
+      layoutArcs();
+      applyParallax();
       ticking = false;
     }
 
@@ -171,9 +317,10 @@
 
     update();
     window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
   })();
   </script>
 
-  <script src="particles.js?v=19"></script>
+  <script src="particles.js?v=20"></script>
 </body>
 </html>
