@@ -1,13 +1,19 @@
-Jordan Houri personal site — v74
+Jordan Houri personal site — v75
 
-Changes:
-- wheel settle time 330ms
-- wheel transition easing matches arrow easing (0.075)
-- wheel threshold remains 260
+WHEEL GESTURE FIX:
+- panel vertical scroll owns whole gesture
+- same-gesture boundary momentum cannot trigger orbit
+- requires 330ms of zero wheel events before orbit unlock
+- orbit threshold remains 260
+- orbit transition easing remains 0.075
+
+VISUAL:
+- instruction text removed
+- topbar alpha matches panels at 0.5625
 
 SHA-256:
-8e9b2b618e3de6dbf44888d9acb6532cc926a347e7f1ff4b4eadecb848a1c406  index.html
+5d2c802007a9f5c5eb17add2773356b9c05dbd936dc5f1d5eea5f7f17437c254  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 8e8f288b95f79f467f397a1e44307b10bc5758b454912436b178efa94881b3e7  particles.js
-403d0ddee581e3a4d5ccccdcc01a45b6c34472a5cc3e40f49a89fc2065776b2f  README.md
+5d0f907e03ed4c351efa592d32f1bb38a916c3f80670e8dca011f91e3d770335  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

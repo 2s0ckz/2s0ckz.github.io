@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v74-wheel-arrow-speed-match" />
+  <meta name="site-build" content="v75-panel-wheel-gesture-isolation" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -21,7 +21,7 @@ a { color:var(--muted); text-decoration:none; transition:color 160ms ease,border
 a:hover,a:focus-visible,a:active { color:var(--accent); }
 #particle-background { position:fixed; inset:0; width:100%; height:100%; background:transparent; pointer-events:none; z-index:1; }
 .topbar { position:fixed; inset:0 0 auto 0; z-index:20; height:var(--nav-height); border-bottom:1px solid var(--line);
-  background:rgba(3,5,11,.82); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); }
+  background:rgba(12,15,26,.5625); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); }
 .topbar-inner { width:min(1440px,calc(100% - 48px)); height:100%; margin:0 auto; display:flex; align-items:center; gap:32px; }
 .identity { display:inline-flex; align-items:center; gap:16px; min-width:0; color:var(--heading); }
 .profile-photo { width:72px; height:72px; flex:0 0 72px; border-radius:50%; object-fit:cover;
@@ -162,7 +162,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
   <main class="orbit-shell">
     <div class="orbit-heading">
-      <p>Scroll, drag, or use the arrows to rotate around the page.</p>
+      
     </div>
 
     <div class="orbit-controls" aria-label="Orbit controls">
@@ -257,6 +257,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     let wheelAccum = 0;
     let wheelLocked = false;
     let wheelUnlockTimer = 0;
+    let panelWheelUnlockTimer = 0;
+    let panelWheelGestureActive = false;
     const wheelThreshold = 260;
     const wheelSettleMs = 330;
 
@@ -360,13 +362,16 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
     viewport.addEventListener('wheel', event => {
       const panel = event.target.closest('.orbit-card');
+      const verticalDominant =
+        Math.abs(event.deltaY) >= Math.abs(event.deltaX);
 
-      // Vertical scrolling inside a panel always gets first priority.
-      // Only hand the gesture to the orbit once the panel has reached the
-      // relevant vertical edge.
+      // If a vertical gesture begins over a scrollable panel, that entire
+      // gesture belongs to the panel. Even after the panel reaches its top or
+      // bottom, the SAME continuing wheel/trackpad gesture must not spill over
+      // into cylinder navigation.
       if (
         panel &&
-        Math.abs(event.deltaY) >= Math.abs(event.deltaX) &&
+        verticalDominant &&
         panel.scrollHeight > panel.clientHeight + 2
       ) {
         const atTop = panel.scrollTop <= 0;
@@ -376,10 +381,44 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const canScrollUp = event.deltaY < 0 && !atTop;
         const canScrollDown = event.deltaY > 0 && !atBottom;
 
-        if (canScrollUp || canScrollDown) {
-          // Let the browser perform the panel's native vertical scroll.
+        if (canScrollUp || canScrollDown || panelWheelGestureActive) {
+          panelWheelGestureActive = true;
+
+          // Every wheel event belonging to this panel gesture extends the
+          // quiet-period requirement. Orbiting is re-enabled only after a full
+          // wheelSettleMs with NO wheel events.
+          window.clearTimeout(panelWheelUnlockTimer);
+          panelWheelUnlockTimer = window.setTimeout(() => {
+            panelWheelGestureActive = false;
+            wheelAccum = 0;
+            wheelLocked = false;
+          }, wheelSettleMs);
+
+          // If the panel can still scroll, leave native vertical scrolling
+          // untouched. At the boundary, consume the remaining momentum so it
+          // cannot trigger an orbit change.
+          if (canScrollUp || canScrollDown) {
+            return;
+          }
+
+          event.preventDefault();
+          wheelAccum = 0;
           return;
         }
+      }
+
+      // A panel-scroll gesture is still in its 330 ms quiet-period lock.
+      if (panelWheelGestureActive) {
+        event.preventDefault();
+
+        window.clearTimeout(panelWheelUnlockTimer);
+        panelWheelUnlockTimer = window.setTimeout(() => {
+          panelWheelGestureActive = false;
+          wheelAccum = 0;
+          wheelLocked = false;
+        }, wheelSettleMs);
+
+        return;
       }
 
       event.preventDefault();
@@ -389,6 +428,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           ? event.deltaX
           : event.deltaY;
 
+      // Orbit gesture lock: after one panel switch, require a full quiet
+      // period before another threshold can be accumulated.
       window.clearTimeout(wheelUnlockTimer);
       wheelUnlockTimer = window.setTimeout(() => {
         wheelLocked = false;
@@ -481,7 +522,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v74 orbit</div>
-  <script src="particles.js?v=74"></script>
+  <div class="build-marker" aria-hidden="true">v75 orbit</div>
+  <script src="particles.js?v=75"></script>
 </body>
 </html>
