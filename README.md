@@ -1,21 +1,21 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 70 adds a viewer-centered cylindrical particle background.
+Version 71 fixes three issues.
 
-Particle surface:
-- particle simulation x-coordinate now represents one full 360-degree cylindrical circumference
-- rendering projects particle trails from the viewer at the cylinder center
-- horizontal projection uses tan(theta), with vertical perspective scaling by 1/cos(theta)
-- peripheral clipping prevents projection singularities near +/-90 degrees
-- horizontal simulation boundaries are periodic rather than terminal
-- the particle cylinder reads the same live orbit phase as the content cylinder and rotates with it
-- primary protons now spawn only from the top of the cylindrical surface
-- proton/electron/photon interaction and cascade logic is otherwise unchanged
+Particles
+- primary x positions already represent random locations over the full 360-degree cylindrical surface
+- spawn frequency is now exactly 6x the original rate (interval divided by six)
+- particles continue simulating while their part of the cylinder is off-screen
+- rotating the page can therefore bring previously generated tracks into view
+- primary particles still originate only from the top
+- the special 0.25 s initial spawn was removed; startup uses the same stationary spawn process as later frames
 
-Existing site behavior retained:
-- max panel width 1440 px
-- centered viewer-cylinder geometry
-- thresholded wheel snapping
-- drag-to-nearest-panel snapping
-- slower arrow-button animation
-- translucent panels
+Load behavior
+- the content orbit initializes synchronously at the end of body
+- shared `__orbitPhase` / `__orbitStep` are published before particles.js starts
+- this removes the startup handoff between an uninitialized and initialized cylinder
+
+Panel sizing
+- cards now use `box-sizing: border-box`
+- 1440 px is therefore the true maximum OUTSIDE width including padding and border
+- on narrower displays cards remain viewport width minus 48 px

@@ -1,16 +1,15 @@
-Jordan Houri personal site — v70
+Jordan Houri personal site — v71
 
-CYLINDRICAL PARTICLE BACKGROUND:
-- particles live on one full 360-degree surface coordinate
-- viewer-centered tan/cos cylindrical projection
-- particle surface rotates with content orbit phase
-- top-only primary proton spawning
-- horizontal cylinder seam is periodic
-- particle cascade physics otherwise retained
+FIXES:
+- particle generation 6x across full 360-degree surface
+- off-screen particle simulation retained
+- no special initial spawn burst
+- orbit initialized before particle renderer
+- true outside panel width capped at 1440px via border-box
 
 SHA-256:
-b9c7f9afe4b65d12e903d7de0d62dc4ad784a015c67915e8128d26a9ecc9f08c  index.html
+a5fc8ef7016c88364271f0b875ee64b6b60faa70cc632166789189fbce30e482  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-8b4df7f3aa8389f6bf7b348e246d6678831a81cb5abdae74fbfde69a385a3da1  particles.js
-66e6bc99cde7d0b4695e7250aa71e7dcfbfcd47bf059aa66190d32d7b8cd1dfe  README.md
+8e8f288b95f79f467f397a1e44307b10bc5758b454912436b178efa94881b3e7  particles.js
+95d02bc254f85a65c0ca85d8a3ae6a6e1cd896c3c2de15fee57891390e8d7a79  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

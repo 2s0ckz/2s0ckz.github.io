@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v70-inner-cylinder-surface";
+  window.__particleBuild = "v71-full-360-sixfold";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -452,7 +452,10 @@
 
       if (spawnClock <= 0) {
         spawnPrimary();
-        spawnClock = rand(3.04, 4.8);
+
+        // The particle surface spans the full 360-degree cylinder. Populate it
+        // at six times the old rate (one equivalent stream per content panel).
+        spawnClock = rand(3.04, 4.8) / 6;
       }
     }
 
@@ -636,7 +639,9 @@
   if (reduceMotion) {
     spawnPrimary();
   } else {
-    spawnClock = 0.25;
+    // No special first-load burst. Start with the same sixfold stationary
+    // interval used for all later cylindrical particle generation.
+    spawnClock = rand(3.04, 4.8) / 6;
   }
 
   requestAnimationFrame(frame);

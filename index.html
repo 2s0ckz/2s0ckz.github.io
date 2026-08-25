@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v70-cylindrical-particle-surface" />
+  <meta name="site-build" content="v71-360-particles-true-1440" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -53,7 +53,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(1440px, calc(100vw - 24px));
+  box-sizing: border-box;
+  width: min(1440px, calc(100vw - 48px));
   height: min(680px, calc(100% - 24px));
   padding: clamp(32px, 4vw, 64px);
   overflow-y: auto;
@@ -445,15 +446,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       if (ready) render();
     }, { passive: true });
 
-    if (document.readyState === 'complete') {
-      initialize();
-    } else {
-      window.addEventListener('load', initialize, { once: true });
-    }
+    // Markup already exists because this script is at the end of <body>.
+    // Initialize synchronously so the shared cylinder phase exists before
+    // particles.js starts its animation loop.
+    initialize();
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v70 orbit</div>
-  <script src="particles.js?v=70"></script>
+  <div class="build-marker" aria-hidden="true">v71 orbit</div>
+  <script src="particles.js?v=71"></script>
 </body>
 </html>
