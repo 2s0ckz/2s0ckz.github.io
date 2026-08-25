@@ -94,7 +94,11 @@
       scatterSigma: options.scatterSigma ?? defaults.scatterSigma,
       scatterClock: rand(0.055, 0.14),
       scatterCount: 0,
-      nextScatterSecondary: kind === "proton" ? Math.floor(rand(5, 8)) : null,
+      nextScatterSecondary:
+        kind === "proton" && Math.random() < 0.35
+          ? Math.floor(rand(7, 15))
+          : null,
+      scatterSecondaryEmitted: false,
       trail: [{ x, y }]
     });
   }
@@ -158,16 +162,20 @@
 
 
   function spawnAtProtonScatter(track) {
-    // This is deliberately tied to a proton's scatter count rather than a
-    // per-vertex random chance. That makes the behavior auditable and ensures
-    // sufficiently long proton tracks really do produce visible daughters.
-    if (track.scatterCount < track.nextScatterSecondary) return false;
+    // At most one multiple-scatter secondary per proton, and only for the
+    // subset of protons assigned a scheduled emission at creation.
+    if (
+      track.scatterSecondaryEmitted ||
+      track.nextScatterSecondary === null ||
+      track.scatterCount < track.nextScatterSecondary
+    ) {
+      return false;
+    }
 
-    // Schedule the next emission several scatter vertices later.
-    track.nextScatterSecondary += Math.floor(rand(8, 13));
+    track.scatterSecondaryEmitted = true;
 
     // Mostly delta-like electrons; occasional photon.
-    if (Math.random() < 0.82) {
+    if (Math.random() < 0.85) {
       addTrack(
         "electron",
         track.x,
@@ -176,7 +184,7 @@
         track.familyId,
         {
           generation: 0,
-          stepLength: rand(26, 56),
+          stepLength: rand(24, 50),
           speed: rand(90, 122.5)
         }
       );
@@ -410,7 +418,7 @@
   }
 
   function frame(now) {
-    const dt = Math.min(1.0, (now - last) / 1000);
+    const dt = Math.min(0.034, (now - last) / 1000);
     last = now;
     if (!reduceMotion) update(dt, now);
     render(now);
