@@ -1,16 +1,18 @@
-Jordan Houri personal site — v14 clean rebuild
+Jordan Houri personal site — v16
 
 Verified:
-arc fields: 1
-arc elements: 6
-arc parent: fixed/full viewport
-parallax: -0.5 * scrollY
-canvas: transparent
-page content max width: 1440px
+- 1 background arc field
+- 4 maximum arc elements
+- 0 arc elements inside content panel
+- gutter-only placement
+- dynamic arc count from content height
+- 50% parallax
+- zero decorative layout height
+- no page-shell bottom padding
 
 SHA-256:
-079f6299164604f52daac1ec94e96c5d6e6d90880a5dcb12af5ba6d81cf7fddf  index.html
-14f2d8b55e83ec743e160ce537b6f5a29f1d0c8aaecfe594c12a132d91ea0185  style.css
+27a9c634d18b52d5ce87005f35b20a8b35360e0049ea64b4b2e3134f552f502e  index.html
+e7b443c960cf1248522bc29051a30a980bc4aa486e6f0e8c609a866ef8f70284  style.css
 95fc29468a671e89191b445db8cf905ef7fe6bf4b8df1d57b25717e633ffc555  particles.js
-ce6b7328996aa860386f8168614bb29b4f9a39ba509078196da175ff5c1cfde3  README.md
+3922d66e43120f84929fdcea39f103c3e91a9e5c8857d8785f18193568d15cf2  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

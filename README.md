@@ -1,13 +1,13 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 14 is a clean rebuild, not a patch of prior arc markup.
+Version 16 is a clean rebuild of the arc layer and stylesheet.
 
-Verified behavior:
-- exactly one CT arc layer
-- exactly six arcs
-- arc layer spans the full browser viewport, independent of the 1440px content panel
-- arc layer is `position: fixed`, so it adds zero page height
-- arcs move upward at exactly half page scroll speed
-- main contour opacity is 3.5%; concentric echoes are dimmer
-- particle canvas is transparent and sits above the arcs
-- content panel sits above both
+- all arc elements removed from the content panel
+- exactly one background arc field
+- maximum four arcs; JavaScript only shows as many as the content height requires
+- arcs and their outer echoes are constrained entirely to the side gutters
+- background arc opacity reduced by ~33%
+- arc parallax remains 50% of page scroll speed
+- fixed decorative layers contribute zero page height
+- page shell has no bottom padding, so the document ends with the content panel
+- particle canvas remains transparent and in front of the arcs
