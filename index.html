@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v105-chevron-refine-outside-scroll" />
+  <meta name="site-build" content="v107-tapered-chevron-strokes" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -201,10 +201,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-edge-nav {
   position:absolute;
   top:50%;
-  width:48px;
-  height:60%;
-  min-height:190px;
-  max-height:360px;
+  width:42px;
+  height:56%;
+  min-height:175px;
+  max-height:340px;
   padding:0;
   margin:0;
   border:0;
@@ -225,26 +225,27 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   content:"";
   position:absolute;
   left:50%;
-  width:4px;
-  height:44%;
+  width:8px;
+  height:50%;
   background:currentColor;
-  border-radius:2px;
 }
 
 .orbit-edge-nav::before {
   bottom:50%;
   transform-origin:50% 100%;
+  clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 .orbit-edge-nav::after {
   top:50%;
   transform-origin:50% 0%;
+  clip-path:polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
-.orbit-edge-nav-prev::before { transform:translateX(-7px) rotate(10deg); }
-.orbit-edge-nav-prev::after  { transform:translateX(-7px) rotate(-10deg); }
-.orbit-edge-nav-next::before { transform:translateX(7px) rotate(-10deg); }
-.orbit-edge-nav-next::after  { transform:translateX(7px) rotate(10deg); }
+.orbit-edge-nav-prev::before { transform:translateX(-6px) rotate(9deg); }
+.orbit-edge-nav-prev::after  { transform:translateX(-6px) rotate(-9deg); }
+.orbit-edge-nav-next::before { transform:translateX(6px) rotate(-9deg); }
+.orbit-edge-nav-next::after  { transform:translateX(6px) rotate(9deg); }
 
 .orbit-edge-nav:hover,
 .orbit-edge-nav:focus-visible {
@@ -264,7 +265,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   }
   .orbit-edge-nav::before,
   .orbit-edge-nav::after {
-    width:3px;
+    width:6px;
   }
 }
 
@@ -541,12 +542,12 @@ const status = document.getElementById('orbitStatus');
       if (activeCard && edgePrev && edgeNext) {
         const viewportRect = viewport.getBoundingClientRect();
         const activeRect = activeCard.getBoundingClientRect();
-        const inset = 8;
-        const prevWidth = edgePrev.offsetWidth || 48;
-        const nextWidth = edgeNext.offsetWidth || 48;
+        const gap = window.innerWidth <= 760 ? 4 : 10;
+        const prevWidth = edgePrev.offsetWidth || 42;
 
-        edgePrev.style.left = `${activeRect.left - viewportRect.left + inset}px`;
-        edgeNext.style.left = `${activeRect.right - viewportRect.left - nextWidth - inset}px`;
+        // Keep the controls fully outside the active panel, hugging its edges.
+        edgePrev.style.left = `${activeRect.left - viewportRect.left - prevWidth - gap}px`;
+        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap}px`;
       }
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -849,7 +850,7 @@ const status = document.getElementById('orbitStatus');
       document.body.classList.remove('orbit-drag-select-lock');
           });
 
-    set.addEventListener('click', event => {
+    viewport.addEventListener('click', event => {
       const control = event.target.closest('.orbit-edge-nav');
       if (!control) return;
       event.preventDefault();
@@ -890,7 +891,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v105 orbit</div>
-  <script src="particles.js?v=105"></script>
+  <div class="build-marker" aria-hidden="true">v107 orbit</div>
+  <script src="particles.js?v=107"></script>
 </body>
 </html>

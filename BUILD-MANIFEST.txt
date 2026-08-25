@@ -1,15 +1,14 @@
-Jordan Houri personal site — v105
+Jordan Houri personal site — v107
 
-CHEVRON REFINEMENT:
-- shorter
-- wider
-- thicker
-- outside scrollable card content
-- tracks active panel edges
+CHEVRONS:
+- tapered polygon wedges
+- pointed outer ends
+- wider at center joint
+- no rounded ends
 
 SHA-256:
-1d9ae5906f308c6b66053dbb7ad2056558d6ab60771e0cbe51a4ae77950f7f30  index.html
+e8fe17592b7b046b97f9c74f27ed81d04d1cebebc4a418123d2bc45bd9c0bbed  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-4b8b7d1e1a89f665f451a31c119d4848261894130d577e00b764e44cdd1ea288  README.md
+963271fcb8b9dbacc4f514dcef6c6d92f5dd49511116185e532c1a81080aa63e  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
