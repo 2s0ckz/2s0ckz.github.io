@@ -156,7 +156,7 @@
     // Primaries now enter only from the top edge of that surface.
     const x = rand(0, width);
     const y = -20;
-    const angle = rand(Math.PI * 0.30, Math.PI * 0.70);
+    const angle = rand(Math.PI * 0.40, Math.PI * 0.60);
 
     addTrack("proton", x, y, angle, familyId, {
       stepLength: rand(height * 0.30, height * 0.72)
@@ -502,7 +502,7 @@
 
           // Exactly one independent probability draw for this vertex.
           // 1 successful integer value out of 1000 = 0.1%.
-          const scatterDraw = Math.floor(Math.random() * 10000000.0);
+          const scatterDraw = Math.floor(Math.random() * 1000000.0);
           if (scatterDraw < 1) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
