@@ -1,9 +1,16 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 5 adjusts the site to be much closer to the screenshot style:
+Version 6 keeps the v5 layout and particle system, and adds only subtle CT reconstruction arcs.
 
-- darker panel at approximately `bone(0.05)` with `25%` opacity
-- lighter overall font weights
-- less aggressive bolding
-- typography and spacing tuned to better match the screenshot
-- CSS/JS cache-busting updated to `?v=5`
+## CT theme
+- two large reconstruction-style arc/ring motifs
+- approximately 6–10% opacity
+- no voxel grid
+- no reconstruction streaks
+- particles remain the only animated visual layer
+
+## Visual system
+- page max width: 1440px
+- content panel: approximately `bone(0.05)` at 25% opacity
+- body text around `bone(0.75)`, with headings progressively lighter
+- hyperlinks around `bone(0.50)`
