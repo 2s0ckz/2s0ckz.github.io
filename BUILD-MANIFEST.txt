@@ -1,18 +1,17 @@
-Jordan Houri personal site — v18
+Jordan Houri personal site — v19
 
 Verified:
-- 8 maximum arc elements
-- desktop minimum target: 6
-- mobile minimum target: 4
-- 2D varied placement
-- collision-aware full echo radius
+- exactly six arc elements
+- no runtime arc-count limiter
+- no collision-based arc dropping
+- deterministic varied 2D positions
 - zero arcs inside content panel
-- fixed field / no document height
+- fixed field / zero document height
 - parallax = -0.5 * scrollY
 
 SHA-256:
-a1d16506ed8227ebf48ce683b1d7c357fd99a5ff7de8f836532d58cde556591c  index.html
-57613ad944b900b26892cae287f0213b087b05269c6f07f14184f0c2ab5dfb5e  style.css
+9184b26b87b9d8c17d9cb7ee20483ba83d6c2d0605f8c09a96fd0331a315ba5d  index.html
+1db76c045bcc5cb93376dc550fb873c62e9a56bd54afd6f49a721850f79c49a8  style.css
 95fc29468a671e89191b445db8cf905ef7fe6bf4b8df1d57b25717e633ffc555  particles.js
-b159303556842fc952775d4942c76a687a6445f67074a726a89541a2894c661d  README.md
+c902fb503a9b4ab28a2a9f9763aac60ccdbc3963c10b6c325348a7904314dc07  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
