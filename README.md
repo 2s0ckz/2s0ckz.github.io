@@ -1,10 +1,8 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 30 makes the yellow interaction color explicit.
+Version 32 corrects proton behavior at multiple-scattering vertices.
 
-- content-panel link hover: #E8BF28
-- keyboard focus-visible: #E8BF28
-- active/click state: #E8BF28
-- selector is scoped to `.content-panel a` with higher specificity
-- `!important` is used on the interaction color to prevent base-link overrides
-- all particle, arc, opacity, and layout behavior remains unchanged
+- sparse electron/photon secondaries can still be emitted at proton scattering vertices
+- the proton now continues propagating after those emissions
+- proton termination remains reserved for the separate terminal secondary-producing interaction
+- all other particle, arc, opacity, and styling behavior is unchanged

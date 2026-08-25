@@ -154,6 +154,50 @@
     }
   }
 
+
+  function spawnAtProtonScatter(track) {
+    // Most proton multiple-scattering vertices remain purely elastic-looking.
+    // Occasionally, treat the vertex as an ionizing interaction and emit a
+    // sparse visible secondary. Delta-like electrons are more common than
+    // radiative photons.
+    const roll = Math.random();
+
+    if (roll < 0.085) {
+      addTrack(
+        "electron",
+        track.x,
+        track.y,
+        track.angle + rand(-1.15, 1.15),
+        track.familyId,
+        {
+          generation: 0,
+          stepLength: rand(16, 38),
+          speed: rand(90, 122.5)
+        }
+      );
+      return true;
+    }
+
+    if (roll < 0.100) {
+      addTrack(
+        "photon",
+        track.x,
+        track.y,
+        track.angle + rand(-1.8, 1.8),
+        track.familyId,
+        {
+          generation: 0,
+          // Keep the current long photon mean-free-path treatment.
+          stepLength: rand(350, 725),
+          speed: rand(85, 115)
+        }
+      );
+      return true;
+    }
+
+    return false;
+  }
+
   function spawnElectronChildren(track) {
     if (track.generation >= track.maxGeneration) return;
     const nextGeneration = track.generation + 1;
@@ -307,6 +351,11 @@
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
+
+          // Sparse ionizing/radiative secondaries can originate exactly at
+          // this multiple-scattering vertex. The proton continues afterward;
+          // these emissions do not terminate the primary track.
+          spawnAtProtonScatter(track);
         }
       }
 
