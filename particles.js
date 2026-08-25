@@ -98,7 +98,7 @@
       scatterClock: rand(0.055, 0.14),
       scatterCount: 0,
       nextScatterSecondary:
-        kind === "proton" && Math.random() < 0.35
+        kind === "proton"
           ? Math.floor(rand(7, 15))
           : null,
       trail: [{ x, y }]

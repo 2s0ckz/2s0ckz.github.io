@@ -1,16 +1,14 @@
-Jordan Houri personal site — v38
+Jordan Houri personal site — v39
 
-Code-level guard:
-- immutable track IDs
-- global Set of proton IDs that emitted
-- max one scatter-secondary per proton enforced globally
-- 35% eligibility
+Verified:
+- all protons eligible
 - scheduled scatter 7–14
+- one emission max per proton via global Set
 - proton continues
 
 SHA-256:
-09c030ab7808cb95449bb159673b79ca419cb35a167fb96c337cc731c8d1e0c7  index.html
+eec46eb8a2fbaf53db4e6c2791086b91a5e5504cd0d4125482bdf7ecebd2919c  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-6978f3b8935196c0b3e1b40b7a1a2bbe65f2b4e446a6ca727a8c7e61b0ea8d38  particles.js
-5b1a0513d55308cd6c06bbc1088ccee6239432caf64a7c9d30e875525924db76  README.md
+be2cec4cb0341ec6b003e15f7f457cb9ab0378393cc634ffdfb210c05bcd6434  particles.js
+a366f2f4dcf3fbaf2bc526d90dda11f819d0cd812c231ea7175c162b531962c3  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
