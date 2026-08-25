@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v77-mobile-inside-cylinder-camera" />
+  <meta name="site-build" content="v78-mobile-camera-at-cylinder-center" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -113,9 +113,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
-  .orbit-viewport {
-    perspective:2200px;
-  }
 
   .orbit-card {
     width: calc(100vw - 20px);
@@ -307,7 +304,18 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       // Shared rotation state for the cylindrical particle background.
       window.__orbitPhase = phase;
       window.__orbitStep = step;
+      window.__orbitRadius = radius;
       window.__orbitMobile = window.innerWidth <= 760;
+
+      // CSS perspective is the camera-to-front-plane distance. For a viewer
+      // standing at the center of this cylinder, that distance must equal R.
+      // Desktop's existing 1400px setup already closely matches its radius;
+      // mobile now uses the exact computed radius instead of an arbitrary 2200px.
+      if (window.__orbitMobile) {
+        viewport.style.perspective = `${radius}px`;
+      } else {
+        viewport.style.perspective = '1400px';
+      }
 
       let nearest = { distance: Infinity, index: 0 };
 
@@ -317,34 +325,36 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const rawTheta = (index - phase) * step;
         const theta = wrappedAngle(rawTheta);
 
-        // VIEWER-CENTERED INSIDE CYLINDER:
-        // Desktop keeps the full geometry. Mobile uses a gentler camera model
-        // because near-full-width cards otherwise loom toward the viewer enough
-        // to make the cylinder read perceptually as outside-facing.
+        // TRUE VIEWER-CENTERED INSIDE CYLINDER:
+        // The CSS perspective distance is matched to the cylinder radius.
+        // That puts the virtual camera at the cylinder center rather than
+        // somewhere outside it — especially important on mobile.
         const isMobile = window.innerWidth <= 760;
-        const xFactor = isMobile ? 0.82 : 1;
-        const zFactor = isMobile ? 0.22 : 1;
-        const rotationFactor = isMobile ? 0.62 : 1;
 
-        let x = radius * Math.sin(theta) * xFactor;
-        const z = radius * (1 - Math.cos(theta)) * zFactor;
+        let x = radius * Math.sin(theta);
+        const z = radius * (1 - Math.cos(theta));
 
-        // Snap the flat/front-facing panel exactly to the viewport center.
         if (Math.abs(theta) < 1e-6) x = 0;
 
-        // Faces still point inward toward the viewer; mobile merely softens
-        // the tangent angle rather than changing its direction.
-        const rotateY = -theta * 180 / Math.PI * rotationFactor;
-
+        // Each panel's front face points inward at the viewer.
+        const rotateY = -theta * 180 / Math.PI;
         const scale = 1;
+
+        // On mobile, panels beyond the +/-90-degree camera horizon would pass
+        // behind the CSS camera plane and visually flip. Hide them instead.
+        const behindMobileCamera =
+          isMobile && Math.abs(theta) >= (Math.PI * 0.49);
 
         // Only fade very peripheral/back-facing panels a little.
         const peripheral = Math.min(1, Math.abs(theta) / Math.PI);
-        const opacity = 1 - peripheral * 0.22;
+        const opacity = behindMobileCamera
+          ? 0
+          : 1 - peripheral * 0.22;
 
         card.style.transform =
           `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
         card.style.opacity = opacity.toFixed(3);
+        card.style.pointerEvents = behindMobileCamera ? 'none' : 'auto';
         card.style.zIndex = String(1000 - Math.round(Math.abs(theta) * 100));
 
         const centerDistance = Math.abs(theta);
@@ -539,7 +549,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v77 orbit</div>
-  <script src="particles.js?v=77"></script>
+  <div class="build-marker" aria-hidden="true">v78 orbit</div>
+  <script src="particles.js?v=78"></script>
 </body>
 </html>

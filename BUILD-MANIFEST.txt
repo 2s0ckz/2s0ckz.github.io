@@ -1,16 +1,16 @@
-Jordan Houri personal site — v77
+Jordan Houri personal site — v78
 
-MOBILE-ONLY CAMERA FIX:
-- desktop untouched
-- mobile perspective 2200px
-- mobile x factor 0.82
-- mobile z factor 0.22
-- mobile rotate factor 0.62
-- mobile particle focal length softened
+MOBILE CAMERA CENTER FIX:
+- mobile perspective = cylinder radius
+- full exact inside-cylinder x/z geometry restored
+- inward-facing rotateY retained
+- panels beyond mobile camera horizon hidden
+- particle focal distance = shared cylinder radius
+- desktop remains at 1400px perspective
 
 SHA-256:
-064449de8a728759e9caabf0a4d66518b91644e924c7b3d026a8fed3b815f094  index.html
+024a337ee2b5a470424581fb1b1974b514e8e347d7491c5b8eff99852da81748  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-759f151520e8e92065608b0a297b98a21bcb450364819ded4826606fdbc8dd97  particles.js
-2228fc4d86ade4a48f7c480f45d65131407b34dfb492ec1b969f5f486d8587b2  README.md
+b86145615b837b13a2fd0d9b608f2201f5eb21be8fcf502b76a861aa92494712  particles.js
+c51d2492a4eed6f2a0df1f4d490850e3a701fda775d58aa06465d57b861fb032  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

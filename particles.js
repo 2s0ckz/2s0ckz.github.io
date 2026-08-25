@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v77-mobile-camera-tuned";
+  window.__particleBuild = "v78-camera-at-cylinder-center";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -535,10 +535,15 @@
     // x = f tan(theta)
     // vertical distances expand by 1/cos(theta) toward the peripheral wall.
     const mobileCamera = window.__orbitMobile === true;
+    const sharedRadius = Number.isFinite(window.__orbitRadius)
+      ? window.__orbitRadius
+      : Math.max(320, width - 48);
+
+    // Match the particle pinhole camera to the content cylinder camera.
     const focal = mobileCamera
-      ? Math.max(900, width * 2.4)
+      ? sharedRadius
       : Math.max(520, Math.min(1100, width * 0.72));
-    const cosine = Math.max(mobileCamera ? 0.42 : 0.24, Math.cos(theta));
+    const cosine = Math.max(mobileCamera ? 0.28 : 0.24, Math.cos(theta));
     const screenX = width * 0.5 + focal * Math.tan(theta);
     const screenY = height * 0.5 + (point.y - height * 0.5) / cosine;
 
