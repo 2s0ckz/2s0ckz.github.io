@@ -58,10 +58,9 @@ a:focus-visible {
   color: var(--bone-86);
 }
 
-/* Background CT reconstruction arcs.
-   The fixed full-viewport field is laid out by JavaScript.
-   Density is capped at about three motifs per 1080 vertical pixels.
-   Opacity remains intentionally very low. */
+/* Single background CT reconstruction arc layer.
+   This is the only arc layer in the site.
+   It may pass beneath the translucent content panel and parallax-scrolls at 50%. */
 .ct-arc-field {
   position: fixed;
   inset: 0;
@@ -101,6 +100,7 @@ a:focus-visible {
   margin: 0 auto;
   padding: 56px 0 0;
 }
+
 
 .content-panel {
   position: relative;
@@ -246,6 +246,7 @@ strong {
 }
 
 @media (max-width: 820px) {
+  
   .page-shell {
     width: min(100% - 18px, 1440px);
     padding-top: 10px;

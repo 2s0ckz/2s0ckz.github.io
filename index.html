@@ -1,48 +1,46 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v20-density-size-range" />
-  <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
-  <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=20" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="v22-single-background-arc-layer" name="site-build"/>
+<meta content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." name="description"/>
+<title>Jordan Houri</title>
+<link href="style.css?v=22" rel="stylesheet"/>
 </head>
-<body>
-  <div class="ct-arc-field" aria-hidden="true">
-    <div class="ct-recon-arc arc-1"></div>
-    <div class="ct-recon-arc arc-2"></div>
-    <div class="ct-recon-arc arc-3"></div>
-    <div class="ct-recon-arc arc-4"></div>
-    <div class="ct-recon-arc arc-5"></div>
-    <div class="ct-recon-arc arc-6"></div>
-    <div class="ct-recon-arc arc-7"></div>
-    <div class="ct-recon-arc arc-8"></div>
-    <div class="ct-recon-arc arc-9"></div>
-  </div>
-    <div class="ct-recon-arc arc-2"></div>
-    <div class="ct-recon-arc arc-3"></div>
-    <div class="ct-recon-arc arc-4"></div>
-    <div class="ct-recon-arc arc-5"></div>
-    <div class="ct-recon-arc arc-6"></div>
-  </div>
-    <div class="ct-recon-arc arc-2"></div>
-    <div class="ct-recon-arc arc-3"></div>
-    <div class="ct-recon-arc arc-4"></div>
-    <div class="ct-recon-arc arc-5"></div>
-    <div class="ct-recon-arc arc-6"></div>
-    <div class="ct-recon-arc arc-7"></div>
-    <div class="ct-recon-arc arc-8"></div>
-  </div>
-    <div class="ct-recon-arc arc-2"></div>
-    <div class="ct-recon-arc arc-3"></div>
-    <div class="ct-recon-arc arc-4"></div>
-  </div>
+<body><div aria-hidden="true" class="ct-arc-field"><div class="ct-recon-arc arc-1"></div><div class="ct-recon-arc arc-2"></div><div class="ct-recon-arc arc-3"></div><div class="ct-recon-arc arc-4"></div><div class="ct-recon-arc arc-5"></div><div class="ct-recon-arc arc-6"></div></div>
 
-  <canvas id="particle-background" aria-hidden="true"></canvas>
+<div class="ct-recon-arc arc-2"></div>
+<div class="ct-recon-arc arc-3"></div>
+<div class="ct-recon-arc arc-4"></div>
+<div class="ct-recon-arc arc-5"></div>
+<div class="ct-recon-arc arc-6"></div>
+<div class="ct-recon-arc arc-7"></div>
+<div class="ct-recon-arc arc-8"></div>
+<div class="ct-recon-arc arc-9"></div>
 
-  <main class="page-shell">
-    <section class="content-panel">
+<div class="ct-recon-arc arc-2"></div>
+<div class="ct-recon-arc arc-3"></div>
+<div class="ct-recon-arc arc-4"></div>
+<div class="ct-recon-arc arc-5"></div>
+<div class="ct-recon-arc arc-6"></div>
+
+<div class="ct-recon-arc arc-2"></div>
+<div class="ct-recon-arc arc-3"></div>
+<div class="ct-recon-arc arc-4"></div>
+<div class="ct-recon-arc arc-5"></div>
+<div class="ct-recon-arc arc-6"></div>
+<div class="ct-recon-arc arc-7"></div>
+<div class="ct-recon-arc arc-8"></div>
+
+<div class="ct-recon-arc arc-2"></div>
+<div class="ct-recon-arc arc-3"></div>
+<div class="ct-recon-arc arc-4"></div>
+
+<canvas aria-hidden="true" id="particle-background"></canvas>
+<main class="page-shell">
+<section class="content-panel">
 <header class="hero" id="about">
 <p class="eyebrow">Researcher · Engineer · Scientist</p>
 <h1>Jordan Houri</h1>
@@ -158,169 +156,97 @@
 <p><a href="mailto:jordanhouri@gmail.com">jordanhouri@gmail.com</a></p>
 </footer>
 </section>
-  </main>
-  <script>
-  (() => {
-    const field = document.querySelector('.ct-arc-field');
-    const panel = document.querySelector('.content-panel');
-    if (!field || !panel) return;
+</main>
 
-    const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
-    let ticking = false;
 
-    // Large deliberate size range: smallest is 1/5 the largest.
-    // 80 px -> 400 px.
-    const sizes = [400, 80, 255, 130, 330, 105, 210, 165, 290];
+<script>
+(() => {
+  const field = document.querySelector('.ct-arc-field');
+  const panel = document.querySelector('.content-panel');
+  if (!field || !panel) return;
 
-    // Deterministic positions spread across the full viewport.
-    const xFractions = [0.10, 0.53, 0.86, 0.30, 0.70, 0.93, 0.17, 0.60, 0.40];
+  const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
+  let ticking = false;
 
-    function layoutArcs() {
-      const viewportW = window.innerWidth;
-      const viewportH = window.innerHeight;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
+  function layoutArcs() {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scrollY = window.scrollY || window.pageYOffset || 0;
 
-      const panelRect = panel.getBoundingClientRect();
-      const panelTopDoc = panelRect.top + scrollY;
-      const panelBottomDoc = panelTopDoc + panel.offsetHeight;
-      const maxScroll = Math.max(0, panelBottomDoc - viewportH);
+    const panelRect = panel.getBoundingClientRect();
+    const panelTopDoc = panelRect.top + scrollY;
+    const panelBottomDoc = panelTopDoc + panel.offsetHeight;
+    const maxScroll = Math.max(0, panelBottomDoc - vh);
 
-      // Complete vertical extent the half-speed field can reveal.
-      const virtualHeight = viewportH + maxScroll * 0.5;
+    // At 50% parallax, this is the full vertical range of the background field
+    // that can ever become visible while the real page scrolls.
+    const virtualHeight = vh + 0.5 * maxScroll;
 
-      // Density rule: no more than 3 arcs per 1080 vertical px.
-      // Keep at least 2 for very short pages.
-      const densityCount = Math.ceil((virtualHeight / 1080) * 3);
-      const desiredCount = Math.max(2, Math.min(arcs.length, densityCount));
+    // Exactly 3 motifs per 1080px band, never duplicated elsewhere.
+    // Use a second band only when the content-derived virtual height needs it.
+    const bandH = 1080;
+    const neededBands = Math.max(1, Math.min(2, Math.ceil(virtualHeight / bandH)));
 
-      arcs.forEach(arc => {
+    // Wide size range: 80px to 400px (5:1).
+    const sizes = [400, 80, 210, 120, 300, 170];
+    const x = [0.12, 0.53, 0.85, 0.22, 0.70, 0.90];
+    const localY = [0.18, 0.50, 0.80];
+
+    arcs.forEach((arc, i) => {
+      const band = i < 3 ? 0 : 1;
+      const j = i % 3;
+
+      if (band >= neededBands) {
         arc.style.display = 'none';
-      });
-
-      const placed = [];
-      const echoPadding = 62;
-      const separation = 32;
-      const edgePadding = 10;
-
-      for (let i = 0; i < desiredCount; i++) {
-        const arc = arcs[i];
-        let size = sizes[i % sizes.length];
-
-        // Scale only the very largest sizes on narrower screens while
-        // preserving approximately the same 5:1 visual range.
-        const maxAllowed = Math.max(180, viewportW * 0.34);
-        if (size > maxAllowed) size = maxAllowed;
-
-        const outerR = size / 2 + echoPadding;
-
-        let cx = viewportW * xFractions[i % xFractions.length];
-
-        // Spread vertically through the full content-derived parallax range.
-        const t = desiredCount === 1 ? 0.5 : i / (desiredCount - 1);
-        let cy = 100 + t * Math.max(0, virtualHeight - 200);
-
-        cx = Math.max(
-          outerR + edgePadding,
-          Math.min(viewportW - outerR - edgePadding, cx)
-        );
-
-        cy = Math.max(
-          outerR + 10,
-          Math.min(virtualHeight - outerR - 10, cy)
-        );
-
-        // Deterministic collision resolution. No silent dropping.
-        // Nudge alternating horizontally/vertically until clear.
-        for (let attempt = 0; attempt < 30; attempt++) {
-          let collided = false;
-
-          for (const other of placed) {
-            const dx = cx - other.x;
-            const dy = cy - other.y;
-            const minDist = outerR + other.r + separation;
-
-            if ((dx * dx + dy * dy) < minDist * minDist) {
-              collided = true;
-
-              const nudge = 36 + attempt * 7;
-              switch (attempt % 4) {
-                case 0: cx += nudge; break;
-                case 1: cx -= nudge; break;
-                case 2: cy += nudge; break;
-                default: cy -= nudge; break;
-              }
-
-              cx = Math.max(
-                outerR + edgePadding,
-                Math.min(viewportW - outerR - edgePadding, cx)
-              );
-              cy = Math.max(
-                outerR + 10,
-                Math.min(virtualHeight - outerR - 10, cy)
-              );
-
-              break;
-            }
-          }
-
-          if (!collided) break;
-        }
-
-        // Final fallback: if a crowded viewport still causes a collision,
-        // reduce only this motif until it clears, but never remove it.
-        for (let shrink = 0; shrink < 5; shrink++) {
-          const testR = size / 2 + echoPadding;
-          const safe = placed.every(other => {
-            const dx = cx - other.x;
-            const dy = cy - other.y;
-            const minDist = testR + other.r + separation;
-            return (dx * dx + dy * dy) >= minDist * minDist;
-          });
-
-          if (safe) break;
-          size *= 0.88;
-        }
-
-        const finalR = size / 2 + echoPadding;
-
-        arc.style.display = 'block';
-        arc.style.width = `${size}px`;
-        arc.style.height = `${size}px`;
-        arc.style.left = `${cx - size / 2}px`;
-        arc.style.right = 'auto';
-        arc.style.top = `${cy - size / 2}px`;
-
-        placed.push({
-          x: cx,
-          y: cy,
-          r: finalR
-        });
+        return;
       }
-    }
 
-    function applyParallax() {
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
-    }
+      arc.style.display = 'block';
 
-    function update() {
-      layoutArcs();
-      applyParallax();
-      ticking = false;
-    }
+      let size = sizes[i];
 
-    function requestUpdate() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    }
+      // Preserve the large size contrast on narrower screens.
+      const scale = Math.min(1, Math.max(0.58, vw / 1500));
+      size *= scale;
 
-    update();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate, { passive: true });
-  })();
-  </script>
+      const echoPad = 62;
+      const r = size / 2 + echoPad;
 
-  <script src="particles.js?v=20"></script>
+      let cx = vw * x[i];
+      let cy = band * bandH + bandH * localY[j];
+
+      cx = Math.max(r + 10, Math.min(vw - r - 10, cx));
+
+      arc.style.width = `${size}px`;
+      arc.style.height = `${size}px`;
+      arc.style.left = `${cx - size / 2}px`;
+      arc.style.top = `${cy - size / 2}px`;
+    });
+  }
+
+  function applyParallax() {
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
+  }
+
+  function update() {
+    layoutArcs();
+    applyParallax();
+    ticking = false;
+  }
+
+  function requestUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  update();
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+})();
+</script>
+
+<script src="particles.js?v=22"></script>
 </body>
 </html>
