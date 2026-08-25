@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v108-larger-gapless-chevrons" />
+  <meta name="site-build" content="v109-opaque-symmetric-chevrons" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -210,7 +210,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   border:0;
   outline:0;
   background:transparent;
-  color:rgba(169,200,200,.74);
+  color:rgb(169,200,200);
   z-index:60;
   cursor:pointer;
   user-select:none;
@@ -244,8 +244,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
 .orbit-edge-nav-prev::before { transform:translateX(-9px) rotate(9deg); }
 .orbit-edge-nav-prev::after  { transform:translateX(-9px) rotate(-9deg); }
-.orbit-edge-nav-next::before { transform:translateX(9px) rotate(-9deg); }
-.orbit-edge-nav-next::after  { transform:translateX(9px) rotate(9deg); }
+.orbit-edge-nav-next::before { transform:translateX(8px) rotate(-9deg); }
+.orbit-edge-nav-next::after  { transform:translateX(8px) rotate(9deg); }
 
 .orbit-edge-nav:hover,
 .orbit-edge-nav:focus-visible {
@@ -543,11 +543,12 @@ const status = document.getElementById('orbitStatus');
         const viewportRect = viewport.getBoundingClientRect();
         const activeRect = activeCard.getBoundingClientRect();
         const gap = window.innerWidth <= 760 ? 4 : 10;
-        const prevWidth = edgePrev.offsetWidth || 42;
+        const prevWidth = edgePrev.offsetWidth || 63;
 
         // Keep the controls fully outside the active panel, hugging its edges.
+        // The right chevron gets a 1px inward nudge for visual centering symmetry.
         edgePrev.style.left = `${activeRect.left - viewportRect.left - prevWidth - gap}px`;
-        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap}px`;
+        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap - 1}px`;
       }
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -891,7 +892,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v108 orbit</div>
-  <script src="particles.js?v=108"></script>
+  <div class="build-marker" aria-hidden="true">v109 orbit</div>
+  <script src="particles.js?v=109"></script>
 </body>
 </html>
