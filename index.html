@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v71-360-particles-true-1440" />
+  <meta name="site-build" content="v72-panel-scroll-priority-arrows-top" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -96,8 +96,18 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .item p + p { margin-top:8px; }
 .date { margin-bottom:9px!important; color:var(--muted); font-size:.74rem!important; letter-spacing:.1em; text-transform:uppercase; }
 .muted { color:var(--muted); }
-.orbit-controls { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:10px 0 18px; display:grid;
-  grid-template-columns:46px minmax(140px,auto) 46px; justify-content:center; align-items:center; gap:10px; }
+.orbit-controls {
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:min(1440px, calc(100vw - 48px));
+  z-index:30;
+  pointer-events:none;
+}
 .orbit-controls button { width:46px; height:38px; border:1px solid var(--line); border-radius:8px; background:rgba(12,15,26,.76);
   color:var(--text); font:inherit; cursor:pointer; }
 .orbit-controls button:hover,.orbit-controls button:focus-visible { color:var(--accent); border-color:rgba(232,191,40,.4); outline:none; }
@@ -157,7 +167,12 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       <p>Scroll, drag, or use the arrows to rotate around the page.</p>
     </div>
 
-    <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
+    <div class="orbit-controls" aria-label="Orbit controls">
+      <button type="button" id="orbitPrev" aria-label="Previous panel">←</button>
+      <span id="orbitStatus" aria-live="polite">About</span>
+      <button type="button" id="orbitNext" aria-label="Next panel">→</button>
+    </div>
+      <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
       <div class="orbit-track" id="orbitTrack">
         <div class="orbit-set" id="orbitSet">
           <article class="orbit-card card-intro" id="about">
@@ -215,11 +230,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       </div>
     </div>
 
-    <div class="orbit-controls" aria-label="Orbit controls">
-      <button type="button" id="orbitPrev" aria-label="Previous panel">←</button>
-      <span id="orbitStatus" aria-live="polite">About</span>
-      <button type="button" id="orbitNext" aria-label="Next panel">→</button>
-    </div>
+    
   </main>
 
   <script>
@@ -350,6 +361,29 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     viewport.addEventListener('wheel', event => {
+      const panel = event.target.closest('.orbit-card');
+
+      // Vertical scrolling inside a panel always gets first priority.
+      // Only hand the gesture to the orbit once the panel has reached the
+      // relevant vertical edge.
+      if (
+        panel &&
+        Math.abs(event.deltaY) >= Math.abs(event.deltaX) &&
+        panel.scrollHeight > panel.clientHeight + 2
+      ) {
+        const atTop = panel.scrollTop <= 0;
+        const atBottom =
+          panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 2;
+
+        const canScrollUp = event.deltaY < 0 && !atTop;
+        const canScrollDown = event.deltaY > 0 && !atBottom;
+
+        if (canScrollUp || canScrollDown) {
+          // Let the browser perform the panel's native vertical scroll.
+          return;
+        }
+      }
+
       event.preventDefault();
 
       const raw =
@@ -357,8 +391,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           ? event.deltaX
           : event.deltaY;
 
-      // Keep extending the unlock timer while the same physical wheel/trackpad
-      // gesture is active.
       window.clearTimeout(wheelUnlockTimer);
       wheelUnlockTimer = window.setTimeout(() => {
         wheelLocked = false;
@@ -367,7 +399,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       if (wheelLocked) return;
 
-      // If direction reverses mid-gesture, restart the threshold accumulation.
       if (
         wheelAccum !== 0 &&
         Math.sign(raw) !== Math.sign(wheelAccum)
@@ -381,7 +412,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       moveByPanels(wheelAccum > 0 ? 1 : -1);
 
-      // Lock to this panel until the wheel/trackpad gesture has settled.
       wheelLocked = true;
       wheelAccum = 0;
     }, { passive: false });
@@ -453,7 +483,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v71 orbit</div>
-  <script src="particles.js?v=71"></script>
+  <div class="build-marker" aria-hidden="true">v72 orbit</div>
+  <script src="particles.js?v=72"></script>
 </body>
 </html>

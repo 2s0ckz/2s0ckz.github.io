@@ -1,15 +1,14 @@
-Jordan Houri personal site — v71
+Jordan Houri personal site — v72
 
-FIXES:
-- particle generation 6x across full 360-degree surface
-- off-screen particle simulation retained
-- no special initial spawn burst
-- orbit initialized before particle renderer
-- true outside panel width capped at 1440px via border-box
+Changes:
+- panel vertical scroll has wheel priority
+- orbit takes over only at panel scroll boundaries
+- arrows moved above panels
+- arrow row capped to 1440px
 
 SHA-256:
-a5fc8ef7016c88364271f0b875ee64b6b60faa70cc632166789189fbce30e482  index.html
+5f0b74150ff4c9c037dc44e065a9929ef2a367bd60ebb69e18643cb60814c8a5  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 8e8f288b95f79f467f397a1e44307b10bc5758b454912436b178efa94881b3e7  particles.js
-95d02bc254f85a65c0ca85d8a3ae6a6e1cd896c3c2de15fee57891390e8d7a79  README.md
+10f0b56c60019ba2313d54bb80dd0cd38e560be9fdf305a148bc0e5d63e7a3e4  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
