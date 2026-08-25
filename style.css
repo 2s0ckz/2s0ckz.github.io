@@ -6,15 +6,15 @@
 
 :root {
   --bone-00: #000000;
-  --bone-25: #3c4a4f;
-  --bone-50: #7f9496;
+  --bone-25: #38384e;
+  --bone-50: #707b90;
   --bone-75: #a9c8c8;
-  --bone-88: #ccd7d5;
-  --bone-94: #e5ece8;
+  --bone-88: #d6e5e5;
+  --bone-94: #eaf2f2;
   --bone-100: #ffffff;
 
   --page-bg: var(--bone-00);
-  --panel: rgba(60, 74, 79, 0.50);
+  --panel: rgba(56, 56, 78, 0.50);
   --panel-border: rgba(255, 255, 255, 0.22);
 
   --text-body: var(--bone-75);
@@ -184,7 +184,7 @@ li {
   padding: 12px clamp(18px, 4vw, 48px);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(60, 74, 79, 0.66);
+  background: rgba(56, 56, 78, 0.68);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   scrollbar-width: none;

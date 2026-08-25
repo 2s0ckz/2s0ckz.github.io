@@ -28,3 +28,12 @@ Updated static personal/research website built with plain HTML, CSS, and JavaScr
 4. In GitHub, open **Settings → Pages**.
 5. Set the source to **Deploy from a branch**, select `main`, and use `/ (root)`.
 6. Your site will appear at `https://YOUR_GITHUB_USERNAME.github.io/`.
+
+
+## Build v3 verification
+- Exact-ish Matplotlib bone(0.25): RGB(56,56,78)
+- Exact-ish bone(0.50): RGB(112,123,144)
+- bone(0.75): RGB(169,200,200)
+- Cache-busting query strings added to CSS/JS
+- 50% top primaries / 25% left / 25% right
+- Top entry angles widened to about 36°–144° from +x (±54° about downward)

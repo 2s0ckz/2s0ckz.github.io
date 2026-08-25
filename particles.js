@@ -106,21 +106,21 @@
     let x, y, angle;
 
     // Wider angle range from above, plus side-born primaries that still travel downward.
-    if (originMode < 0.60) {
+    if (originMode < 0.50) {
       // From above
       x = rand(width * 0.02, width * 0.98);
       y = -20;
-      angle = rand(Math.PI * 0.30, Math.PI * 0.70);
-    } else if (originMode < 0.80) {
+      angle = rand(Math.PI * 0.20, Math.PI * 0.80);
+    } else if (originMode < 0.75) {
       // From left side, still going downward
       x = -20;
       y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.16, Math.PI * 0.44);
+      angle = rand(Math.PI * 0.14, Math.PI * 0.42);
     } else {
       // From right side, still going downward
       x = width + 20;
       y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.56, Math.PI * 0.84);
+      angle = rand(Math.PI * 0.58, Math.PI * 0.86);
     }
 
     addTrack("proton", x, y, angle, familyId, {
