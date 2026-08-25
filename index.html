@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v63-viewer-centered-cylinder" />
+  <meta name="site-build" content="v67-restored-panel-opacity" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
 <style>
 * { box-sizing: border-box; }
 :root {
-  --bg:#000; --panel:rgba(12,15,26,.66); --text:#a9c8c8; --heading:#f2f5f5;
+  --bg:#000; --panel:rgba(12,15,26,.5625); --text:#a9c8c8; --heading:#f2f5f5;
   --subheading:#cad7d9; --muted:#707b90; --line:rgba(169,200,200,.16);
   --accent:#E8BF28; --nav-height:118px; --panel-max:1440px;
 }
@@ -129,7 +129,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         <img class="profile-photo" src="https://github.com/2s0ckz.png?size=240" alt="Jordan Houri" />
         <span class="identity-copy">
           <strong>Jordan Houri</strong>
-          <span>Physici-an/st (in training)</span>
+          <span>Radiation Physici-an/st (in training)</span>
         </span>
       </a>
 
@@ -233,6 +233,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     let raf = 0;
     let ready = false;
 
+    // Wheel snapping state: accumulate gesture distance, move one panel when
+    // threshold is crossed, then lock until the gesture settles.
+    let wheelAccum = 0;
+    let wheelLocked = false;
+    let wheelUnlockTimer = 0;
+    const wheelThreshold = 85;
+    const wheelSettleMs = 170;
+
     function wrappedAngle(angle) {
       return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
@@ -268,8 +276,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         // theta=0 is the panel directly in front of the viewer.
         // As a panel moves toward the viewer's sides, its center comes FORWARD
         // in CSS z-space rather than receding into a rotation center behind the page.
-        const x = radius * Math.sin(theta);
+        let x = radius * Math.sin(theta);
         const z = radius * (1 - Math.cos(theta));
+
+        // Snap the flat/front-facing panel exactly to the viewport center.
+        if (Math.abs(theta) < 1e-6) x = 0;
 
         // The panel's front face points inward toward the viewer at the cylinder center.
         // This is the opposite sign from an outside-facing carousel/rolodex.
@@ -317,25 +328,40 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     viewport.addEventListener('wheel', event => {
-      const card = event.target.closest('.orbit-card');
+      event.preventDefault();
 
+      const raw =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? event.deltaX
+          : event.deltaY;
+
+      // Keep extending the unlock timer while the same physical wheel/trackpad
+      // gesture is active.
+      window.clearTimeout(wheelUnlockTimer);
+      wheelUnlockTimer = window.setTimeout(() => {
+        wheelLocked = false;
+        wheelAccum = 0;
+      }, wheelSettleMs);
+
+      if (wheelLocked) return;
+
+      // If direction reverses mid-gesture, restart the threshold accumulation.
       if (
-        card &&
-        card.scrollHeight > card.clientHeight + 2 &&
-        Math.abs(event.deltaY) > Math.abs(event.deltaX)
+        wheelAccum !== 0 &&
+        Math.sign(raw) !== Math.sign(wheelAccum)
       ) {
-        const canScrollUp = event.deltaY < 0 && card.scrollTop > 0;
-        const canScrollDown =
-          event.deltaY > 0 &&
-          card.scrollTop + card.clientHeight < card.scrollHeight - 2;
-        if (canScrollUp || canScrollDown) return;
+        wheelAccum = 0;
       }
 
-      event.preventDefault();
-      const raw = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      wheelAccum += raw;
 
-      // Continuous angular movement rather than translating a strip.
-      moveByPanels(raw / 650);
+      if (Math.abs(wheelAccum) < wheelThreshold) return;
+
+      moveByPanels(wheelAccum > 0 ? 1 : -1);
+
+      // Lock to this panel until the wheel/trackpad gesture has settled.
+      wheelLocked = true;
+      wheelAccum = 0;
     }, { passive: false });
 
     viewport.addEventListener('pointerdown', event => {
@@ -358,8 +384,16 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       if (!dragging) return;
       dragging = false;
       viewport.classList.remove('is-dragging');
+
       if (viewport.hasPointerCapture(event.pointerId)) {
         viewport.releasePointerCapture(event.pointerId);
+      }
+
+      // Snap to the nearest panel after free dragging.
+      targetPhase = Math.round(targetPhase);
+
+      if (!raf) {
+        raf = requestAnimationFrame(animate);
       }
     }
 
@@ -398,7 +432,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v63 orbit</div>
-  <script src="particles.js?v=63"></script>
+  <div class="build-marker" aria-hidden="true">v67 orbit</div>
+  <script src="particles.js?v=67"></script>
 </body>
 </html>

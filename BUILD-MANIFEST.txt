@@ -1,15 +1,13 @@
-Jordan Houri personal site — v63
+Jordan Houri personal site — v67
 
-Viewer-centered inside cylinder:
-- z = R * (1 - cos(theta))
-- rotateY = -theta
-- no artificial side-panel shrinking
-- perspective = 1400px
-- closed 6-panel ring retained
+Panel treatment:
+- rgba(12,15,26,0.5625)
+- backdrop blur retained
+- orbit/snapping behavior unchanged
 
 SHA-256:
-145dfc8aad20fa544f771292d4f8160876e6cf61925215358a54c4bb394e06f6  index.html
+19c0175ba67d30fa2199828e150909e3b72a6f189ef2cc4e3130ac3fc0e1698a  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
-42a462d733e9e1fcefb16b916cbc81267396c4176116b5734b6bb189f20e4370  README.md
+5c482b9cc37dd9afdf41678cbea378cf4726cfddc2522a3d819f10390db51af3  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
