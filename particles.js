@@ -256,7 +256,7 @@
 
     if (family.activeCount <= 0) {
       family.activeCount = 0;
-      family.fadeStart = performance.now() + rand(400, 800);
+      family.fadeStart = performance.now() + rand(2000, 4000);
     }
   }
 

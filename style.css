@@ -8,7 +8,7 @@
   --bone-100: #ffffff;
 
   --page-bg: var(--bone-00);
-  --panel: rgba(12, 15, 26, 0.25);
+  --panel: rgba(12, 15, 26, 0.375);
   --panel-border: rgba(255, 255, 255, 0.12);
 
   --text-body: var(--bone-75);
@@ -79,11 +79,11 @@ a:focus-visible {
   position: absolute;
   display: none;
   border-radius: 50%;
-  border: 1px solid rgba(169, 200, 200, 0.0235);
+  border: 1px solid rgba(169, 200, 200, 0.03525);
   box-shadow:
-    0 0 0 18px rgba(169, 200, 200, 0.0174),
-    0 0 0 38px rgba(169, 200, 200, 0.0127),
-    0 0 0 62px rgba(169, 200, 200, 0.0087);
+    0 0 0 18px rgba(169, 200, 200, 0.02610),
+    0 0 0 38px rgba(169, 200, 200, 0.01905),
+    0 0 0 62px rgba(169, 200, 200, 0.01305);
 }
 
 /* Transparent particles pass in front of the arcs. */
