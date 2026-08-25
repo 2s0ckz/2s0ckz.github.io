@@ -1,10 +1,17 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 52 adjusts the intermediate-origin linear cascade generation limits.
+Version 53 changes the CT reconstruction arc parallax from 50% to 25%.
 
-- intermediate proton scatter emission remains 0.1% per vertex
-- electron-origin linear chains remain capped at 5 generations
-- photon-origin linear chains are now capped at 3 generations
-- linear chains remain strictly 1 -> 1
-- electron -> photon and photon -> electron transitions remain enabled
-- terminal proton interactions remain unchanged
+Arc parallax math:
+- real scroll distance = document scroll height - viewport height
+- arc virtual height = viewport height + 0.25 * real scroll distance
+- arc translation = -0.25 * window scrollY
+- density remains ~3 arcs per 1080 px of the updated virtual arc field
+
+Example:
+- viewport = 1080 px
+- document = 2160 px
+- real scroll distance = 1080 px
+- 25% parallax travel = 270 px
+- virtual arc field = 1350 px
+- target arc count = ceil(1350 / 1080 * 3) = 4 arcs

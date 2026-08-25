@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v52-photon-linear-max3" />
+  <meta name="site-build" content="v53-arc-parallax-25pct" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=52" />
+  <link rel="stylesheet" href="style.css?v=53" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
@@ -178,14 +178,15 @@
       // Example: 2160px document, 1080px viewport:
       // real scroll = 1080
       // virtual height = 1080 + 0.5*1080 = 1620
-      const virtualHeight = vh + 0.5 * realScrollableDistance;
+      const virtualHeight = vh + 0.25 * realScrollableDistance;
 
       // Fixed layer gets a real virtual height but contributes zero layout height.
       field.style.height = `${virtualHeight}px`;
 
       // Exactly the requested density:
       // 3 arcs per 1080 virtual vertical pixels, rounded up.
-      const requestedCount = Math.ceil((virtualHeight / 1080) * 3);
+      // Keep arc density at ~3 arcs per 1080px of the 25%-parallax virtual field.
+    const requestedCount = Math.ceil((virtualHeight / 1080) * 3);
       const count = Math.min(arcs.length, Math.max(1, requestedCount));
 
       arcs.forEach(arc => {
@@ -229,7 +230,7 @@
 
     function applyParallax() {
       const scrollY = window.scrollY || window.pageYOffset || 0;
-      field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
+      field.style.transform = `translate3d(0, ${-0.25 * scrollY}px, 0)`;
     }
 
     function update() {
@@ -256,6 +257,6 @@
   })();
   </script>
 
-  <script src="particles.js?v=52"></script>
+  <script src="particles.js?v=53"></script>
 </body>
 </html>
