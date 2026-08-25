@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v17-varied-arcs" />
+  <meta name="site-build" content="v18-richer-arcs" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=17" />
+  <link rel="stylesheet" href="style.css?v=18" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
@@ -153,9 +153,17 @@
     const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
     let ticking = false;
 
-    // A deterministic sequence gives variety without changing on every resize.
-    const xFractions = [0.08, 0.78, 0.28, 0.91, 0.56, 0.14, 0.70, 0.40];
-    const baseSizes = [250, 390, 215, 320, 275, 430, 235, 345];
+    // Deliberately varied 2D positions rather than a mostly vertical stack.
+    const candidates = [
+      { x: 0.08, y: 0.14, size: 250 },
+      { x: 0.46, y: 0.20, size: 185 },
+      { x: 0.83, y: 0.13, size: 285 },
+      { x: 0.20, y: 0.56, size: 310 },
+      { x: 0.66, y: 0.54, size: 220 },
+      { x: 0.91, y: 0.72, size: 255 },
+      { x: 0.39, y: 0.82, size: 195 },
+      { x: 0.73, y: 0.91, size: 300 }
+    ];
 
     function layoutArcs() {
       const viewportW = window.innerWidth;
@@ -167,87 +175,118 @@
       const panelBottomDoc = panelTopDoc + panel.offsetHeight;
       const maxScroll = Math.max(0, panelBottomDoc - viewportH);
 
-      // Since the field moves at half scroll speed, this is the full vertical
-      // background range that can ever become visible.
+      // This is the complete vertical space the half-speed parallax field can
+      // expose while scrolling from the top to the bottom of the real content.
       const virtualHeight = viewportH + maxScroll * 0.5;
 
-      // More arcs than v16, but still tied strictly to actual content length.
-      const desiredCount = Math.max(
-        3,
-        Math.min(arcs.length, Math.ceil(virtualHeight / 620))
-      );
+      // Use a visually rich minimum on desktop. The decorative field is fixed,
+      // so these extra arcs do not affect document height.
+      const desktop = viewportW >= 900;
+      const desiredCount = desktop
+        ? Math.min(arcs.length, Math.max(6, Math.ceil(virtualHeight / 520)))
+        : Math.min(arcs.length, Math.max(4, Math.ceil(virtualHeight / 650)));
 
-      // Hide everything first.
       arcs.forEach(arc => {
         arc.style.display = 'none';
       });
 
       const placed = [];
-      const echoPadding = 100;
-      const edgePadding = 18;
-
-      // Candidate Y slots are evenly distributed through only the visible
-      // virtual range. No decorative element participates in document flow.
-      const usableTop = 100;
-      const usableBottom = Math.max(usableTop, virtualHeight - 120);
+      const echoPadding = 92;
+      const separation = 26;
+      const edgePadding = 12;
 
       for (let i = 0; i < desiredCount; i++) {
         const arc = arcs[i];
-        let size = baseSizes[i % baseSizes.length];
+        const spec = candidates[i % candidates.length];
 
-        // Scale down gracefully on narrower windows.
-        size = Math.min(size, Math.max(150, viewportW * 0.28));
+        let size = Math.min(
+          spec.size,
+          desktop ? viewportW * 0.24 : viewportW * 0.34
+        );
+        size = Math.max(150, size);
 
-        const outerRadius = size / 2 + echoPadding;
-        let centerX = viewportW * xFractions[i % xFractions.length];
-        let centerY =
-          desiredCount === 1
-            ? virtualHeight * 0.5
-            : usableTop + (usableBottom - usableTop) * (i / (desiredCount - 1));
+        const outerR = size / 2 + echoPadding;
 
-        // Keep the complete echo system inside the browser horizontally.
-        centerX = Math.max(
-          outerRadius + edgePadding,
-          Math.min(viewportW - outerRadius - edgePadding, centerX)
+        let cx = Math.max(
+          outerR + edgePadding,
+          Math.min(viewportW - outerR - edgePadding, viewportW * spec.x)
         );
 
-        // Resolve collisions. We primarily shift vertically so the intentional
-        // x-position variety is preserved.
-        for (let attempt = 0; attempt < 14; attempt++) {
-          let collision = false;
+        let cy = Math.max(
+          outerR + 20,
+          Math.min(
+            virtualHeight - outerR - 20,
+            virtualHeight * spec.y
+          )
+        );
+
+        // Resolve overlap in 2D while keeping each motif near its intended
+        // location. Try alternating horizontal/vertical nudges.
+        for (let attempt = 0; attempt < 24; attempt++) {
+          let collidedWith = null;
 
           for (const other of placed) {
-            const dx = centerX - other.x;
-            const dy = centerY - other.y;
-            const minDist = outerRadius + other.r + 34;
+            const dx = cx - other.x;
+            const dy = cy - other.y;
+            const minDist = outerR + other.r + separation;
 
             if ((dx * dx + dy * dy) < minDist * minDist) {
-              collision = true;
-              centerY += Math.max(90, minDist - Math.abs(dy) + 24);
+              collidedWith = { other, minDist };
               break;
             }
           }
 
-          if (!collision) break;
+          if (!collidedWith) break;
+
+          const dir = attempt % 4;
+          const nudge = 44 + attempt * 8;
+
+          if (dir === 0) cx += nudge;
+          if (dir === 1) cx -= nudge;
+          if (dir === 2) cy += nudge;
+          if (dir === 3) cy -= nudge;
+
+          cx = Math.max(
+            outerR + edgePadding,
+            Math.min(viewportW - outerR - edgePadding, cx)
+          );
+          cy = Math.max(
+            outerR + 20,
+            Math.min(virtualHeight - outerR - 20, cy)
+          );
         }
 
-        // If collision resolution pushes this arc beyond the content-derived
-        // virtual range, do not show it. This prevents decorative overflow.
-        if (centerY + outerRadius > virtualHeight + 20) {
-          continue;
+        // Final safety check. If a rare viewport cannot accommodate a given
+        // motif without overlap, shrink only that motif modestly and retry.
+        let safe = false;
+
+        for (let shrinkAttempt = 0; shrinkAttempt < 4 && !safe; shrinkAttempt++) {
+          const testOuterR = size / 2 + echoPadding;
+          safe = placed.every(other => {
+            const dx = cx - other.x;
+            const dy = cy - other.y;
+            const minDist = testOuterR + other.r + separation;
+            return (dx * dx + dy * dy) >= minDist * minDist;
+          });
+
+          if (!safe) size *= 0.88;
         }
+
+        if (!safe) continue;
+
+        const finalOuterR = size / 2 + echoPadding;
 
         arc.style.display = 'block';
         arc.style.width = `${size}px`;
         arc.style.height = `${size}px`;
-        arc.style.left = `${centerX - size / 2}px`;
+        arc.style.left = `${cx - size / 2}px`;
         arc.style.right = 'auto';
-        arc.style.top = `${centerY - size / 2}px`;
+        arc.style.top = `${cy - size / 2}px`;
 
         placed.push({
-          x: centerX,
-          y: centerY,
-          r: outerRadius
+          x: cx,
+          y: cy,
+          r: finalOuterR
         });
       }
     }
@@ -275,6 +314,6 @@
   })();
   </script>
 
-  <script src="particles.js?v=17"></script>
+  <script src="particles.js?v=18"></script>
 </body>
 </html>

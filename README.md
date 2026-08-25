@@ -1,14 +1,13 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 17 expands the background CT geometry.
+Version 18 increases the density and variety of the CT background geometry.
 
-- up to eight available arc motifs
-- JavaScript shows only as many as the actual content-derived virtual height needs
-- varying sizes and varied horizontal positions across the full viewport
-- arcs are no longer restricted to the page edges
-- collision detection includes the outer echo rings, preventing overlap
-- arcs that would extend beyond the content-derived virtual range are omitted
-- opacity remains at the reduced v16 level
-- parallax remains exactly 50% of page scroll speed
-- decorative layers remain fixed and add zero document height
-- no arc elements exist inside the content panel
+- desktop minimum: 6 arcs
+- mobile minimum: 4 arcs
+- up to 8 available motifs
+- varied sizes and 2D positions across the viewport
+- collision detection includes the full echo radius
+- individual motifs may shrink slightly only if needed to avoid overlap
+- fixed/parallax background, so arc count does not add page height
+- opacity remains at the reduced v16/v17 level
+- parallax remains 50% of page scroll speed
