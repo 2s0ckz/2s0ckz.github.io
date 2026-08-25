@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v84-no-z-compression";
+  window.__particleBuild = "v97-particle-radius-floor";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -538,8 +538,13 @@
       ? window.__orbitRadius
       : Math.max(320, width - 48);
 
-    // Match the particle pinhole camera to the same regular-prism apothem.
-    const focal = sharedRadius;
+    // Keep the particle surface from becoming too tightly curved on smaller
+    // screens. It still rotates with the content phase, but may sit on a
+    // larger concentric cylinder.
+    const minParticleRadius = 1200;
+    const particleRadius = Math.max(sharedRadius, minParticleRadius);
+
+    const focal = particleRadius;
     const cosine = Math.max(0.28, Math.cos(theta));
     const screenX = width * 0.5 + focal * Math.tan(theta);
     const screenY =

@@ -1,12 +1,11 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 96 applies visual polish only.
+Version 97 adds a minimum radius to the particle-background cylinder.
 
-Changes:
-- orbit-card backdrop blur increased from 1px to 2px
-- orbit-card corners changed to sharp (border-radius: 0)
-- mobile card corners also sharp
-- vertical spacing around the arrow-control row reduced
-- arrow button padding tightened slightly
+- particle radius = max(content cylinder radius, 1200px)
+- particle surface still rotates with the same content orbit phase
+- this reduces strong cylindrical distortion on small/mobile screens
+- desktop is unchanged whenever the content cylinder radius already exceeds 1200px
 
-Orbit geometry, responsive sizing, spacing, scrolling, particles, snapping, and timing are unchanged.
+All content-panel geometry, responsive sizing, scrolling, snapping, opacity,
+2px blur, sharp corners, and arrow spacing from v96 are unchanged.
