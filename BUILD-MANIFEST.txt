@@ -1,14 +1,14 @@
-Jordan Houri personal site — v34
+Jordan Houri personal site — v35
 
-Scatter-secondary mechanism:
-- first emission: scatter 3–5
-- next emissions: every 4–7 scatters
-- 82% electron / 18% photon
-- proton continues
+Scatter-secondary tuning:
+- first emission: scatter 5–7
+- later emissions: every 8–12 scatters
+- electron daughter initial length: 26–56 px
+- proton continues after emission
 
 SHA-256:
-9c1f2e953cef0f6f67fd3875e49e6e0e7674222a949526aa047f1d5dbc7b77a4  index.html
+0d69fcfa924d87c9d20cae832617f702b87e5e096c20bf26ab5d6759d2e9f0b6  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-12e67d4517bb71eae94c4744f0c7f52f8c6b5704007397dbe52a11652985f3b7  particles.js
-62480d17748f2f6fe4d2e0da99db1160bd562ca6789257c731a3f7aef3fba21d  README.md
+14d3822b0ab5db4a1be2abbf86f4dcbcd8c80fc66d9d6451bc4881898f871377  particles.js
+61c311a6f34a2197e5c8dfaa41c716316517339403affbffeaf77eeba688623f  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

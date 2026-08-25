@@ -94,7 +94,7 @@
       scatterSigma: options.scatterSigma ?? defaults.scatterSigma,
       scatterClock: rand(0.055, 0.14),
       scatterCount: 0,
-      nextScatterSecondary: kind === "proton" ? Math.floor(rand(3, 6)) : null,
+      nextScatterSecondary: kind === "proton" ? Math.floor(rand(5, 8)) : null,
       trail: [{ x, y }]
     });
   }
@@ -164,7 +164,7 @@
     if (track.scatterCount < track.nextScatterSecondary) return false;
 
     // Schedule the next emission several scatter vertices later.
-    track.nextScatterSecondary += Math.floor(rand(4, 8));
+    track.nextScatterSecondary += Math.floor(rand(8, 13));
 
     // Mostly delta-like electrons; occasional photon.
     if (Math.random() < 0.82) {
@@ -176,7 +176,7 @@
         track.familyId,
         {
           generation: 0,
-          stepLength: rand(34, 72),
+          stepLength: rand(26, 56),
           speed: rand(90, 122.5)
         }
       );

@@ -1,16 +1,14 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 34 replaces probabilistic proton-scatter secondary emission with an
-auditable scatter-count mechanism.
+Version 35 reduces proton multiple-scattering secondaries.
 
-For each proton:
-- first scatter-vertex secondary occurs on scatter 3–5
-- subsequent scatter-vertex secondaries occur every additional 4–7 scatters
-- ~82% are red electrons
-- ~18% are green photons
-- the proton always continues after emission
-- electron daughter length is 34–72px
-- photon long mean-free-path behavior remains
+Updated scatter-count schedule:
+- first scatter-vertex secondary: scatter 5–7
+- later scatter-vertex secondaries: every additional 8–12 scatters
+- proton still continues after emission
+- daughter type split unchanged: ~82% electron / ~18% photon
 
-This guarantees that a sufficiently long proton track produces visible
-scatter-vertex daughters instead of relying on an opaque per-vertex probability.
+Visibility tweak:
+- scatter-electron initial segment reduced from 34–72 px to 26–56 px
+
+Everything else remains unchanged.
