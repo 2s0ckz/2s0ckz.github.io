@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v83-more-z-compression";
+  window.__particleBuild = "v84-no-z-compression";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -541,20 +541,10 @@
     // Match the particle pinhole camera to the same regular-prism apothem.
     const focal = sharedRadius;
     const cosine = Math.max(0.28, Math.cos(theta));
-    const zDepthFactor = Number.isFinite(window.__orbitZDepthFactor)
-      ? window.__orbitZDepthFactor
-      : 1;
-
-    // Compress perspective distortion in the same spirit as the panel z-depth
-    // adjustment, without changing the underlying cylindrical surface angle.
-    const tanTheta = Math.tan(theta) * zDepthFactor;
-    const verticalScale =
-      1 + ((1 / cosine) - 1) * zDepthFactor;
-
-    const screenX = width * 0.5 + focal * tanTheta;
+    const screenX = width * 0.5 + focal * Math.tan(theta);
     const screenY =
       height * 0.5 +
-      (point.y - height * 0.5) * verticalScale;
+      (point.y - height * 0.5) / cosine;
 
     if (
       screenX < -180 ||

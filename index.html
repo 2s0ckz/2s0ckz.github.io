@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v83-more-z-compression-mobile-scroll-gap" />
+  <meta name="site-build" content="v84-no-z-compression" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -339,7 +339,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       window.__orbitStep = step;
       window.__orbitRadius = radius;
       window.__orbitInteriorAngle = Math.PI - step;
-      window.__orbitZDepthFactor = 0.24;
       window.__orbitMobile = window.innerWidth <= 760;
 
       // CSS perspective is the camera-to-front-plane distance. For a viewer
@@ -365,10 +364,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         // somewhere outside it — especially important on mobile.
         let x = radius * Math.sin(theta);
 
-        // Keep the exact regular-prism face orientation, but compress the
-        // apparent depth to reduce perspective exaggeration.
-        const zDepthFactor = 0.24;
-        const z = radius * (1 - Math.cos(theta)) * zDepthFactor;
+        // Use the true regular-prism depth with no visual compression.
+        const z = radius * (1 - Math.cos(theta));
 
         if (Math.abs(theta) < 1e-6) x = 0;
 
@@ -639,7 +636,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v83 orbit</div>
-  <script src="particles.js?v=83"></script>
+  <div class="build-marker" aria-hidden="true">v84 orbit</div>
+  <script src="particles.js?v=84"></script>
 </body>
 </html>

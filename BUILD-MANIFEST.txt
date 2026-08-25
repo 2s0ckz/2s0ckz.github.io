@@ -1,14 +1,15 @@
-Jordan Houri personal site — v83
+Jordan Houri personal site — v84
 
 Changes:
-- z-depth factor 0.24
-- panel spacing based on panelWidth + 72px
-- mobile bottom padding/scroll clearance increased
-- mobile panel height leaves 24px viewport breathing room
+- all z-depth compression removed
+- true regular-prism depth restored
+- particle projection uncompressed
+- wider panel spacing retained
+- mobile scroll fixes retained
 
 SHA-256:
-cd87b7409ce01fc888d5e0fba3d1cce92dfe45d96e7fe6dd25e544fcb243c83e  index.html
+a23be04ab5d944b0b265004f551f5e4408c5005f0443aefe366493831337486c  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-3e5f05d8270bad441c00173a87bc7b06f64c12599523565e3c49b69b7dcb0056  particles.js
-0ff43505be80d7df1caa9ca2739d4882e958fd85754dd396ce2bb7861ee5f0c1  README.md
+5fa7c8e93dad1ac0931044971a36236631c95ce36baa5d6fe7d6d3ab0db29cba  particles.js
+efd50611a7d2023faeeb51a6bed6ef2b3cc7cf608006c5c086ce12fe6de8e9c4  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
