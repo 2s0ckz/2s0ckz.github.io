@@ -1,13 +1,12 @@
-Jordan Houri personal site — v28
+Jordan Houri personal site — v29
 
-Verified opacity values:
-panel alpha = 0.5625
-arc border = 0.052875
-arc echoes = 0.03915, 0.028575, 0.019575
+Verified changes:
+- electron maxGeneration = 5
+- link hover/focus color = #E8BF28
 
 SHA-256:
-91f89036e583d34893b6e0c180ec134feca0943821a427a80dca6242c89cab34  index.html
-47e3e2f9db370ca5da27a04ca96d8580e2f26841dd09db64e6860370d494df43  style.css
-3d12785c3f5ce4de5e70c9cb6a7da433ca1ca51db1bf69c8ffc95d54ceb7f0d2  particles.js
-4aaaece52c4850b5c175374b6c87fdd48d9c2be3cb199ba1ff3b645fb2acc113  README.md
+0744f7e7633360a7ea7c6c6f0f165fcb1af4ab36e3e756729b00d557a1d0c813  index.html
+ac4b1dcbcf10578967ceda6971dd80de90cd32113ab95c5a366ead8bb8af2738  style.css
+da17f907fdd996076fc72491036a41398a9bf4a5c627ff6baa0b08ee5f875707  particles.js
+833431cb127aa6ae693996fb1da3eae7a13f9135efa1bc0ed3371662b5c700a9  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

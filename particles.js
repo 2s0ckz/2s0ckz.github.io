@@ -66,7 +66,7 @@
         speed: rand(90, 122.5),
         stepLength: rand(20, 44),
         generation: 0,
-        maxGeneration: 4
+        maxGeneration: 5
       },
       photon: {
         speed: rand(85, 115),
