@@ -1,13 +1,14 @@
-Jordan Houri personal site — v103
+Jordan Houri personal site — v104
 
-FIXES:
-- shell grid changed from 3 rows to 2 rows
-- orbit viewport fills remaining shell height again
-- side arrows wired to existing navigation JS IDs
+CHANGES:
+- robust selection lock during real orbit drag only
+- desktop legacy top spacer collapsed; mobile spacing preserved
+- navigation chevrons integrated into active card margins
+- chevrons are CSS strokes, not literal angle-bracket glyphs
 
 SHA-256:
-2a8a226812a92ebe8896ea718b1b1bdecc28a9cc14a182be8cd043e65d263592  index.html
+a26fcb6161f15e183c96abd3206ee322f2fa56b38e2a5b7d3bfaac0be4a17139  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-e66ab4b5d50123fabe6daede78d6ad02cd3882990cacb6beaded96f50bfc6130  README.md
+cc0196d388878267806b4f0f0b5ad4387539e5ff135f70e16624d912c1c1f514  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v103-side-arrow-layout-fix" />
+  <meta name="site-build" content="v104-integrated-panel-chevrons" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -36,7 +36,13 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   background:rgba(255,255,255,.018); font-size:.72rem; letter-spacing:.07em; text-transform:uppercase; }
 .social-grid a:hover,.social-grid a:focus-visible { border-color:rgba(232,191,40,.4); }
 .orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr); }
-.orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
+.orbit-heading {
+  width:min(1440px,calc(100% - 48px));
+  height:0;
+  margin:0 auto;
+  padding:0;
+  overflow:hidden;
+}
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
 .orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1400px; perspective-origin:50% 50%; cursor:grab; outline:none; touch-action:pan-y; }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
@@ -142,7 +148,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .identity-copy span { font-size:.64rem; letter-spacing:.04em; white-space:normal; }
   .social-grid { width:auto; flex:1 1 auto; grid-template-columns:repeat(2,minmax(74px,1fr)); gap:6px; }
   .social-grid a { min-height:32px; padding:0 7px; font-size:.59rem; letter-spacing:.045em; }
-  .orbit-heading { width:calc(100% - 24px); padding-top:12px; }
+  .orbit-heading {
+    width:calc(100% - 24px);
+    height:auto;
+    padding:12px 0 8px;
+  }
   .orbit-heading p { font-size:.6rem; letter-spacing:.09em; }
   
   
@@ -185,65 +195,101 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 }
 
 
-.orbit-side-arrow {
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  width:30px;
-  height:64%;
-  min-height:180px;
-  max-height:520px;
+
+/* Active-panel navigation: tall, narrow chevrons drawn from strokes. */
+.orbit-card-nav {
+  position:fixed;
+  top:5%;
+  bottom:5%;
+  width:32px;
   padding:0;
   margin:0;
   border:0;
   outline:0;
   background:transparent;
-  color:rgba(169,200,200,.78);
-  font:300 28px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:40;
+  color:rgba(169,200,200,.58);
+  opacity:0;
+  pointer-events:none;
+  z-index:50;
   cursor:pointer;
   user-select:none;
   -webkit-user-select:none;
   touch-action:manipulation;
+  transition:color 140ms ease, opacity 120ms ease;
 }
 
-.orbit-side-arrow-left {
-  left:4px;
+.orbit-card.is-active .orbit-card-nav {
+  opacity:1;
+  pointer-events:auto;
 }
 
-.orbit-side-arrow-right {
-  right:4px;
+.orbit-card-nav-prev { left:8px; }
+.orbit-card-nav-next { right:8px; }
+
+.orbit-card-nav::before,
+.orbit-card-nav::after {
+  content:"";
+  position:absolute;
+  width:1px;
+  height:50%;
+  background:currentColor;
+  left:50%;
 }
 
-.orbit-side-arrow:hover,
-.orbit-side-arrow:focus-visible {
+.orbit-card-nav::before {
+  bottom:50%;
+  transform-origin:50% 100%;
+}
+
+.orbit-card-nav::after {
+  top:50%;
+  transform-origin:50% 0%;
+}
+
+/* Very tall/narrow left chevron: top-right -> center-left -> bottom-right. */
+.orbit-card-nav-prev::before {
+  left:35%;
+  transform:rotate(3.2deg);
+}
+.orbit-card-nav-prev::after {
+  left:35%;
+  transform:rotate(-3.2deg);
+}
+
+/* Mirrored right chevron. */
+.orbit-card-nav-next::before {
+  left:65%;
+  transform:rotate(-3.2deg);
+}
+.orbit-card-nav-next::after {
+  left:65%;
+  transform:rotate(3.2deg);
+}
+
+.orbit-card-nav:hover,
+.orbit-card-nav:focus-visible {
   color:#E8BF28;
-  background:rgba(255,255,255,.025);
 }
 
-.orbit-side-arrow:active {
-  transform:translateY(-50%) scale(.96);
+.orbit-card-nav:focus-visible {
+  filter:drop-shadow(0 0 3px rgba(232,191,40,.28));
 }
 
 @media (max-width:760px) {
-  .orbit-side-arrow {
+  .orbit-card-nav {
+    top:6%;
+    bottom:6%;
     width:24px;
-    height:58%;
-    min-height:150px;
-    max-height:420px;
-    font-size:24px;
   }
+  .orbit-card-nav-prev { left:4px; }
+  .orbit-card-nav-next { right:4px; }
+}
 
-  .orbit-side-arrow-left {
-    left:1px;
-  }
-
-  .orbit-side-arrow-right {
-    right:1px;
-  }
+/* Selection is locked only while an orbit drag is genuinely active. */
+body.orbit-drag-select-lock,
+body.orbit-drag-select-lock * {
+  user-select:none !important;
+  -webkit-user-select:none !important;
 }
 
 </style>
@@ -275,12 +321,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       
     </div>
 <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
-      <button class="orbit-side-arrow orbit-side-arrow-left" id="orbitPrev" type="button" aria-label="Previous panel">&lt;</button>
-      <button class="orbit-side-arrow orbit-side-arrow-right" id="orbitNext" type="button" aria-label="Next panel">&gt;</button>
-
-      <div class="orbit-track" id="orbitTrack">
+<div class="orbit-track" id="orbitTrack">
         <div class="orbit-set" id="orbitSet">
           <article class="orbit-card card-intro" id="about">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Researcher · Engineer · Scientist</p>
             <h1>Jordan Houri</h1>
             <p class="lede">Physician-scientist in training working at the intersection of medical physics, computational imaging, Monte Carlo modeling, radiation biology, and human spaceflight.</p>
@@ -291,6 +336,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           </article>
 
           <article class="orbit-card" id="selected-work">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Selected Work</p>
             <h2>Physics across scales</h2>
             <section class="item"><h3>Artemis I / AstroRad Radiation Protection</h3><p>Led scientific evaluation of the AstroRad vest during NASA's Artemis I mission, helping assess wearable shielding for deep-space radiation protection.</p></section>
@@ -299,6 +346,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           </article>
 
           <article class="orbit-card" id="publications">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Publications</p>
             <h2>Selected papers</h2>
             <section class="item"><h3>First Evaluation of Wearable Radiation Protection for Human Deep Space Exploration, as Flown on Artemis I</h3><p><strong>Houri J</strong>, Berger T, Gaza R, Hussein H, et al. <em>Science Advances</em> (2026).</p></section>
@@ -307,6 +356,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           </article>
 
           <article class="orbit-card" id="experience">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Experience</p>
             <h2>Research trajectory</h2>
             <section class="item"><h3>Research Assistant · Purdue University</h3><p class="date">2026–Present</p><p>Developing physics-informed constrained optimization methods for hyperspectral neutron CT strain reconstruction in collaboration with Oak Ridge National Laboratory.</p></section>
@@ -315,6 +366,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           </article>
 
           <article class="orbit-card" id="education">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Education</p>
             <h2>Training</h2>
             <section class="item"><h3>Indiana University</h3><p class="date">2024–Present</p><p>MD · Indianapolis, Indiana</p></section>
@@ -323,6 +376,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           </article>
 
           <article class="orbit-card card-contact" id="contact">
+            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Contact</p>
             <h2>Jordan Houri</h2>
             <p>Indianapolis, Indiana</p>
@@ -342,9 +397,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   (() => {
     const viewport = document.getElementById('orbitViewport');
     const set = document.getElementById('orbitSet');
-    const prev = document.getElementById('orbitPrev');
-    const next = document.getElementById('orbitNext');
-    const status = document.getElementById('orbitStatus');
+const status = document.getElementById('orbitStatus');
     if (!viewport || !set) return;
 
     const cards = Array.from(set.querySelectorAll('.orbit-card'));
@@ -502,6 +555,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
         const centerDistance = Math.abs(theta);
         if (centerDistance < nearest.distance) nearest = { distance: centerDistance, index };
+      });
+
+      cards.forEach((card, index) => {
+        card.classList.toggle('is-active', index === nearest.index);
       });
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -697,6 +754,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         dragging = false;
         activePointerId = null;
         viewport.classList.remove('is-dragging');
+      document.body.classList.remove('orbit-drag-select-lock');
         return;
       }
 
@@ -711,6 +769,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         pendingDrag = false;
         viewport.setPointerCapture(event.pointerId);
         viewport.classList.add('is-dragging');
+        document.body.classList.add('orbit-drag-select-lock');
               } else {
         // Touch/pen starts undecided. Do NOT capture the pointer yet:
         // native vertical panel scrolling must remain available.
@@ -733,6 +792,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         if (absY > 8 && absY > absX * 1.15) {
           pendingDrag = false;
           activePointerId = null;
+          document.body.classList.remove('orbit-drag-select-lock');
                     return;
         }
 
@@ -742,6 +802,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
           dragging = true;
           viewport.setPointerCapture(event.pointerId);
           viewport.classList.add('is-dragging');
+          document.body.classList.add('orbit-drag-select-lock');
                 } else {
           return;
         }
@@ -768,6 +829,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       if (!dragging) {
         pendingDrag = false;
         activePointerId = null;
+        document.body.classList.remove('orbit-drag-select-lock');
                 return;
       }
 
@@ -796,7 +858,19 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       pendingDrag = false;
       activePointerId = null;
       viewport.classList.remove('is-dragging');
+      document.body.classList.remove('orbit-drag-select-lock');
           });
+
+    set.addEventListener('click', event => {
+      const control = event.target.closest('.orbit-card-nav');
+      if (!control) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const direction = Number(control.dataset.orbitDir);
+      if (direction === -1 || direction === 1) {
+        moveByPanels(direction, arrowEase);
+      }
+    });
 
     viewport.addEventListener('keydown', event => {
       if (event.key === 'ArrowRight') {
@@ -807,11 +881,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         moveByPanels(-1);
       }
     });
-
-    prev?.addEventListener('click', () => moveByPanels(-1, arrowEase));
-    next?.addEventListener('click', () => moveByPanels(1, arrowEase));
-
-    function initialize() {
+function initialize() {
       updateResponsivePanelWidth();
       phase = 0;
       targetPhase = 0;
@@ -832,7 +902,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v103 orbit</div>
-  <script src="particles.js?v=103"></script>
+  <div class="build-marker" aria-hidden="true">v104 orbit</div>
+  <script src="particles.js?v=104"></script>
 </body>
 </html>
