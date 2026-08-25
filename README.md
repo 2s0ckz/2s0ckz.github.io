@@ -1,9 +1,13 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 107 changes the external chevrons to tapered wedges.
+Version 108 refines the external orbit chevrons.
 
-- each upper/lower chevron segment is a polygon rather than a rectangular stroke
-- the segment is widest at the center joint
-- it tapers to a sharp point at the outer end
-- no rounded line caps or rounded corners
-- placement and click behavior remain unchanged
+- chevrons are enlarged by roughly 50% overall
+- desktop control width: 63px
+- desktop control height: 84% with 262–510px clamp
+- mobile control width: 57px
+- mobile control height: 81% with 240–450px clamp
+- tapered wedge segments are also scaled up
+- the upper and lower halves now overlap slightly at the midpoint so there is no visible center gap
+
+All other orbit, particle, and layout behavior remains unchanged.

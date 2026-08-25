@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v107-tapered-chevron-strokes" />
+  <meta name="site-build" content="v108-larger-gapless-chevrons" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -200,11 +200,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 /* Navigation chevrons live outside scrollable card content but align to active panel edges. */
 .orbit-edge-nav {
   position:absolute;
-  top:50%;
-  width:42px;
-  height:56%;
-  min-height:175px;
-  max-height:340px;
+  top:calc(50% - 2px);
+  width:63px;
+  height:84%;
+  min-height:262px;
+  max-height:510px;
   padding:0;
   margin:0;
   border:0;
@@ -225,13 +225,13 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   content:"";
   position:absolute;
   left:50%;
-  width:8px;
+  width:12px;
   height:50%;
   background:currentColor;
 }
 
 .orbit-edge-nav::before {
-  bottom:50%;
+  bottom:calc(50% - 2px);
   transform-origin:50% 100%;
   clip-path:polygon(50% 0%, 100% 100%, 0% 100%);
 }
@@ -242,10 +242,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   clip-path:polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
-.orbit-edge-nav-prev::before { transform:translateX(-6px) rotate(9deg); }
-.orbit-edge-nav-prev::after  { transform:translateX(-6px) rotate(-9deg); }
-.orbit-edge-nav-next::before { transform:translateX(6px) rotate(-9deg); }
-.orbit-edge-nav-next::after  { transform:translateX(6px) rotate(9deg); }
+.orbit-edge-nav-prev::before { transform:translateX(-9px) rotate(9deg); }
+.orbit-edge-nav-prev::after  { transform:translateX(-9px) rotate(-9deg); }
+.orbit-edge-nav-next::before { transform:translateX(9px) rotate(-9deg); }
+.orbit-edge-nav-next::after  { transform:translateX(9px) rotate(9deg); }
 
 .orbit-edge-nav:hover,
 .orbit-edge-nav:focus-visible {
@@ -258,14 +258,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
 @media (max-width:760px) {
   .orbit-edge-nav {
-    width:38px;
-    height:54%;
-    min-height:160px;
-    max-height:300px;
+    width:57px;
+    height:81%;
+    min-height:240px;
+    max-height:450px;
   }
   .orbit-edge-nav::before,
   .orbit-edge-nav::after {
-    width:6px;
+    width:9px;
   }
 }
 
@@ -891,7 +891,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v107 orbit</div>
-  <script src="particles.js?v=107"></script>
+  <div class="build-marker" aria-hidden="true">v108 orbit</div>
+  <script src="particles.js?v=108"></script>
 </body>
 </html>
