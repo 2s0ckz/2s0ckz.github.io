@@ -1,15 +1,16 @@
-Jordan Houri personal site — v36
+Jordan Houri personal site — v38
 
-Scatter-secondary policy:
-- 35% of protons eligible
-- one emission max per proton
-- scheduled on scatter 7–14
-- 85% electron / 15% photon
+Code-level guard:
+- immutable track IDs
+- global Set of proton IDs that emitted
+- max one scatter-secondary per proton enforced globally
+- 35% eligibility
+- scheduled scatter 7–14
 - proton continues
 
 SHA-256:
-1a5874e1e7677795b533060b6014cd4b4dc58d0a0f2fe1cd7cec6e3863f78e96  index.html
+09c030ab7808cb95449bb159673b79ca419cb35a167fb96c337cc731c8d1e0c7  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-11cfbab5cb1002e428fb1249bcdb69981d7c75257f05695b3b612b4ea0251566  particles.js
-22c9acff35c938edb95ab538f273c3189ae8116161acc07c4f62b32e5b03493a  README.md
+6978f3b8935196c0b3e1b40b7a1a2bbe65f2b4e446a6ca727a8c7e61b0ea8d38  particles.js
+5b1a0513d55308cd6c06bbc1088ccee6239432caf64a7c9d30e875525924db76  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

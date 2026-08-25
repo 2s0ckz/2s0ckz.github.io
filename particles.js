@@ -17,6 +17,8 @@
   let last = performance.now();
   let spawnClock = 0;
   let nextFamilyId = 1;
+  let nextTrackId = 1;
+  const scatterSecondaryProtons = new Set();
 
   const activeTracks = [];
   const completedTracks = [];
@@ -82,6 +84,7 @@
     family.activeCount += 1;
 
     activeTracks.push({
+      id: nextTrackId++,
       kind,
       familyId,
       x,
@@ -98,7 +101,6 @@
         kind === "proton" && Math.random() < 0.35
           ? Math.floor(rand(7, 15))
           : null,
-      scatterSecondaryEmitted: false,
       trail: [{ x, y }]
     });
   }
@@ -162,19 +164,20 @@
 
 
   function spawnAtProtonScatter(track) {
-    // At most one multiple-scatter secondary per proton, and only for the
-    // subset of protons assigned a scheduled emission at creation.
+    // Hard global one-shot guard keyed by immutable proton track ID.
+    // This remains effective even if local track state is accidentally reset.
     if (
-      track.scatterSecondaryEmitted ||
+      track.kind !== "proton" ||
       track.nextScatterSecondary === null ||
-      track.scatterCount < track.nextScatterSecondary
+      track.scatterCount < track.nextScatterSecondary ||
+      scatterSecondaryProtons.has(track.id)
     ) {
       return false;
     }
 
-    track.scatterSecondaryEmitted = true;
+    scatterSecondaryProtons.add(track.id);
 
-    // Mostly delta-like electrons; occasional photon.
+    // One terminal daughter only; proton continues.
     if (Math.random() < 0.85) {
       addTrack(
         "electron",
@@ -184,6 +187,7 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 0,
           stepLength: rand(24, 50),
           speed: rand(90, 122.5)
         }
@@ -197,6 +201,7 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 0,
           stepLength: rand(350, 725),
           speed: rand(85, 115)
         }
