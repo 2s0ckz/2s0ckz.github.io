@@ -93,11 +93,6 @@
       maxGeneration: options.maxGeneration ?? defaults.maxGeneration,
       scatterSigma: options.scatterSigma ?? defaults.scatterSigma,
       scatterClock: rand(0.055, 0.14),
-      scatterCount: 0,
-      nextScatterSecondary:
-        kind === "proton"
-          ? Math.floor(rand(7, 15))
-          : null,
       trail: [{ x, y }]
     });
   }
@@ -161,20 +156,13 @@
 
 
   function spawnAtProtonScatter(track) {
-    if (
-      track.kind !== "proton" ||
-      track.nextScatterSecondary === null ||
-      track.scatterCount < track.nextScatterSecondary
-    ) {
-      return false;
-    }
+    if (track.kind !== "proton") return false;
 
-    // After an emission, schedule the next one several scatter vertices later.
-    // This allows multiple emissions over a long proton track without making
-    // every scattering vertex productive.
-    track.nextScatterSecondary += Math.floor(rand(8, 13));
+    // Independent per-vertex probability.
+    // Keep this modest so most multiple-scattering vertices do not emit.
+    const roll = Math.random();
 
-    if (Math.random() < 0.85) {
+    if (roll < 0.08) {
       addTrack(
         "electron",
         track.x,
@@ -188,7 +176,10 @@
           speed: rand(90, 122.5)
         }
       );
-    } else {
+      return true;
+    }
+
+    if (roll < 0.095) {
       addTrack(
         "photon",
         track.x,
@@ -202,9 +193,10 @@
           speed: rand(85, 115)
         }
       );
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   function spawnElectronChildren(track) {
@@ -360,9 +352,7 @@
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
-          track.scatterCount += 1;
-
-          // Visible secondary production is scheduled by scatter number.
+          // Sparse probabilistic secondary production at this scatter vertex.
           // The proton always continues after the vertex.
           spawnAtProtonScatter(track);
         }

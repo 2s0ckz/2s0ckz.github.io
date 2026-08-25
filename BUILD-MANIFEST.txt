@@ -1,15 +1,16 @@
-Jordan Houri personal site — v40
+Jordan Houri personal site — v41
 
-Scatter-secondary policy:
-- all protons eligible
-- first emission: scatter 7–14
-- repeat emissions: every additional 8–12 scatters
-- no one-shot global guard
+Proton scatter-secondary model:
+- electron: 8% per scatter vertex
+- photon: 1.5% per scatter vertex
+- no daughter: 90.5%
 - proton continues
+- scatter daughters terminal
+- no scheduled counter state
 
 SHA-256:
-eac7b4ae9927a2f6ba5a42b2b08db0f49b5852f06612131b3815022897d77f25  index.html
+481cb6fe7d34c7c681e1bff881647a607f4f6612dac17237af2e028f74da5dae  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-31064ef7d08702628b825d7c477f8d0752305c6c31f3e009837a86cca8cfdf6b  particles.js
-3422972d64dc58b9a8fefb2a7ad62c517f02046578eb01ebbc1e4a4920239327  README.md
+a9b6a25b9301eb491db928acbc49613ff9436f83407b2c9169278e71c11ff4f4  particles.js
+49149c96cd0c92516e9d33e26799dfb766188380933934f9551bf1ef7f303ad8  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
