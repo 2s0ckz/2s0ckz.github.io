@@ -1,15 +1,13 @@
-Jordan Houri personal site — v95
+Jordan Houri personal site — v96
 
-SCALE-INVARIANT CYLINDER:
-- gap proportional to panel width
-- 320px geometry floor removed
-- radius scales directly with rendered card width
-- perspective remains equal to radius
-- explicit 50% 50% perspective origin
+VISUAL POLISH:
+- card blur 2px
+- sharp card corners
+- tighter arrow-row vertical spacing
 
 SHA-256:
-15aaec85f190f3016e36c30dc170e68ff5b1d5ce67e57cb0566ab54000da0bac  index.html
+c594485a616e590eb3e50e4cdd5d28a45eb7434797e2ade68be2260af983f170  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 5fa7c8e93dad1ac0931044971a36236631c95ce36baa5d6fe7d6d3ab0db29cba  particles.js
-4e7dd521fa37d291bec87e661222a294cd62f0eef4d2c768649964aaf64075af  README.md
+68dff453f3667ee6821ccd8da4ed73e08f850b4b1e1bddceecdaaa1b88cbf502  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

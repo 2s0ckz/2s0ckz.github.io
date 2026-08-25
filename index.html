@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v95-scale-invariant-cylinder" />
+  <meta name="site-build" content="v96-visual-polish" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -65,7 +65,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   scrollbar-width: thin;
   scrollbar-color: rgba(169,200,200,.22) transparent;
   border: 1px solid rgba(169,200,200,.12);
-  border-radius: 16px;
+  border-radius: 0;
   background: var(--panel);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
@@ -109,7 +109,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   justify-content:space-between;
   width:var(--panel-width-vw);
   max-width:1440px;
-  margin:0 auto 8px;
+  margin:0 auto 2px;
   z-index:30;
   pointer-events:none;
 }
@@ -136,7 +136,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     height:calc(100% - 24px);
     max-height:none;
     padding:26px 24px 72px;
-    border-radius:13px;
+    border-radius:0;
     overflow-y:auto;
     overscroll-behavior-y:contain;
     touch-action:pan-y;
@@ -157,7 +157,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .orbit-heading p { font-size:.6rem; letter-spacing:.09em; }
   
   
-  .orbit-controls { padding-bottom:12px; }
+  .orbit-controls { padding-bottom:2px; }
 }
 @media (prefers-reduced-motion:reduce) { .orbit-card,a { transition:none; } }
 
@@ -674,7 +674,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v95 orbit</div>
-  <script src="particles.js?v=95"></script>
+  <div class="build-marker" aria-hidden="true">v96 orbit</div>
+  <script src="particles.js?v=96"></script>
 </body>
 </html>

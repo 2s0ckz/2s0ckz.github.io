@@ -1,27 +1,12 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 95 fixes the remaining viewport-size coupling in the cylinder geometry.
+Version 96 applies visual polish only.
 
-What was already correct
-- CSS perspective distance equals the cylinder radius R
-- therefore the camera/radius ratio was already constant as the page resized
-- card geometry uses untransformed offsetWidth
+Changes:
+- orbit-card backdrop blur increased from 1px to 2px
+- orbit-card corners changed to sharp (border-radius: 0)
+- mobile card corners also sharp
+- vertical spacing around the arrow-control row reduced
+- arrow button padding tightened slightly
 
-What was not scale-invariant
-- the gap was fixed at 32px/18px while cards changed size
-- effectiveSideLength had a hard 320px minimum, so the cylinder could stop
-  shrinking even while the cards continued shrinking
-
-v95
-- gap is proportional to actual card width:
-  gapRatio = 32 / 1440
-  desiredGap = panelWidth * gapRatio
-- the 320px radius/side-length floor is removed
-- radius is now always:
-  R = (panelWidth + desiredGap) / (2 tan(pi/N))
-- perspective remains exactly R
-- perspective-origin is explicitly fixed at 50% 50%
-- a stray mobile orbit-controls width override was removed
-
-This makes card width, geometric gap, cylinder radius, and camera distance scale
-together at every viewport size.
+Orbit geometry, responsive sizing, spacing, scrolling, particles, snapping, and timing are unchanged.
