@@ -1,9 +1,12 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 39 removes the 35% proton eligibility constraint.
+Version 40 removes the one-scatter-secondary-per-proton constraint.
 
-- every proton is now eligible for one scatter-secondary
-- emission remains scheduled at scatter 7–14
-- global proton-ID Set still enforces a maximum of one scatter-secondary per proton
-- proton continues after emission
-- daughter behavior otherwise unchanged
+Behavior:
+- every proton remains eligible
+- first scatter-secondary is scheduled at scatter 7–14
+- after each emission, the next is scheduled 8–12 scatter vertices later
+- proton can therefore emit multiple scatter-secondaries over a long track
+- emissions still do not occur at every scatter vertex
+- proton always continues after emission
+- scatter daughters remain terminal single tracks

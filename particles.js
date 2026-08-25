@@ -17,8 +17,6 @@
   let last = performance.now();
   let spawnClock = 0;
   let nextFamilyId = 1;
-  let nextTrackId = 1;
-  const scatterSecondaryProtons = new Set();
 
   const activeTracks = [];
   const completedTracks = [];
@@ -84,7 +82,6 @@
     family.activeCount += 1;
 
     activeTracks.push({
-      id: nextTrackId++,
       kind,
       familyId,
       x,
@@ -164,20 +161,19 @@
 
 
   function spawnAtProtonScatter(track) {
-    // Hard global one-shot guard keyed by immutable proton track ID.
-    // This remains effective even if local track state is accidentally reset.
     if (
       track.kind !== "proton" ||
       track.nextScatterSecondary === null ||
-      track.scatterCount < track.nextScatterSecondary ||
-      scatterSecondaryProtons.has(track.id)
+      track.scatterCount < track.nextScatterSecondary
     ) {
       return false;
     }
 
-    scatterSecondaryProtons.add(track.id);
+    // After an emission, schedule the next one several scatter vertices later.
+    // This allows multiple emissions over a long proton track without making
+    // every scattering vertex productive.
+    track.nextScatterSecondary += Math.floor(rand(8, 13));
 
-    // One terminal daughter only; proton continues.
     if (Math.random() < 0.85) {
       addTrack(
         "electron",
