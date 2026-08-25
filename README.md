@@ -1,10 +1,8 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 72:
-- vertical mouse-wheel scrolling inside a content panel has priority
-- orbit navigation only consumes a vertical wheel gesture when that panel has
-  reached the top or bottom in the requested direction
-- horizontal-dominant wheel/trackpad gestures still operate the orbit
-- thresholded one-panel wheel snapping is retained
-- arrow controls moved to a row above the panels
-- arrow row uses the same maximum 1440 px width as the panels
+Version 74:
+- wheel gesture settle time increased from 220 ms to 330 ms
+- wheel-triggered panel transitions now use the same easing as on-screen arrow transitions
+- current arrow/wheel easing: 0.075
+- wheel threshold remains 260
+- in-panel vertical scrolling priority remains unchanged

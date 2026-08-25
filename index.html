@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v72-panel-scroll-priority-arrows-top" />
+  <meta name="site-build" content="v74-wheel-arrow-speed-match" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -33,7 +33,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .social-grid a { min-height:34px; display:flex; align-items:center; padding:0 10px; border:1px solid var(--line); border-radius:7px;
   background:rgba(255,255,255,.018); font-size:.72rem; letter-spacing:.07em; text-transform:uppercase; }
 .social-grid a:hover,.social-grid a:focus-visible { border-color:rgba(232,191,40,.4); }
-.orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr) auto; }
+.orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto auto minmax(0,1fr); }
 .orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
 .orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1400px; cursor:grab; outline:none; touch-action:pan-y; }
@@ -97,18 +97,16 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .date { margin-bottom:9px!important; color:var(--muted); font-size:.74rem!important; letter-spacing:.1em; text-transform:uppercase; }
 .muted { color:var(--muted); }
 .orbit-controls {
-  position:absolute;
-  top:8px;
-  left:50%;
-  transform:translateX(-50%);
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:space-between;
   width:min(1440px, calc(100vw - 48px));
+  margin:0 auto 8px;
   z-index:30;
   pointer-events:none;
 }
-.orbit-controls button { width:46px; height:38px; border:1px solid var(--line); border-radius:8px; background:rgba(12,15,26,.76);
+.orbit-controls button { pointer-events:auto; width:46px; height:38px; border:1px solid var(--line); border-radius:8px; background:rgba(12,15,26,.76);
   color:var(--text); font:inherit; cursor:pointer; }
 .orbit-controls button:hover,.orbit-controls button:focus-visible { color:var(--accent); border-color:rgba(232,191,40,.4); outline:none; }
 .orbit-controls span { color:rgba(169,200,200,.58); text-align:center; font-size:.69rem; letter-spacing:.18em; text-transform:uppercase; }
@@ -259,8 +257,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     let wheelAccum = 0;
     let wheelLocked = false;
     let wheelUnlockTimer = 0;
-    const wheelThreshold = 85;
-    const wheelSettleMs = 170;
+    const wheelThreshold = 260;
+    const wheelSettleMs = 330;
 
     // Animation responsiveness. Arrow-button navigation intentionally uses a
     // slower easing rate than wheel/keyboard snapping.
@@ -410,7 +408,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       if (Math.abs(wheelAccum) < wheelThreshold) return;
 
-      moveByPanels(wheelAccum > 0 ? 1 : -1);
+      moveByPanels(wheelAccum > 0 ? 1 : -1, arrowEase);
 
       wheelLocked = true;
       wheelAccum = 0;
@@ -483,7 +481,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v72 orbit</div>
-  <script src="particles.js?v=72"></script>
+  <div class="build-marker" aria-hidden="true">v74 orbit</div>
+  <script src="particles.js?v=74"></script>
 </body>
 </html>
