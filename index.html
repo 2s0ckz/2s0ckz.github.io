@@ -3,32 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v13-transparent-canvas" />
+  <meta name="site-build" content="v14-clean-rebuild" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=13" />
+  <link rel="stylesheet" href="style.css?v=14" />
 </head>
 <body>
+  <div class="ct-arc-field" aria-hidden="true">
+    <div class="ct-recon-arc arc-1"></div>
+    <div class="ct-recon-arc arc-2"></div>
+    <div class="ct-recon-arc arc-3"></div>
+    <div class="ct-recon-arc arc-4"></div>
+    <div class="ct-recon-arc arc-5"></div>
+    <div class="ct-recon-arc arc-6"></div>
+  </div>
+
   <canvas id="particle-background" aria-hidden="true"></canvas>
 
   <main class="page-shell">
-    <div class="ct-arc-field" aria-hidden="true">
-      <div class="ct-recon-arc arc-1"></div>
-      <div class="ct-recon-arc arc-2"></div>
-      <div class="ct-recon-arc arc-3"></div>
-      <div class="ct-recon-arc arc-4"></div>
-      <div class="ct-recon-arc arc-5"></div>
-      <div class="ct-recon-arc arc-6"></div>
-    </div>
-
-<section class="content-panel">
-<div class="ct-recon-arc arc-2"></div>
-        <div class="ct-recon-arc arc-3"></div>
-        <div class="ct-recon-arc arc-4"></div>
-        <div class="ct-recon-arc arc-5"></div>
-        <div class="ct-recon-arc arc-6"></div>
-      </div>
-
+    <section class="content-panel">
       <header class="hero" id="about">
         <p class="eyebrow">Researcher · Engineer · Scientist</p>
         <h1>Jordan Houri</h1>
@@ -164,6 +157,7 @@
       </footer>
     </section>
   </main>
+
   <script>
   (() => {
     const field = document.querySelector('.ct-arc-field');
@@ -171,25 +165,24 @@
 
     let ticking = false;
 
-    function update() {
-      const y = (window.scrollY || window.pageYOffset || 0) * 0.5;
-      field.style.transform = `translate3d(0, ${y}px, 0)`;
+    function updateArcParallax() {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
       ticking = false;
     }
 
-    function requestTick() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
+    function requestArcParallax() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateArcParallax);
     }
 
-    update();
-    window.addEventListener('scroll', requestTick, { passive: true });
-    window.addEventListener('resize', requestTick, { passive: true });
+    updateArcParallax();
+    window.addEventListener('scroll', requestArcParallax, { passive: true });
+    window.addEventListener('resize', requestArcParallax, { passive: true });
   })();
   </script>
 
-  <script src="particles.js?v=13"></script>
+  <script src="particles.js?v=14"></script>
 </body>
 </html>

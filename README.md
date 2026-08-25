@@ -1,19 +1,13 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 13 fixes the actual arc/particle compositing bug.
+Version 14 is a clean rebuild, not a patch of prior arc markup.
 
-## Key fix
-The particle canvas used to repaint itself black on every animation frame.
-That meant anything placed behind the canvas — including CT arcs — could never be visible.
-
-Now:
-- the page body supplies the black background
-- the particle canvas is transparent
-- the canvas is cleared with `clearRect()` each frame
-- CT arcs sit behind particle tracks
-- particle tracks visibly pass in front of the arcs
-- the content panel/text remains above both
-- the arcs retain the ~3–5% opacity and 50% parallax behavior
-
-## Build marker
-`v13-transparent-canvas`
+Verified behavior:
+- exactly one CT arc layer
+- exactly six arcs
+- arc layer spans the full browser viewport, independent of the 1440px content panel
+- arc layer is `position: fixed`, so it adds zero page height
+- arcs move upward at exactly half page scroll speed
+- main contour opacity is 3.5%; concentric echoes are dimmer
+- particle canvas is transparent and sits above the arcs
+- content panel sits above both
