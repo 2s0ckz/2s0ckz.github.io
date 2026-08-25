@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v104-integrated-panel-chevrons" />
+  <meta name="site-build" content="v105-chevron-refine-outside-scroll" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -196,93 +196,76 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
 
 
-/* Active-panel navigation: tall, narrow chevrons drawn from strokes. */
-.orbit-card-nav {
-  position:fixed;
-  top:5%;
-  bottom:5%;
-  width:32px;
+
+/* Navigation chevrons live outside scrollable card content but align to active panel edges. */
+.orbit-edge-nav {
+  position:absolute;
+  top:50%;
+  width:48px;
+  height:60%;
+  min-height:190px;
+  max-height:360px;
   padding:0;
   margin:0;
   border:0;
   outline:0;
   background:transparent;
-  color:rgba(169,200,200,.58);
-  opacity:0;
-  pointer-events:none;
-  z-index:50;
+  color:rgba(169,200,200,.74);
+  z-index:60;
   cursor:pointer;
   user-select:none;
   -webkit-user-select:none;
   touch-action:manipulation;
+  transform:translateY(-50%);
   transition:color 140ms ease, opacity 120ms ease;
 }
 
-.orbit-card.is-active .orbit-card-nav {
-  opacity:1;
-  pointer-events:auto;
-}
-
-.orbit-card-nav-prev { left:8px; }
-.orbit-card-nav-next { right:8px; }
-
-.orbit-card-nav::before,
-.orbit-card-nav::after {
+.orbit-edge-nav::before,
+.orbit-edge-nav::after {
   content:"";
   position:absolute;
-  width:1px;
-  height:50%;
-  background:currentColor;
   left:50%;
+  width:4px;
+  height:44%;
+  background:currentColor;
+  border-radius:2px;
 }
 
-.orbit-card-nav::before {
+.orbit-edge-nav::before {
   bottom:50%;
   transform-origin:50% 100%;
 }
 
-.orbit-card-nav::after {
+.orbit-edge-nav::after {
   top:50%;
   transform-origin:50% 0%;
 }
 
-/* Very tall/narrow left chevron: top-right -> center-left -> bottom-right. */
-.orbit-card-nav-prev::before {
-  left:35%;
-  transform:rotate(3.2deg);
-}
-.orbit-card-nav-prev::after {
-  left:35%;
-  transform:rotate(-3.2deg);
-}
+.orbit-edge-nav-prev::before { transform:translateX(-7px) rotate(10deg); }
+.orbit-edge-nav-prev::after  { transform:translateX(-7px) rotate(-10deg); }
+.orbit-edge-nav-next::before { transform:translateX(7px) rotate(-10deg); }
+.orbit-edge-nav-next::after  { transform:translateX(7px) rotate(10deg); }
 
-/* Mirrored right chevron. */
-.orbit-card-nav-next::before {
-  left:65%;
-  transform:rotate(-3.2deg);
-}
-.orbit-card-nav-next::after {
-  left:65%;
-  transform:rotate(3.2deg);
-}
-
-.orbit-card-nav:hover,
-.orbit-card-nav:focus-visible {
+.orbit-edge-nav:hover,
+.orbit-edge-nav:focus-visible {
   color:#E8BF28;
 }
 
-.orbit-card-nav:focus-visible {
+.orbit-edge-nav:focus-visible {
   filter:drop-shadow(0 0 3px rgba(232,191,40,.28));
 }
 
 @media (max-width:760px) {
-  .orbit-card-nav {
-    top:6%;
-    bottom:6%;
-    width:24px;
+  .orbit-edge-nav {
+    width:38px;
+    height:54%;
+    min-height:160px;
+    max-height:300px;
   }
-  .orbit-card-nav-prev { left:4px; }
-  .orbit-card-nav-next { right:4px; }
+  .orbit-edge-nav::before,
+  .orbit-edge-nav::after {
+    width:3px;
+  }
 }
 
 /* Selection is locked only while an orbit drag is genuinely active. */
@@ -321,11 +304,12 @@ body.orbit-drag-select-lock * {
       
     </div>
 <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
+      <button class="orbit-edge-nav orbit-edge-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
+      <button class="orbit-edge-nav orbit-edge-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
+
 <div class="orbit-track" id="orbitTrack">
         <div class="orbit-set" id="orbitSet">
           <article class="orbit-card card-intro" id="about">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Researcher · Engineer · Scientist</p>
             <h1>Jordan Houri</h1>
             <p class="lede">Physician-scientist in training working at the intersection of medical physics, computational imaging, Monte Carlo modeling, radiation biology, and human spaceflight.</p>
@@ -336,8 +320,6 @@ body.orbit-drag-select-lock * {
           </article>
 
           <article class="orbit-card" id="selected-work">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Selected Work</p>
             <h2>Physics across scales</h2>
             <section class="item"><h3>Artemis I / AstroRad Radiation Protection</h3><p>Led scientific evaluation of the AstroRad vest during NASA's Artemis I mission, helping assess wearable shielding for deep-space radiation protection.</p></section>
@@ -346,8 +328,6 @@ body.orbit-drag-select-lock * {
           </article>
 
           <article class="orbit-card" id="publications">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Publications</p>
             <h2>Selected papers</h2>
             <section class="item"><h3>First Evaluation of Wearable Radiation Protection for Human Deep Space Exploration, as Flown on Artemis I</h3><p><strong>Houri J</strong>, Berger T, Gaza R, Hussein H, et al. <em>Science Advances</em> (2026).</p></section>
@@ -356,8 +336,6 @@ body.orbit-drag-select-lock * {
           </article>
 
           <article class="orbit-card" id="experience">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Experience</p>
             <h2>Research trajectory</h2>
             <section class="item"><h3>Research Assistant · Purdue University</h3><p class="date">2026–Present</p><p>Developing physics-informed constrained optimization methods for hyperspectral neutron CT strain reconstruction in collaboration with Oak Ridge National Laboratory.</p></section>
@@ -366,8 +344,6 @@ body.orbit-drag-select-lock * {
           </article>
 
           <article class="orbit-card" id="education">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Education</p>
             <h2>Training</h2>
             <section class="item"><h3>Indiana University</h3><p class="date">2024–Present</p><p>MD · Indianapolis, Indiana</p></section>
@@ -376,8 +352,6 @@ body.orbit-drag-select-lock * {
           </article>
 
           <article class="orbit-card card-contact" id="contact">
-            <button class="orbit-card-nav orbit-card-nav-prev" type="button" data-orbit-dir="-1" aria-label="Previous panel"></button>
-            <button class="orbit-card-nav orbit-card-nav-next" type="button" data-orbit-dir="1" aria-label="Next panel"></button>
             <p class="eyebrow">Contact</p>
             <h2>Jordan Houri</h2>
             <p>Indianapolis, Indiana</p>
@@ -398,6 +372,8 @@ body.orbit-drag-select-lock * {
     const viewport = document.getElementById('orbitViewport');
     const set = document.getElementById('orbitSet');
 const status = document.getElementById('orbitStatus');
+    const edgePrev = document.querySelector('.orbit-edge-nav-prev');
+    const edgeNext = document.querySelector('.orbit-edge-nav-next');
     if (!viewport || !set) return;
 
     const cards = Array.from(set.querySelectorAll('.orbit-card'));
@@ -560,6 +536,18 @@ const status = document.getElementById('orbitStatus');
       cards.forEach((card, index) => {
         card.classList.toggle('is-active', index === nearest.index);
       });
+
+      const activeCard = cards[nearest.index];
+      if (activeCard && edgePrev && edgeNext) {
+        const viewportRect = viewport.getBoundingClientRect();
+        const activeRect = activeCard.getBoundingClientRect();
+        const inset = 8;
+        const prevWidth = edgePrev.offsetWidth || 48;
+        const nextWidth = edgeNext.offsetWidth || 48;
+
+        edgePrev.style.left = `${activeRect.left - viewportRect.left + inset}px`;
+        edgeNext.style.left = `${activeRect.right - viewportRect.left - nextWidth - inset}px`;
+      }
 
       if (status) status.textContent = labels[nearest.index] || 'About';
     }
@@ -862,7 +850,7 @@ const status = document.getElementById('orbitStatus');
           });
 
     set.addEventListener('click', event => {
-      const control = event.target.closest('.orbit-card-nav');
+      const control = event.target.closest('.orbit-edge-nav');
       if (!control) return;
       event.preventDefault();
       event.stopPropagation();
@@ -902,7 +890,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v104 orbit</div>
-  <script src="particles.js?v=104"></script>
+  <div class="build-marker" aria-hidden="true">v105 orbit</div>
+  <script src="particles.js?v=105"></script>
 </body>
 </html>
