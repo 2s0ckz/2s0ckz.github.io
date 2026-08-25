@@ -36,58 +36,33 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v112-circumference-particle-rate";
+  window.__particleBuild = "v97-particle-radius-floor";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
-  const MIN_PARTICLE_RADIUS = 1200;
-  const BASELINE_1920_PANEL_WIDTH = 1440;
-  const BASELINE_1920_PANEL_GAP = 32;
-
-  function currentParticleRadius() {
+  function nextPrimarySpawnInterval() {
+    // Preserve the v111 visual density at a 1920px-wide viewport, then scale
+    // primary frequency linearly with the circumference of the particle cylinder.
+    //
+    // v111 particle radius:
+    //   sharedRadius = finite __orbitRadius ? __orbitRadius : max(320, width - 48)
+    //   particleRadius = max(sharedRadius, 1200)
     const sharedRadius = Number.isFinite(window.__orbitRadius)
       ? window.__orbitRadius
-      : MIN_PARTICLE_RADIUS;
-    return Math.max(sharedRadius, MIN_PARTICLE_RADIUS);
-  }
+      : Math.max(320, width - 48);
+    const particleRadius = Math.max(sharedRadius, 1200);
 
-  function baseline1920ParticleRadius() {
-    // Use the current number of orbit faces, but evaluate the cylinder at the
-    // 1920px desktop baseline where the panel reaches its 1440px maximum width
-    // and the geometric gap is 32px.
-    const step =
-      Number.isFinite(window.__orbitStep) && window.__orbitStep > 0
-        ? window.__orbitStep
-        : Math.PI / 3;
-    const panelCount = (Math.PI * 2) / step;
-    const sideLength =
-      BASELINE_1920_PANEL_WIDTH + BASELINE_1920_PANEL_GAP;
-    const radius =
-      sideLength / (2 * Math.tan(Math.PI / panelCount));
+    // 1920px baseline: panel width = 1440px, geometric gap = 32px,
+    // six orbit faces => R = (1440 + 32) / (2 tan(pi/6)).
+    const baselineParticleRadius = Math.max(
+      1200,
+      (1440 + 32) / (2 * Math.tan(Math.PI / 6))
+    );
 
-    return Math.max(radius, MIN_PARTICLE_RADIUS);
-  }
+    // Circumference ratio is identical to radius ratio because C = 2*pi*R.
+    const circumferenceScale = particleRadius / baselineParticleRadius;
 
-  function particleCircumference(radius) {
-    return Math.PI * 2 * radius;
-  }
-
-  function nextPrimarySpawnInterval() {
-    // The old v111 rate is the exact baseline at a 1920px viewport.
-    // Frequency scales linearly with circumference so particle density around
-    // the full 360-degree particle cylinder stays consistent:
-    //
-    //   frequency / baselineFrequency = circumference / baselineCircumference
-    //
-    // Since spawnClock is an interval, divide the baseline interval by that
-    // circumference ratio.
-    const currentCircumference =
-      particleCircumference(currentParticleRadius());
-    const baselineCircumference =
-      particleCircumference(baseline1920ParticleRadius());
-    const circumferenceScale =
-      currentCircumference / baselineCircumference;
-
+    // v111 baseline interval at 1920px.
     return (rand(3.04, 4.8) / 6) / circumferenceScale;
   }
 
@@ -504,8 +479,8 @@
       if (spawnClock <= 0) {
         spawnPrimary();
 
-        // Scale the full-cylinder primary rate with particle-cylinder
-        // circumference. A 1920px viewport preserves the v111 appearance.
+        // Scale primary frequency with particle-cylinder circumference while
+        // preserving the v111 appearance at a 1920px viewport.
         spawnClock = nextPrimarySpawnInterval();
       }
     }
@@ -526,8 +501,8 @@
           particleDebug.protonScatterVertices += 1;
 
           // Exactly one independent probability draw for this vertex.
-          // 1 successful integer value out of 100 = 1%.
-          const scatterDraw = Math.floor(Math.random() * 100.0);
+          // 1 successful integer value out of 10 = 10%.
+          const scatterDraw = Math.floor(Math.random() * 10.0);
           if (scatterDraw < 1) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
@@ -585,9 +560,15 @@
     // Pinhole projection from the CENTER of a vertical cylinder.
     // x = f tan(theta)
     // vertical distances expand by 1/cos(theta) toward the peripheral wall.
-    // Use the same particle-cylinder radius for projection and frequency
-    // normalization.
-    const particleRadius = currentParticleRadius();
+    const sharedRadius = Number.isFinite(window.__orbitRadius)
+      ? window.__orbitRadius
+      : Math.max(320, width - 48);
+
+    // Keep the particle surface from becoming too tightly curved on smaller
+    // screens. It still rotates with the content phase, but may sit on a
+    // larger concentric cylinder.
+    const minParticleRadius = 1200;
+    const particleRadius = Math.max(sharedRadius, minParticleRadius);
 
     const focal = particleRadius;
     const cosine = Math.max(0.28, Math.cos(theta));
@@ -696,8 +677,8 @@
   if (reduceMotion) {
     spawnPrimary();
   } else {
-    // No special first-load burst. Use the same circumference-normalized
-    // interval as all later primary generation.
+    // No special first-load burst. Use the same circumference-scaled
+    // primary interval used for all later generation.
     spawnClock = nextPrimarySpawnInterval();
   }
 
