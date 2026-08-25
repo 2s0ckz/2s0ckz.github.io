@@ -1,16 +1,14 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 84 removes all z-depth compression.
+Version 85 makes the 1440 px panel cap explicit.
 
-- panel depth is restored to the true regular-prism geometry:
-  z = R * (1 - cos(theta))
-- exact face orientation remains unchanged
-- six-panel interior angle remains 120 degrees
-- particle projection returns to the full uncompressed cylindrical perspective
+Panel sizing:
+- desktop: width = calc(100vw - 48px), max-width = 1440px
+- mobile: width = calc(100vw - 24px), max-width = 1440px
+- box-sizing remains border-box, so padding and borders are included inside 1440px
+- the orbit geometry now measures the actual rendered card width with
+  getBoundingClientRect() and caps that measurement at 1440px
+- the arrow-control row also uses an explicit max-width: 1440px
 
-Retained from v83:
-- wider spacing between adjacent panels (effective side length = panelWidth + 72 px)
-- mobile vertical-scroll fixes and bottom clearance
-- wheel threshold / settle behavior
-- drag snapping
-- translucent panels and title bar
+All regular-prism geometry, spacing, mobile scrolling fixes, snapping, timing,
+particles, and opacity remain unchanged.

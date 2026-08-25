@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v84-no-z-compression" />
+  <meta name="site-build" content="v85-explicit-1440-max-width" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -54,7 +54,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   left: 50%;
   top: 50%;
   box-sizing: border-box;
-  width: min(1440px, calc(100vw - 48px));
+  width:calc(100vw - 48px);
+  max-width:1440px;
   height: min(680px, calc(100% - 24px));
   padding: clamp(32px, 4vw, 64px);
   overflow-y: auto;
@@ -104,7 +105,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   display:flex;
   align-items:center;
   justify-content:space-between;
-  width:min(1440px, calc(100vw - 48px));
+  width:calc(100vw - 48px);
+  max-width:1440px;
   margin:0 auto 8px;
   z-index:30;
   pointer-events:none;
@@ -123,6 +125,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
   .orbit-card {
     width:calc(100vw - 24px);
+    max-width:1440px;
     height:calc(100% - 24px);
     max-height:none;
     padding:26px 24px 72px;
@@ -299,7 +302,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     function geometry() {
-      const panelWidth = Math.min(1440, Math.max(320, viewport.clientWidth - 48));
+      // Use the real outer width of the rendered card. CSS owns sizing;
+      // geometry follows it rather than independently approximating it.
+      const measuredWidth =
+        cards[0]?.getBoundingClientRect().width || Math.min(1440, viewport.clientWidth - 48);
+      const panelWidth = Math.min(1440, measuredWidth);
 
       // Regular N-sided prism geometry.
       //
@@ -636,7 +643,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v84 orbit</div>
-  <script src="particles.js?v=84"></script>
+  <div class="build-marker" aria-hidden="true">v85 orbit</div>
+  <script src="particles.js?v=85"></script>
 </body>
 </html>
