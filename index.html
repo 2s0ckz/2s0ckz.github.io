@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v56-inline-orbit-layout" />
+  <meta name="site-build" content="v57-centered-1440-rotational-orbit" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -13,7 +13,7 @@
 :root {
   --bg:#000; --panel:rgba(12,15,26,.66); --text:#a9c8c8; --heading:#f2f5f5;
   --subheading:#cad7d9; --muted:#707b90; --line:rgba(169,200,200,.16);
-  --accent:#E8BF28; --nav-height:118px;
+  --accent:#E8BF28; --nav-height:118px; --panel-max:1440px;
 }
 html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text);
   font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
@@ -41,13 +41,37 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
 .orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
-.orbit-set { display:flex; align-items:center; gap:34px; height:100%; padding:20px 34px 20px 7vw; }
-.orbit-card { --orbit-rotate:0deg; --orbit-scale:1; --orbit-opacity:1; flex:0 0 clamp(360px,54vw,760px); width:clamp(360px,54vw,760px);
-  height:min(650px,calc(100% - 24px)); padding:clamp(28px,3.3vw,48px); overflow-y:auto; overscroll-behavior:contain;
-  scrollbar-width:thin; scrollbar-color:rgba(169,200,200,.22) transparent; border:1px solid rgba(169,200,200,.12);
-  border-radius:16px; background:var(--panel); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-  transform:rotateY(var(--orbit-rotate)) scale(var(--orbit-scale)); transform-origin:center; opacity:var(--orbit-opacity);
-  transition:opacity 100ms linear; box-shadow:0 22px 72px rgba(0,0,0,.16); }
+.orbit-set {
+  display:flex;
+  align-items:center;
+  gap:clamp(110px,14vw,260px);
+  height:100%;
+  padding:20px max(7vw,28px);
+}
+.orbit-card {
+  --orbit-rotate:0deg;
+  --orbit-scale:1;
+  --orbit-opacity:1;
+  --orbit-z:0px;
+  flex:0 0 min(var(--panel-max), calc(100vw - 64px));
+  width:min(var(--panel-max), calc(100vw - 64px));
+  height:min(680px, calc(100% - 24px));
+  padding:clamp(32px,4vw,64px);
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(169,200,200,.22) transparent;
+  border:1px solid rgba(169,200,200,.12);
+  border-radius:16px;
+  background:var(--panel);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  transform:translateZ(var(--orbit-z)) rotateY(var(--orbit-rotate)) scale(var(--orbit-scale));
+  transform-origin:center center;
+  opacity:var(--orbit-opacity);
+  transition:opacity 100ms linear;
+  box-shadow:0 22px 72px rgba(0,0,0,.16);
+}
 .orbit-card h1,.orbit-card h2,.orbit-card h3,.orbit-card p { max-width:62ch; }
 .orbit-card h1 { margin:10px 0 18px; color:#fff; font-size:clamp(2.5rem,4.8vw,5rem); line-height:.94; letter-spacing:-.045em; font-weight:600; }
 .orbit-card h2 { margin:8px 0 26px; color:var(--heading); font-size:clamp(1.55rem,2.5vw,2.45rem); line-height:1.08; font-weight:500; letter-spacing:-.025em; }
@@ -82,7 +106,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .orbit-heading { width:calc(100% - 24px); padding-top:12px; }
   .orbit-heading p { font-size:.6rem; letter-spacing:.09em; }
   .orbit-set { gap:16px; padding:20px 16px 20px 6vw; }
-  .orbit-card { flex-basis:min(82vw,430px); width:min(82vw,430px); height:calc(100% - 14px); padding:26px 24px; border-radius:13px; }
+  .orbit-card { flex-basis:calc(100vw - 28px); width:calc(100vw - 28px); height:calc(100% - 14px); padding:26px 24px; border-radius:13px; }
   .orbit-controls { width:calc(100% - 24px); padding-bottom:12px; }
 }
 @media (prefers-reduced-motion:reduce) { .orbit-card,a { transition:none; } }
@@ -95,7 +119,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   <nav class="topbar" aria-label="Primary">
     <div class="topbar-inner">
       <a class="identity" href="#about" aria-label="Jordan Houri — home">
-        <img class="profile-photo" src="https://avatars.githubusercontent.com/u/90605578?s=240&v=4" alt="Jordan Houri" />
+        <img class="profile-photo" src="https://github.com/2s0ckz.png?size=240" alt="Jordan Houri" />
         <span class="identity-copy">
           <strong>Jordan Houri</strong>
           <span>Physici-an/st (in training)</span>
@@ -104,9 +128,9 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       <div class="social-grid" aria-label="Profiles">
         <a href="https://scholar.google.com/scholar?q=%22Jordan+Houri%22" target="_blank" rel="noreferrer">Google Scholar</a>
-        <a href="https://github.com/jordanhouri" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/2s0ckz" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/jordanhouri" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a href="https://x.com/" target="_blank" rel="noreferrer" title="Replace with your X profile URL">X</a>
+        <a href="https://x.com/2s0ckz" target="_blank" rel="noreferrer" title="@2s0ckz on X">X</a>
       </div>
     </div>
   </nav>
@@ -210,8 +234,23 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
     function measure() {
       cycleWidth = firstSet.getBoundingClientRect().width || 1;
-      offset = ((offset % cycleWidth) + cycleWidth) % cycleWidth;
-      target = offset;
+      const firstCard = firstSet.querySelector('.orbit-card');
+      const firstRect = firstCard ? firstCard.getBoundingClientRect() : null;
+      const setRect = firstSet.getBoundingClientRect();
+      const firstCenterWithinSet = firstRect
+        ? (firstRect.left - setRect.left) + firstRect.width / 2
+        : 0;
+      const desiredOffset = firstCenterWithinSet - viewport.clientWidth / 2;
+
+      if (!window.__orbitInitialized) {
+        offset = wrap(desiredOffset);
+        target = offset;
+        window.__orbitInitialized = true;
+      } else {
+        offset = wrap(offset);
+        target = offset;
+      }
+
       render(true);
     }
 
@@ -237,11 +276,13 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const cardCenter = rect.left + rect.width / 2;
         const normalized = (cardCenter - center) / Math.max(1, viewport.clientWidth);
         const distance = Math.min(1.35, Math.abs(normalized));
-        const rotate = Math.max(-34, Math.min(34, normalized * -34));
-        const scale = 1 - Math.min(0.16, distance * 0.12);
+        const rotate = Math.max(-78, Math.min(78, normalized * -78));
+        const scale = 1 - Math.min(0.30, distance * 0.22);
+        const z = -Math.min(520, distance * 440);
         card.style.setProperty('--orbit-rotate', `${rotate}deg`);
         card.style.setProperty('--orbit-scale', scale.toFixed(3));
-        card.style.setProperty('--orbit-opacity', (1 - Math.min(0.42, distance * 0.30)).toFixed(3));
+        card.style.setProperty('--orbit-z', `${z}px`);
+        card.style.setProperty('--orbit-opacity', (1 - Math.min(0.62, distance * 0.46)).toFixed(3));
 
         if (Math.abs(cardCenter - center) < nearest.d) {
           nearest = { d: Math.abs(cardCenter - center), label: labels[i % labels.length] };
@@ -341,7 +382,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v56 orbit</div>
-  <script src="particles.js?v=56"></script>
+  <div class="build-marker" aria-hidden="true">v57 orbit</div>
+  <script src="particles.js?v=57"></script>
 </body>
 </html>

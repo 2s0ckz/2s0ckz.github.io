@@ -1,11 +1,11 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 56 is a cache-proof horizontal orbit redesign.
+Version 57 refines the horizontal orbit concept.
 
-- No external stylesheet is loaded.
-- All layout CSS is embedded directly in `index.html`.
-- CT arcs are absent.
-- Fixed profile/social navigation is present.
-- Main content loops horizontally with a stronger cylindrical perspective.
-- Particle background remains.
-- A temporary `v56 orbit` marker at bottom-right confirms this exact build.
+- each content panel is centered when active
+- panels can grow to 1440 px wide
+- neighboring panels are spaced farther off-axis
+- much stronger rotateY + translateZ + scale changes create a genuine rotational/cylindrical transition
+- wheel, drag, keyboard, and arrow-button navigation remain
+- GitHub profile/avatar updated to @2s0ckz
+- X updated to @2s0ckz
