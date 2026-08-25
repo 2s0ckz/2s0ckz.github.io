@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v86-responsive-panel-width" />
+  <meta name="site-build" content="v88-interpolated-panel-width" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -13,6 +13,8 @@
   --bg:#000; --panel:rgba(12,15,26,.5625); --text:#a9c8c8; --heading:#f2f5f5;
   --subheading:#cad7d9; --muted:#707b90; --line:rgba(169,200,200,.16);
   --accent:#E8BF28; --nav-height:118px; --panel-max:1440px;
+
+  --panel-width-vw:75vw;
 }
 html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text);
   font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
@@ -54,7 +56,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   left: 50%;
   top: 50%;
   box-sizing: border-box;
-  width:75vw;
+  width:var(--panel-width-vw);
   max-width:1440px;
   height: min(680px, calc(100% - 24px));
   padding: clamp(32px, 4vw, 64px);
@@ -105,7 +107,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   display:flex;
   align-items:center;
   justify-content:space-between;
-  width:75vw;
+  width:var(--panel-width-vw);
   max-width:1440px;
   margin:0 auto 8px;
   z-index:30;
@@ -119,7 +121,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
   .orbit-controls {
-    width:95vw;
+    width:var(--panel-width-vw);
     max-width:1440px;
   }
 
@@ -129,7 +131,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
 
   .orbit-card {
-    width:95vw;
+    width:var(--panel-width-vw);
     max-width:1440px;
     height:calc(100% - 24px);
     max-height:none;
@@ -306,6 +308,26 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
 
+    function updateResponsivePanelWidth() {
+      const w = window.innerWidth;
+
+      // 80vw at mobile widths (<= 760px), linearly decreasing to 75vw at 1920px.
+      let ratio;
+      if (w <= 760) {
+        ratio = 80;
+      } else if (w >= 1920) {
+        ratio = 75;
+      } else {
+        const t = (w - 760) / (1920 - 760);
+        ratio = 80 + (75 - 80) * t;
+      }
+
+      document.documentElement.style.setProperty(
+        '--panel-width-vw',
+        `${ratio}vw`
+      );
+    }
+
     function geometry() {
       // Use the real outer width of the rendered card. CSS owns sizing;
       // geometry follows it rather than independently approximating it.
@@ -328,13 +350,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       const interiorAngle = Math.PI - step;
 
       // Treat each content panel as one side of the regular polygon.
-      // The center of each face sits one apothem from the viewer.
-      //
-      // sideLength = 2 * apothem * tan(π/N)
-      // apothem = sideLength / (2 * tan(π/N))
-      //
-      // A tiny overlap keeps antialiasing from exposing seams between faces.
-      const effectiveSideLength = Math.max(320, panelWidth + 72);
+      // Radius is derived from the actual panel width itself. Visible spacing
+      // is handled separately in screen space so perspective does not make the
+      // gap grow as a panel rotates off-axis.
+      const effectiveSideLength = Math.max(320, panelWidth);
       const radius =
         effectiveSideLength / (2 * Math.tan(Math.PI / count));
 
@@ -378,6 +397,13 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
         // Use the true regular-prism depth with no visual compression.
         const z = radius * (1 - Math.cos(theta));
+
+        // Keep a roughly constant visible gap in screen space instead of
+        // increasing polygon radius. This avoids perspective making the gap
+        // look larger and larger during a transition.
+        const visualGap = window.innerWidth <= 760 ? 18 : 32;
+        if (theta > 1e-6) x += visualGap * 0.5;
+        if (theta < -1e-6) x -= visualGap * 0.5;
 
         if (Math.abs(theta) < 1e-6) x = 0;
 
@@ -631,6 +657,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     next?.addEventListener('click', () => moveByPanels(1, arrowEase));
 
     function initialize() {
+      updateResponsivePanelWidth();
       phase = 0;
       targetPhase = 0;
       ready = true;
@@ -648,7 +675,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v86 orbit</div>
-  <script src="particles.js?v=86"></script>
+  <div class="build-marker" aria-hidden="true">v88 orbit</div>
+  <script src="particles.js?v=88"></script>
 </body>
 </html>
