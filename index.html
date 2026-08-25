@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v92-geometric-panel-gap" />
+  <meta name="site-build" content="v93-responsive-geometry-sync-original-panel-style" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -67,8 +67,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   border: 1px solid rgba(169,200,200,.12);
   border-radius: 16px;
   background: var(--panel);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
   transform-origin: center center;
   will-change: transform, opacity;
   box-shadow: 0 22px 72px rgba(0,0,0,.16);
@@ -360,6 +360,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     function render() {
+      // Keep CSS sizing and cylinder geometry synchronized at every viewport width.
+      updateResponsivePanelWidth();
       const { radius, step } = geometry();
       const viewportCenterX = viewport.clientWidth / 2;
       const viewportCenterY = viewport.clientHeight / 2;
@@ -656,7 +658,9 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     window.addEventListener('resize', () => {
-      if (ready) render();
+      if (!ready) return;
+      updateResponsivePanelWidth();
+      render();
     }, { passive: true });
 
     // Markup already exists because this script is at the end of <body>.
@@ -666,7 +670,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v92 orbit</div>
-  <script src="particles.js?v=92"></script>
+  <div class="build-marker" aria-hidden="true">v93 orbit</div>
+  <script src="particles.js?v=93"></script>
 </body>
 </html>

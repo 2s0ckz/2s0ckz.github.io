@@ -1,18 +1,23 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 92 keeps the rigid fixed-anchor cylinder from v91 and adds a real
-geometric gap between neighboring panel faces.
+Version 93 fixes sub-1920 responsive geometry synchronization and restores the
+pre-orbit panel surface treatment.
 
-Radius:
-- R = (panelWidth + gap) / (2 * tan(pi / count))
-- desktop/tablet gap: 32 px
-- mobile gap: 18 px
+Responsive orbit fix
+- responsive panel width is recalculated before every render/geometry measurement
+- resize events explicitly update the width before rendering
+- this prevents CSS card width and cylinder radius from becoming out of sync
+  when the viewport crosses below 1920 px
+- width model remains:
+  - <=760 px: 80vw
+  - 760–1920 px: linear interpolation from 80vw to 75vw
+  - >=1920 px: 75vw
+  - max-width: 1440 px
 
-This means the panels are still anchored at equal angular positions on one
-shared cylinder, but the polygon side length is slightly larger than the card
-width so adjacent faces no longer touch exactly.
+Pre-orbit panel treatment
+- background color/opacity was already correct:
+  rgba(12,15,26,0.5625)
+- backdrop blur restored from the orbit-era 8 px to the original pre-orbit 1 px
+- -webkit-backdrop-filter restored to 1 px as well
 
-Responsive panel sizing remains:
-- 80vw at <=760px
-- linearly interpolated to 75vw at 1920px
-- max-width 1440px
+Rigid fixed cylinder anchors and real geometric panel gaps from v92 are retained.
