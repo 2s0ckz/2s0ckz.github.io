@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v82-compressed-z-perspective";
+  window.__particleBuild = "v83-more-z-compression";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 

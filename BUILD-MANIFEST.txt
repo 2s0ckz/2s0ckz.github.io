@@ -1,14 +1,14 @@
-Jordan Houri personal site — v82
+Jordan Houri personal site — v83
 
-PERSPECTIVE ADJUSTMENT:
-- true 120° interior angle retained
-- rotateY unchanged
-- z-depth compressed to 58%
-- particle projection compressed to match
+Changes:
+- z-depth factor 0.24
+- panel spacing based on panelWidth + 72px
+- mobile bottom padding/scroll clearance increased
+- mobile panel height leaves 24px viewport breathing room
 
 SHA-256:
-376f06b06d19c9af18ac16a014595d4f57d3cd0c76a3d4f74a52c13588e0fec1  index.html
+cd87b7409ce01fc888d5e0fba3d1cce92dfe45d96e7fe6dd25e544fcb243c83e  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-7f804f63de6ea6c12a05dd5af0df70564db93bbb25c315aaebc92214943a5360  particles.js
-d63ae407216f06d24d83ea421a252913b5eeb0f7b3bf1caa7c23b1117ac0c8bb  README.md
+3e5f05d8270bad441c00173a87bc7b06f64c12599523565e3c49b69b7dcb0056  particles.js
+0ff43505be80d7df1caa9ca2739d4882e958fd85754dd396ce2bb7861ee5f0c1  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

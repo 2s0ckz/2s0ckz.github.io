@@ -1,21 +1,22 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 82 keeps the true regular-prism face angles but reduces perspective exaggeration.
+Version 83 adjusts perspective, panel spacing, and mobile vertical scrolling.
 
-Geometry:
-- six panels still use a 60° normal-to-normal turn
-- therefore the interior angle remains exactly 120°
-- rotateY remains exact and unchanged
+Perspective
+- true regular-prism face orientation is unchanged
+- six-panel interior angle remains 120 degrees
+- visual z-depth compression is increased substantially:
+  0.58 -> 0.24
+- particle projection reads the same shared z-depth factor
 
-Visual perspective adjustment:
-- only z-depth is compressed
-- zDepthFactor = 0.58
-- x placement and face orientation stay exact
-- this should make adjacent panels look less sharply folded while preserving
-  the polygon geometry
+Panel spacing
+- effective polygon side length is now panelWidth + 72 px
+- this creates a visible gap between adjacent faces rather than near-touching edges
 
-Particles:
-- particle projection uses the same 0.58 perspective compression
-- particle physics, generation rate, and cylindrical phase remain unchanged
-
-Mobile vertical-scroll fix from v81 is retained.
+Mobile scrolling
+- mobile cards get a larger bottom padding (72 px)
+- explicit overflow-y:auto and momentum scrolling are retained
+- scroll-padding-bottom is increased
+- panel height leaves 24 px breathing room inside the viewport
+- viewport gets an additional 12 px bottom inset
+- vertical touch gestures remain native unless they become clearly horizontal orbit drags
