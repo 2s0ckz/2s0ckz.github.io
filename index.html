@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v80-regular-polygon-cylinder" />
+  <meta name="site-build" content="v82-compressed-z-perspective" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -70,6 +70,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   will-change: transform, opacity;
   box-shadow: 0 22px 72px rgba(0,0,0,.16);
   pointer-events: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 }
 
 
@@ -257,7 +259,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     let phase = 0;
     let targetPhase = 0;
     let dragging = false;
+    let pendingDrag = false;
+    let activePointerId = null;
     let pointerStart = 0;
+    let pointerStartY = 0;
     let phaseStart = 0;
     let raf = 0;
     let ready = false;
@@ -323,6 +328,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       window.__orbitStep = step;
       window.__orbitRadius = radius;
       window.__orbitInteriorAngle = Math.PI - step;
+      window.__orbitZDepthFactor = 0.58;
       window.__orbitMobile = window.innerWidth <= 760;
 
       // CSS perspective is the camera-to-front-plane distance. For a viewer
@@ -347,11 +353,16 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         // That puts the virtual camera at the cylinder center rather than
         // somewhere outside it — especially important on mobile.
         let x = radius * Math.sin(theta);
-        const z = radius * (1 - Math.cos(theta));
+
+        // Keep the exact regular-prism face orientation, but compress the
+        // apparent depth to reduce perspective exaggeration.
+        const zDepthFactor = 0.58;
+        const z = radius * (1 - Math.cos(theta)) * zDepthFactor;
 
         if (Math.abs(theta) < 1e-6) x = 0;
 
-        // Each panel's front face points inward at the viewer.
+        // Exact face orientation is retained, so the six-panel interior angle
+        // remains mathematically 120 degrees.
         const rotateY = -theta * 180 / Math.PI;
         const scale = 1;
 
@@ -499,30 +510,83 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
     viewport.addEventListener('pointerdown', event => {
       if (event.button !== 0 || !ready) return;
-      dragging = true;
+
+      activePointerId = event.pointerId;
       pointerStart = event.clientX;
+      pointerStartY = event.clientY;
       phaseStart = targetPhase;
-      viewport.setPointerCapture(event.pointerId);
-      viewport.classList.add('is-dragging');
+
+      if (event.pointerType === 'mouse') {
+        // Desktop mouse dragging can begin immediately.
+        dragging = true;
+        pendingDrag = false;
+        viewport.setPointerCapture(event.pointerId);
+        viewport.classList.add('is-dragging');
+      } else {
+        // Touch/pen starts undecided. Do NOT capture the pointer yet:
+        // native vertical panel scrolling must remain available.
+        pendingDrag = true;
+        dragging = false;
+      }
     });
 
     viewport.addEventListener('pointermove', event => {
+      if (event.pointerId !== activePointerId) return;
+
+      const dx = event.clientX - pointerStart;
+      const dy = event.clientY - pointerStartY;
+
+      if (pendingDrag) {
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+
+        // A clearly vertical gesture belongs entirely to native panel scrolling.
+        if (absY > 8 && absY > absX * 1.15) {
+          pendingDrag = false;
+          activePointerId = null;
+          return;
+        }
+
+        // Only promote touch/pen into orbit dragging once movement is clearly horizontal.
+        if (absX > 12 && absX > absY * 1.25) {
+          pendingDrag = false;
+          dragging = true;
+          viewport.setPointerCapture(event.pointerId);
+          viewport.classList.add('is-dragging');
+        } else {
+          return;
+        }
+      }
+
       if (!dragging) return;
-      targetPhase = phaseStart - (event.clientX - pointerStart) / Math.max(420, viewport.clientWidth * 0.72);
+
+      targetPhase =
+        phaseStart -
+        dx / Math.max(420, viewport.clientWidth * 0.72);
       phase = targetPhase;
       render();
     });
 
     function endDrag(event) {
-      if (!dragging) return;
+      if (event.pointerId !== activePointerId && activePointerId !== null) return;
+
+      // An undecided tap/vertical gesture never became an orbit drag.
+      if (!dragging) {
+        pendingDrag = false;
+        activePointerId = null;
+        return;
+      }
+
       dragging = false;
+      pendingDrag = false;
+      activePointerId = null;
       viewport.classList.remove('is-dragging');
 
       if (viewport.hasPointerCapture(event.pointerId)) {
         viewport.releasePointerCapture(event.pointerId);
       }
 
-      // Snap to the nearest panel after free dragging.
+      // Snap to the nearest panel after free horizontal dragging.
       targetPhase = Math.round(targetPhase);
 
       if (!raf) {
@@ -564,7 +628,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v80 orbit</div>
-  <script src="particles.js?v=80"></script>
+  <div class="build-marker" aria-hidden="true">v82 orbit</div>
+  <script src="particles.js?v=82"></script>
 </body>
 </html>

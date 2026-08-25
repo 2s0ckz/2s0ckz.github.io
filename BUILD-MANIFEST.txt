@@ -1,17 +1,14 @@
-Jordan Houri personal site — v80
+Jordan Houri personal site — v82
 
-REGULAR POLYGON CYLINDER:
-- interior angle = π - 2π/N
-- N=6 => 120° interior angle
-- apothem = panelWidth / (2 tan(π/N))
-- same geometry on desktop and mobile
-- perspective = apothem on all devices
-- mobile 45° compression removed
-- particle camera uses same geometry
+PERSPECTIVE ADJUSTMENT:
+- true 120° interior angle retained
+- rotateY unchanged
+- z-depth compressed to 58%
+- particle projection compressed to match
 
 SHA-256:
-57ea9d28f6426ef5bdde70eef7c65babbe6c60e8b68db1fe60f54a3abdb54b5e  index.html
+376f06b06d19c9af18ac16a014595d4f57d3cd0c76a3d4f74a52c13588e0fec1  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-a60998b38c11853bd4ee01c73269af872edc238e655986680533850924a41c64  particles.js
-abd1adc86e9f3e907364a37efe8c57480c30767d770b1e645d46da28ec23b0a3  README.md
+7f804f63de6ea6c12a05dd5af0df70564db93bbb25c315aaebc92214943a5360  particles.js
+d63ae407216f06d24d83ea421a252913b5eeb0f7b3bf1caa7c23b1117ac0c8bb  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
