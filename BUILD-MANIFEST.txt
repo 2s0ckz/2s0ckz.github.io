@@ -1,12 +1,13 @@
-Jordan Houri personal site — v29
+Jordan Houri personal site — v30
 
-Verified changes:
-- electron maxGeneration = 5
-- link hover/focus color = #E8BF28
+Verified:
+- .content-panel a:hover => #E8BF28 !important
+- .content-panel a:focus-visible => #E8BF28 !important
+- .content-panel a:active => #E8BF28 !important
 
 SHA-256:
-0744f7e7633360a7ea7c6c6f0f165fcb1af4ab36e3e756729b00d557a1d0c813  index.html
-ac4b1dcbcf10578967ceda6971dd80de90cd32113ab95c5a366ead8bb8af2738  style.css
+c3bbfcfc292f07b0dcc122c587ab05b7de1723758b0f6562f2e28dbf09025494  index.html
+c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
 da17f907fdd996076fc72491036a41398a9bf4a5c627ff6baa0b08ee5f875707  particles.js
-833431cb127aa6ae693996fb1da3eae7a13f9135efa1bc0ed3371662b5c700a9  README.md
+7fb4d168355531a2b1c23d271f231064793e9d35a6cc3691f67e9bcd87ca77d4  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

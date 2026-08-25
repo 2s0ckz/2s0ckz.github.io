@@ -1,9 +1,10 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 29 changes:
-- electron `maxGeneration`: 4 -> 5
-- link hover/focus color: #E8BF28
-  - sampled from the supplied image: RGB(232, 191, 40)
-- normal link color unchanged
-- photon mean free path remains at the prior 5x setting
-- opacity and arc/parallax behavior otherwise unchanged
+Version 30 makes the yellow interaction color explicit.
+
+- content-panel link hover: #E8BF28
+- keyboard focus-visible: #E8BF28
+- active/click state: #E8BF28
+- selector is scoped to `.content-panel a` with higher specificity
+- `!important` is used on the interaction color to prevent base-link overrides
+- all particle, arc, opacity, and layout behavior remains unchanged

@@ -53,10 +53,16 @@ a {
   font-weight: 400;
 }
 
-a:hover,
-a:focus-visible {
-  color: #E8BF28;
+/* Explicit link interaction color from the supplied radiation-symbol yellow. */
+.content-panel a:hover,
+.content-panel a:focus-visible,
+.content-panel a:active {
+  color: #E8BF28 !important;
+  text-decoration-color: #E8BF28;
 }
+
+
+
 
 
 /* Single virtual CT reconstruction canvas.
