@@ -25,23 +25,18 @@
   const particleDebug = {
     protonScatterVertices: 0,
     protonScatterEmissions: 0,
+    terminalProtonInteractions: 0,
+    electronsCreated: 0,
+    photonsCreated: 0,
     get protonScatterEmissionRate() {
       return this.protonScatterVertices
         ? this.protonScatterEmissions / this.protonScatterVertices
         : 0;
     }
   };
-  window.__particleDebug = particleDebug;
-  window.__particleBuild = "v47-restored-terminal-probabilistic-scatter";
 
-  function randomInt1000() {
-    if (window.crypto && window.crypto.getRandomValues) {
-      const value = new Uint32Array(1);
-      window.crypto.getRandomValues(value);
-      return value[0] % 1000;
-    }
-    return Math.floor(Math.random() * 1000);
-  }
+  window.__particleDebug = particleDebug;
+  window.__particleBuild = "v48-clean-particle-engine";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -59,6 +54,7 @@
     width = window.innerWidth;
     height = window.innerHeight;
     dpr = Math.min(2, window.devicePixelRatio || 1);
+
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -87,20 +83,27 @@
         speed: rand(90, 122.5),
         stepLength: rand(20, 44),
         generation: 0,
-        maxGeneration: 5
+        maxGeneration: 5,
+        scatterSigma: 0
       },
       photon: {
         speed: rand(85, 115),
         stepLength: rand(70, 145),
         generation: 0,
-        maxGeneration: 2
+        maxGeneration: 2,
+        scatterSigma: 0
       }
     }[kind];
+
+    if (!defaults) return;
 
     const family = families.get(familyId);
     if (!family) return;
 
     family.activeCount += 1;
+
+    if (kind === "electron") particleDebug.electronsCreated += 1;
+    if (kind === "photon") particleDebug.photonsCreated += 1;
 
     activeTracks.push({
       kind,
@@ -121,7 +124,10 @@
   function spawnPrimary() {
     const familyId = createFamily();
     const originMode = Math.random();
-    let x, y, angle;
+
+    let x;
+    let y;
+    let angle;
 
     if (originMode < 0.50) {
       x = rand(width * 0.02, width * 0.98);
@@ -142,7 +148,10 @@
     });
   }
 
+  // Normal proton termination interaction.
   function spawnFromProton(track) {
+    particleDebug.terminalProtonInteractions += 1;
+
     const electronCount = Math.random() < 0.72 ? Math.ceil(rand(1, 3)) : 1;
     const photonCount = Math.random() < 0.32 ? 1 : 0;
 
@@ -155,6 +164,7 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 5,
           stepLength: rand(18, 42)
         }
       );
@@ -169,18 +179,16 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 2,
           stepLength: rand(75, 140)
         }
       );
     }
   }
 
-
+  // Intermediate proton multiple-scattering interaction.
+  // Called only when the per-vertex probability gate succeeds.
   function spawnAtProtonScatter(track) {
-    if (track.kind !== "proton") return;
-
-    // This function is called ONLY for vertices already selected to emit.
-    // Decide daughter species separately from the emission gate.
     const electronFraction = 0.08 / 0.095;
 
     if (Math.random() < electronFraction) {
@@ -216,6 +224,7 @@
 
   function spawnElectronChildren(track) {
     if (track.generation >= track.maxGeneration) return;
+
     const nextGeneration = track.generation + 1;
 
     addTrack(
@@ -226,6 +235,7 @@
       track.familyId,
       {
         generation: nextGeneration,
+        maxGeneration: track.maxGeneration,
         stepLength: rand(14, 34),
         speed: Math.max(62.5, track.speed * rand(0.90, 0.98))
       }
@@ -240,6 +250,7 @@
         track.familyId,
         {
           generation: nextGeneration,
+          maxGeneration: track.maxGeneration,
           stepLength: rand(10, 25),
           speed: rand(77.5, 102.5)
         }
@@ -255,6 +266,7 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 2,
           stepLength: rand(60, 110)
         }
       );
@@ -263,6 +275,7 @@
 
   function spawnPhotonChildren(track) {
     if (track.generation >= track.maxGeneration) return;
+
     const nextGeneration = track.generation + 1;
 
     addTrack(
@@ -273,6 +286,7 @@
       track.familyId,
       {
         generation: nextGeneration,
+        maxGeneration: track.maxGeneration,
         stepLength: rand(55, 115),
         speed: Math.max(57.5, track.speed * rand(0.84, 0.95))
       }
@@ -287,6 +301,7 @@
         track.familyId,
         {
           generation: 0,
+          maxGeneration: 5,
           stepLength: rand(15, 34),
           speed: rand(82.5, 110)
         }
@@ -297,8 +312,8 @@
   function finishTrack(index, track, generateSecondaries) {
     if (generateSecondaries) {
       if (track.kind === "proton") spawnFromProton(track);
-      if (track.kind === "electron") spawnElectronChildren(track);
-      if (track.kind === "photon") spawnPhotonChildren(track);
+      else if (track.kind === "electron") spawnElectronChildren(track);
+      else if (track.kind === "photon") spawnPhotonChildren(track);
     }
 
     completedTracks.push({
@@ -330,11 +345,13 @@
     const expired = [];
 
     for (const [id, family] of families.entries()) {
-      const done =
+      if (
         family.activeCount === 0 &&
         family.fadeStart !== null &&
-        now >= family.fadeStart + family.fadeDuration;
-      if (done) expired.push(id);
+        now - family.fadeStart >= family.fadeDuration
+      ) {
+        expired.push(id);
+      }
     }
 
     if (!expired.length) return;
@@ -342,18 +359,22 @@
     const expiredSet = new Set(expired);
 
     for (let i = completedTracks.length - 1; i >= 0; i--) {
-      if (expiredSet.has(completedTracks[i].familyId)) completedTracks.splice(i, 1);
+      if (expiredSet.has(completedTracks[i].familyId)) {
+        completedTracks.splice(i, 1);
+      }
     }
 
     for (const id of expired) families.delete(id);
   }
 
   function update(dt, now) {
-    spawnClock += dt;
+    if (!reduceMotion) {
+      spawnClock -= dt;
 
-    if (spawnClock > rand(3.04, 4.8)) {
-      spawnClock = 0;
-      spawnPrimary();
+      if (spawnClock <= 0) {
+        spawnPrimary();
+        spawnClock = rand(3.04, 4.8);
+      }
     }
 
     const countAtFrameStart = activeTracks.length;
@@ -364,21 +385,20 @@
 
       if (track.kind === "proton") {
         track.scatterClock -= dt;
+
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
 
           particleDebug.protonScatterVertices += 1;
 
-          // Intermediate proton scatter-secondary production:
-          // exactly 95 successful draws out of 1000 = 9.5% per vertex.
-          const scatterDraw = randomInt1000();
+          // Exactly one independent probability draw for this vertex.
+          // 95 successful integer values out of 1000 = 9.5%.
+          const scatterDraw = Math.floor(Math.random() * 1000);
           if (scatterDraw < 95) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
           }
-
-          // Proton always continues after the scatter vertex.
         }
       }
 
@@ -395,8 +415,11 @@
         track.y < -margin ||
         track.y > height + margin;
 
-      if (track.distanceLeft <= 0) finishTrack(i, track, true);
-      else if (outside) finishTrack(i, track, false);
+      if (track.distanceLeft <= 0) {
+        finishTrack(i, track, true);
+      } else if (outside) {
+        finishTrack(i, track, false);
+      }
     }
 
     removeFadedFamilies(now);
@@ -409,17 +432,32 @@
     if (eventAlpha <= 0) return;
 
     const rgb = COLORS[track.kind];
-    const baseAlpha = isActive
-      ? track.kind === "proton" ? 0.90 : track.kind === "electron" ? 0.80 : 0.76
-      : track.kind === "proton" ? 0.76 : track.kind === "electron" ? 0.66 : 0.62;
+    if (!rgb) return;
 
-    const lineWidth = track.kind === "proton" ? 1.55 : track.kind === "electron" ? 1.15 : 1.05;
+    const baseAlpha = isActive
+      ? track.kind === "proton"
+        ? 0.90
+        : track.kind === "electron"
+          ? 0.80
+          : 0.76
+      : track.kind === "proton"
+        ? 0.76
+        : track.kind === "electron"
+          ? 0.66
+          : 0.62;
+
+    const lineWidth =
+      track.kind === "proton" ? 1.55 : track.kind === "electron" ? 1.15 : 1.05;
 
     ctx.beginPath();
     ctx.moveTo(track.trail[0].x, track.trail[0].y);
-    for (let i = 1; i < track.trail.length; i++) ctx.lineTo(track.trail[i].x, track.trail[i].y);
 
-    ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${baseAlpha * eventAlpha})`;
+    for (let i = 1; i < track.trail.length; i++) {
+      ctx.lineTo(track.trail[i].x, track.trail[i].y);
+    }
+
+    ctx.strokeStyle =
+      `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${baseAlpha * eventAlpha})`;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -428,26 +466,29 @@
 
   function render(now) {
     ctx.clearRect(0, 0, width, height);
+
     for (const track of completedTracks) drawTrack(track, now, false);
     for (const track of activeTracks) drawTrack(track, now, true);
   }
 
   function frame(now) {
-    const dt = Math.min(0.034, (now - last) / 1000);
+    const dt = Math.min(0.034, Math.max(0, (now - last) / 1000));
     last = now;
-    if (!reduceMotion) update(dt, now);
+
+    update(dt, now);
     render(now);
+
     requestAnimationFrame(frame);
   }
 
-  window.addEventListener("resize", resize, { passive: true });
   resize();
-  spawnPrimary();
+  window.addEventListener("resize", resize);
 
   if (reduceMotion) {
-    for (let i = 0; i < 280; i++) update(1 / 60, performance.now());
-    render(performance.now());
+    spawnPrimary();
   } else {
-    requestAnimationFrame(frame);
+    spawnClock = 0.25;
   }
+
+  requestAnimationFrame(frame);
 })();

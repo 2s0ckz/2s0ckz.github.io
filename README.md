@@ -1,18 +1,20 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 47 restores the normal particle system after the diagnostic builds.
+Version 48 cleanly rebuilds the particle engine instead of continuing to patch
+the diagnostic versions.
 
-Restored:
-- terminal proton interactions (`spawnFromProton`)
-- normal electron cascades
-- normal photon cascades
-- electron/photon creation in `addTrack`
+Particle behavior:
+- blue primary protons
+- normal terminal proton interactions restored
+- terminal proton interactions always create at least one electron
+- normal electron and photon cascades restored
+- generation limits are now propagated correctly instead of silently resetting
+- intermediate proton multiple-scattering vertices independently emit with a
+  9.5% probability
+- intermediate scatter daughters are terminal single tracks
+- the proton continues after an intermediate emission
 
-Intermediate proton multiple-scatter secondaries:
-- 9.5% probability per scatter vertex
-- explicit integer draw: 0–999, emit only for values below 95
-- scatter-produced daughters remain terminal (`maxGeneration: 0`)
-- proton continues after emission
-
-Runtime marker:
-`window.__particleBuild === "v47-restored-terminal-probabilistic-scatter"`
+Debug:
+`window.__particleBuild` -> `v48-clean-particle-engine`
+`window.__particleDebug` exposes scatter, terminal-interaction, electron, and
+photon creation counters.

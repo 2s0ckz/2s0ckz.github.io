@@ -1,19 +1,15 @@
-Jordan Houri personal site — v47
+Jordan Houri personal site — v48
 
-Restored normal terminal behavior:
-- terminal proton daughters enabled
-- electron/photon cascades enabled
-- addTrack accepts all particle types
-
-Intermediate proton scatter:
-- 9.5% probability per vertex
-- integer random gate (<95 of 1000)
-- one scatter helper call site
+CLEAN PARTICLE ENGINE REBUILD
+- terminal proton secondaries restored
+- electron/photon cascade generation bounds fixed
+- intermediate scatter emission = 9.5% per vertex
 - scatter daughters terminal
+- proton continues after scatter emission
 
 SHA-256:
-51d7b8ec62746585828b85deb78ef89147184ac8785ec30c9549c467773b79a0  index.html
+a553a5bc39806bd2416a20b097a46e83f5b584f4e1d3164e365b0fb270856365  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-42335be41c2030024ee1730bc8c1dd0d02be76373f2ba08dfff4b35739621c09  particles.js
-ca576b674122d098c9848794f5d28a3b2e4a94c40825c86dfcfb639bb7bba945  README.md
+b2bb3e2489cffb0b5e6c1aa8bb7273777d14e277666e6d28699f18a854723821  particles.js
+113dc10bbd488302d1ded2c02d76a7a5ee9f89b9c4ba7419615cea128a11c4df  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
