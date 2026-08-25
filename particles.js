@@ -502,7 +502,7 @@
 
           // Exactly one independent probability draw for this vertex.
           // 1 successful integer value out of 1000 = 0.1%.
-          const scatterDraw = Math.floor(Math.random() * 100000.0);
+          const scatterDraw = Math.floor(Math.random() * 10000000.0);
           if (scatterDraw < 1) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
