@@ -1,11 +1,9 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 110 makes the right-chevron repositioning visibly meaningful.
+Version 111 makes only two arrow-position adjustments from v110:
 
-- the previous 1px adjustment was too small to perceive
-- the right control is now pulled 14px inward toward the active panel
-- both visible chevron shapes are re-centered within their control boxes
-- left/right internal shape offsets are now equal and mirrored at ±6px
-- fully opaque tapered styling is retained
+- left arrow: 3px farther left
+- right arrow: 7px farther right
 
-No orbit geometry, scrolling, particles, or panel layout changed.
+Chevron shape, opacity, taper, size, click behavior, orbit geometry, scrolling,
+particles, and all other layout/styling remain unchanged.

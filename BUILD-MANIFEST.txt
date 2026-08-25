@@ -1,13 +1,12 @@
-Jordan Houri personal site — v110
+Jordan Houri personal site — v111
 
-CHEVRON POSITION:
-- right control moved 14px inward
-- internal visible chevrons re-centered symmetrically
-- mirrored offsets = +/-6px
+ARROW POSITION:
+- left: 3px farther left
+- right: 7px farther right
 
 SHA-256:
-e7b89989459f13512d9e79a036b23a051460b674857626cf61e8b98722116062  index.html
+d29143cfa2d31afd91b03476a0e1a13ff35f1c675dbe1ec0681983116a791fcc  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-aedd9e60206557214f57b00608f6cff9b10902e80d139be0aa85a8e4c58e585a  README.md
+9e86c22526c68c91cf72d21c491427c1f36b848873304a915dbc4510429bc1e5  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

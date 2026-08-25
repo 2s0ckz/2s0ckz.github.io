@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v110-visible-right-chevron-recenter" />
+  <meta name="site-build" content="v111-arrow-position-tweak" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -548,8 +548,8 @@ const status = document.getElementById('orbitStatus');
         // Keep the controls outside the active panel while balancing their
         // visible position around the panel. The right control is pulled inward
         // by 14px because its previous placement read too far toward the viewport edge.
-        edgePrev.style.left = `${activeRect.left - viewportRect.left - prevWidth - gap}px`;
-        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap - 14}px`;
+        edgePrev.style.left = `${activeRect.left - viewportRect.left - prevWidth - gap - 3}px`;
+        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap - 7}px`;
       }
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -893,7 +893,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v110 orbit</div>
-  <script src="particles.js?v=110"></script>
+  <div class="build-marker" aria-hidden="true">v111 orbit</div>
+  <script src="particles.js?v=111"></script>
 </body>
 </html>
