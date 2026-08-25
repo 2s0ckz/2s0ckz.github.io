@@ -1,25 +1,18 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 89 compensates panel spacing for CSS perspective.
+Version 92 keeps the rigid fixed-anchor cylinder from v91 and adds a real
+geometric gap between neighboring panel faces.
 
-Problem:
-- a fixed world-space or x-offset gap does not stay visually constant
-- as a card rotates, its projected width changes because of both rotateY
-  foreshortening and CSS perspective magnification
-- this made the visible edge gap expand/contract during transitions
+Radius:
+- R = (panelWidth + gap) / (2 * tan(pi / count))
+- desktop/tablet gap: 32 px
+- mobile gap: 18 px
 
-Fix:
-- each frame estimates every visible card's projected width:
-  projectedWidth ≈ panelWidth * |cos(theta)| * P/(P-z)
-- cards are then laid out cumulatively in screen space with a fixed visible gap
-- desired screen-space centers are converted back to world-space x positions
-  before applying the existing CSS 3D transform
+This means the panels are still anchored at equal angular positions on one
+shared cylinder, but the polygon side length is slightly larger than the card
+width so adjacent faces no longer touch exactly.
 
-Gap targets:
-- desktop/tablet: 32 px
-- mobile: 18 px
-
-Responsive panel width from v88 is retained:
+Responsive panel sizing remains:
 - 80vw at <=760px
 - linearly interpolated to 75vw at 1920px
 - max-width 1440px

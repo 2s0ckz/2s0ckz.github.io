@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v89-perspective-compensated-gap" />
+  <meta name="site-build" content="v92-geometric-panel-gap" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -349,15 +349,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       const step = (Math.PI * 2) / count;
       const interiorAngle = Math.PI - step;
 
-      // Treat each content panel as one side of the regular polygon.
-      // Radius is derived from the actual panel width itself. Visible spacing
-      // is handled separately in screen space so perspective does not make the
-      // gap grow as a panel rotates off-axis.
-      const effectiveSideLength = Math.max(320, panelWidth);
+      // Treat each content panel as one face of the regular polygon, but leave
+      // a small real geometric gap between neighboring faces.
+      const desiredGap = window.innerWidth <= 760 ? 18 : 32;
+      const effectiveSideLength = Math.max(320, panelWidth + desiredGap);
       const radius =
         effectiveSideLength / (2 * Math.tan(Math.PI / count));
 
-      return { panelWidth, radius, step, interiorAngle };
+      return { panelWidth, radius, step, interiorAngle, desiredGap };
     }
 
     function render() {
@@ -381,124 +380,48 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
       let nearest = { distance: Infinity, index: 0 };
 
-      // Build per-card geometry first so we can compensate for perspective
-      // when assigning horizontal positions.
-      const states = cards.map((card, index) => {
-        const rawTheta = (index - phase) * step;
-        const theta = wrappedAngle(rawTheta);
+      cards.forEach((card, index) => {
+        // Fixed cylindrical anchors:
+        // each card owns one equally spaced angular point on the cylinder.
+        // Scrolling changes only `phase`, rotating the whole cylinder around
+        // the stationary camera. No per-card spacing correction is applied.
+        const anchorAngle = index * step;
+        const cylinderRotation = phase * step;
+        const theta = wrappedAngle(anchorAngle - cylinderRotation);
         const isMobile = window.innerWidth <= 760;
 
-        // True regular-prism depth and exact face orientation.
+        // TRUE VIEWER-CENTERED REGULAR-POLYGON CYLINDER:
+        // The CSS perspective distance is matched to the cylinder radius.
+        // That puts the virtual camera at the cylinder center rather than
+        // somewhere outside it — especially important on mobile.
+        // All panel centers lie on the same cylindrical surface.
+        const x = radius * Math.sin(theta);
         const z = radius * (1 - Math.cos(theta));
-        const rotateY = -theta * 180 / Math.PI;
 
+        // Exact face orientation is retained, so the six-panel interior angle
+        // remains mathematically 120 degrees.
+        const rotateY = -theta * 180 / Math.PI;
+        const scale = 1;
+
+        // On mobile, panels beyond the +/-90-degree camera horizon would pass
+        // behind the CSS camera plane and visually flip. Hide them instead.
         const behindCamera =
           Math.abs(theta) >= (Math.PI * 0.49);
 
-        // Approximate projected card width under CSS perspective.
-        // P/(P-z) is the perspective magnification and cos(theta) is the
-        // horizontal foreshortening of the rotated face.
-        const perspectiveDistance = radius;
-        const denom = Math.max(1, perspectiveDistance - z);
-        const magnification = perspectiveDistance / denom;
-        const projectedWidth =
-          panelWidth * Math.max(0.08, Math.abs(Math.cos(theta))) * magnification;
-
-        return {
-          card,
-          index,
-          theta,
-          z,
-          rotateY,
-          behindCamera,
-          projectedWidth,
-          delta: index - phase
-        };
-      });
-
-      // Wrap each delta into the nearest logical neighborhood around phase.
-      states.forEach(state => {
-        let d = state.delta;
-        while (d > count / 2) d -= count;
-        while (d < -count / 2) d += count;
-        state.delta = d;
-      });
-
-      // Sort left-to-right by logical delta, then assign desired SCREEN-SPACE
-      // centers cumulatively so adjacent visible edges have a constant gap.
-      const gapPx = window.innerWidth <= 760 ? 18 : 32;
-      const visibleStates = states
-        .filter(s => !s.behindCamera)
-        .sort((a, b) => a.delta - b.delta);
-
-      // Find the state nearest the center and anchor it at screen x = 0.
-      let centerPos = 0;
-      let bestAbs = Infinity;
-      visibleStates.forEach((s, i) => {
-        const a = Math.abs(s.delta);
-        if (a < bestAbs) {
-          bestAbs = a;
-          centerPos = i;
-        }
-      });
-
-      if (visibleStates.length) {
-        visibleStates[centerPos].screenX = 0;
-
-        // Place panels to the right.
-        for (let i = centerPos + 1; i < visibleStates.length; i++) {
-          const prevState = visibleStates[i - 1];
-          const state = visibleStates[i];
-          state.screenX =
-            prevState.screenX +
-            prevState.projectedWidth * 0.5 +
-            gapPx +
-            state.projectedWidth * 0.5;
-        }
-
-        // Place panels to the left.
-        for (let i = centerPos - 1; i >= 0; i--) {
-          const nextState = visibleStates[i + 1];
-          const state = visibleStates[i];
-          state.screenX =
-            nextState.screenX -
-            nextState.projectedWidth * 0.5 -
-            gapPx -
-            state.projectedWidth * 0.5;
-        }
-      }
-
-      let nearest = { distance: Infinity, index: 0 };
-
-      states.forEach(state => {
-        const {
-          card, index, theta, z, rotateY, behindCamera
-        } = state;
-
-        // Convert desired projected screen x back into world-space x so CSS
-        // perspective lands the card center at that screen position.
-        const perspectiveDistance = radius;
-        const denom = Math.max(1, perspectiveDistance - z);
-        const x =
-          behindCamera
-            ? 0
-            : (state.screenX || 0) * denom / perspectiveDistance;
-
+        // Only fade very peripheral/back-facing panels a little.
         const peripheral = Math.min(1, Math.abs(theta) / Math.PI);
         const opacity = behindCamera
           ? 0
           : 1 - peripheral * 0.22;
 
         card.style.transform =
-          `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(1)`;
+          `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
         card.style.opacity = opacity.toFixed(3);
         card.style.pointerEvents = behindCamera ? 'none' : 'auto';
         card.style.zIndex = String(1000 - Math.round(Math.abs(theta) * 100));
 
         const centerDistance = Math.abs(theta);
-        if (centerDistance < nearest.distance) {
-          nearest = { distance: centerDistance, index };
-        }
+        if (centerDistance < nearest.distance) nearest = { distance: centerDistance, index };
       });
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -743,7 +666,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v89 orbit</div>
-  <script src="particles.js?v=89"></script>
+  <div class="build-marker" aria-hidden="true">v92 orbit</div>
+  <script src="particles.js?v=92"></script>
 </body>
 </html>

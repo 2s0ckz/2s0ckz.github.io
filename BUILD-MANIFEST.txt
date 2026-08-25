@@ -1,14 +1,14 @@
-Jordan Houri personal site — v89
+Jordan Houri personal site — v92
 
-PERSPECTIVE-COMPENSATED GAP:
-- projected card width computed each frame
-- constant screen-space edge gap
-- desired screen position converted back to world x
-- 32px desktop / 18px mobile
+GEOMETRIC PANEL GAP:
+- rigid fixed-anchor cylinder retained
+- desktop/tablet gap = 32px
+- mobile gap = 18px
+- radius = (panelWidth + gap)/(2*tan(pi/N))
 
 SHA-256:
-26f29c6a6929e2c7db2cc9ea5998d8310bbe76abcb02a70db3b1c85277998aa8  index.html
+d16ed61d4682397c96c7d2009491b51d90b71263dbaf9744efb39c0e9fa75c8f  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 5fa7c8e93dad1ac0931044971a36236631c95ce36baa5d6fe7d6d3ab0db29cba  particles.js
-f41ccfb406724cc06556fcd62d8582076d359616de400d6cdf2d65052ff6a3ef  README.md
+4bd816d045fc958c7e14ebbe6461360274b6cb2420741d597e4e13a0a7d8b53b  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
