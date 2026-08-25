@@ -1,21 +1,17 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 61 replaces the horizontal flex-track implementation with a true
-inside-cylinder orbit.
+Version 63 corrects the cylinder's center of rotation.
 
-Key architectural change:
-- panels are no longer laid out in a horizontal strip
-- there is no cloned periodic track
-- every panel is absolutely positioned from cylindrical coordinates
-- the viewer is treated as being at the cylinder center
-- adjacent panel angular spacing is computed from panel width and cylinder radius
-  so visible edges are approximately 4 px apart
-- scroll changes angular phase, not horizontal translation
-- active panel remains centered and up to 1440 px wide
+The prior geometry still behaved like an outside-facing rolodex:
+- side panels moved backward in z
+- their rotateY sign pointed toward a center behind the page
 
-First-scroll fix:
-- phase starts exactly at 0
-- no measured initial horizontal offset
-- no wrap correction
-- no cloned-set seam
-- first interaction uses the same phase model as every later interaction
+v63 uses a viewer-centered inside cylinder:
+- x = R sin(theta)
+- z = R (1 - cos(theta)), so side panels move toward the viewer
+- rotateY = -theta, so each panel's front face points inward toward the viewer
+- artificial scale falloff is removed
+- CSS perspective alone provides the size/depth cue
+- perspective is relaxed to 1400px to avoid an exaggerated fisheye effect
+
+The closed six-panel / 60-degree ring and seam-free phase model remain unchanged.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v61-true-inside-cylinder" />
+  <meta name="site-build" content="v63-viewer-centered-cylinder" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -36,22 +36,9 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr) auto; }
 .orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
-.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1000px; cursor:grab; outline:none; touch-action:pan-y; }
+.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1400px; cursor:grab; outline:none; touch-action:pan-y; }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
-
-.orbit-viewport:not(.orbit-ready) .orbit-track {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-.orbit-viewport.orbit-ready .orbit-track {
-  visibility: visible;
-}
 
 .orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
 
@@ -59,7 +46,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(1440px, calc(100vw - 48px));
+  width: min(1440px, calc(100vw - 24px));
   height: min(680px, calc(100% - 24px));
   padding: clamp(32px, 4vw, 64px);
   overflow-y: auto;
@@ -246,21 +233,20 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     let raf = 0;
     let ready = false;
 
-    function shortestDelta(index, currentPhase) {
-      let d = index - currentPhase;
-      while (d > count / 2) d -= count;
-      while (d < -count / 2) d += count;
-      return d;
+    function wrappedAngle(angle) {
+      return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
 
     function geometry() {
       const panelWidth = Math.min(1440, Math.max(320, viewport.clientWidth - 48));
 
-      // Choose radius from the desired edge-to-edge spacing.
-      // Adjacent chord length ~= panel width + 4px, so panels appear nearly touching.
-      const chord = panelWidth + 4;
-      const radius = Math.max(panelWidth * 1.18, 1450);
-      const step = 2 * Math.asin(Math.min(0.92, chord / (2 * radius)));
+      // A genuinely closed cylinder: N equal panels fill exactly 360 degrees.
+      const step = (Math.PI * 2) / count;
+
+      // Solve the radius from the chord between adjacent panel centers.
+      // Slight negative gap intentionally lets projected panel edges nearly touch.
+      const desiredCenterChord = Math.max(280, panelWidth - 36);
+      const radius = desiredCenterChord / (2 * Math.sin(step / 2));
 
       return { panelWidth, radius, step };
     }
@@ -273,29 +259,36 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       let nearest = { distance: Infinity, index: 0 };
 
       cards.forEach((card, index) => {
-        const delta = shortestDelta(index, phase);
-        const theta = delta * step;
+        // Continuous closed-ring angle. Crossing index 0 is no different from
+        // crossing any other point on the cylinder.
+        const rawTheta = (index - phase) * step;
+        const theta = wrappedAngle(rawTheta);
 
-        // TRUE INSIDE-CYLINDER GEOMETRY:
-        // Viewer is at the center. Panels lie on the inner wall and face inward.
-        // The active panel is directly in front; adjacent panels curve around the viewer.
+        // VIEWER-CENTERED INSIDE CYLINDER:
+        // theta=0 is the panel directly in front of the viewer.
+        // As a panel moves toward the viewer's sides, its center comes FORWARD
+        // in CSS z-space rather than receding into a rotation center behind the page.
         const x = radius * Math.sin(theta);
-        const z = -radius * (1 - Math.cos(theta));
+        const z = radius * (1 - Math.cos(theta));
 
-        // Inward-facing tangent orientation.
+        // The panel's front face points inward toward the viewer at the cylinder center.
+        // This is the opposite sign from an outside-facing carousel/rolodex.
         const rotateY = -theta * 180 / Math.PI;
 
-        // Keep off-axis panels readable while clearly peripheral.
-        const peripheral = Math.min(1, Math.abs(theta) / (Math.PI / 2));
-        const scale = 1 - peripheral * 0.07;
-        const opacity = 1 - peripheral * 0.24;
+        // Do not fake cylindrical depth with shrinking. The actual x/z placement
+        // and CSS perspective provide the depth cue.
+        const scale = 1;
+
+        // Only fade very peripheral/back-facing panels a little.
+        const peripheral = Math.min(1, Math.abs(theta) / Math.PI);
+        const opacity = 1 - peripheral * 0.22;
 
         card.style.transform =
           `translate3d(calc(-50% + ${x}px), -50%, ${z}px) rotateY(${rotateY}deg) scale(${scale})`;
         card.style.opacity = opacity.toFixed(3);
-        card.style.zIndex = String(1000 - Math.round(Math.abs(delta) * 100));
+        card.style.zIndex = String(1000 - Math.round(Math.abs(theta) * 100));
 
-        const centerDistance = Math.abs(delta);
+        const centerDistance = Math.abs(theta);
         if (centerDistance < nearest.distance) nearest = { distance: centerDistance, index };
       });
 
@@ -303,10 +296,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     function animate() {
-      let delta = targetPhase - phase;
-      while (delta > count / 2) delta -= count;
-      while (delta < -count / 2) delta += count;
-
+      const delta = targetPhase - phase;
       phase += delta * 0.16;
 
       if (Math.abs(delta) < 0.001) phase = targetPhase;
@@ -322,12 +312,6 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     function moveByPanels(amount) {
       if (!ready) return;
       targetPhase += amount;
-
-      // Keep numbers bounded while preserving periodicity.
-      if (Math.abs(targetPhase) > count * 100) {
-        targetPhase %= count;
-        phase %= count;
-      }
 
       if (!raf) raf = requestAnimationFrame(animate);
     }
@@ -396,16 +380,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     next?.addEventListener('click', () => moveByPanels(1));
 
     function initialize() {
-      // No cloned track, no measurement-derived initial offset, no first-frame wrap.
       phase = 0;
       targetPhase = 0;
+      ready = true;
       render();
-
-      requestAnimationFrame(() => {
-        render();
-        ready = true;
-        viewport.classList.add('orbit-ready');
-      });
     }
 
     window.addEventListener('resize', () => {
@@ -420,7 +398,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v61 orbit</div>
-  <script src="particles.js?v=61"></script>
+  <div class="build-marker" aria-hidden="true">v63 orbit</div>
+  <script src="particles.js?v=63"></script>
 </body>
 </html>
