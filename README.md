@@ -1,15 +1,17 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 44 is a diagnostic isolation build.
+Version 45 is a strict isolation build.
 
-Proton multiple-scattering vertex daughter production is set to exactly ZERO.
+All daughter generation is disabled:
+- proton scatter vertices: no daughters
+- terminal proton interactions: no daughters
+- electron interactions: no daughters
+- photon interactions: no daughters
 
-- proton scattering/kinks remain
-- NO call to `spawnAtProtonScatter()` occurs anywhere
-- terminal proton interaction (`spawnFromProton`) remains unchanged
-- electron/photon interactions remain unchanged
-- `window.__particleBuild` reports `v44-zero-scatter-emission`
-- `window.__particleDebug.protonScatterEmissions` must remain 0
+Only primary blue proton tracks should appear.
 
-If intermediate proton vertices still visibly produce daughters in this build,
-those daughters are not coming from the proton-scatter emission path.
+Runtime marker:
+`window.__particleBuild === "v45-blue-protons-only-diagnostic"`
+
+If any red or green tracks appear in this build, they are not being generated
+by the current `particles.js` secondary-production code.

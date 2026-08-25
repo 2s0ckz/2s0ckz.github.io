@@ -32,7 +32,7 @@
     }
   };
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v44-zero-scatter-emission";
+  window.__particleBuild = "v45-blue-protons-only-diagnostic";
 
   function randomInt1000() {
     if (window.crypto && window.crypto.getRandomValues) {
@@ -295,11 +295,8 @@
   }
 
   function finishTrack(index, track, generateSecondaries) {
-    if (generateSecondaries) {
-      if (track.kind === "proton") spawnFromProton(track);
-      if (track.kind === "electron") spawnElectronChildren(track);
-      if (track.kind === "photon") spawnPhotonChildren(track);
-    }
+    // DIAGNOSTIC v45: all daughter generation is disabled.
+    // Tracks simply terminate; no proton/electron/photon can spawn children.
 
     completedTracks.push({
       kind: track.kind,
