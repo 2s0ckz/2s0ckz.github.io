@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v59-tight-circular-orbit" />
+  <meta name="site-build" content="v60-inside-cylinder-orbit" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -36,18 +36,27 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr) auto; }
 .orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
-.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:900px; cursor:grab; outline:none; touch-action:pan-y; }
+.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:700px; cursor:grab; outline:none; touch-action:pan-y; }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
+
+.orbit-viewport:not(.orbit-ready) .orbit-track {
+  visibility: hidden;
+}
+
+.orbit-viewport.orbit-ready .orbit-track {
+  visibility: visible;
+}
+
 .orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
 
 
 .orbit-set {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 2px;
   height: 100%;
-  padding: 20px 24px;
+  padding: 20px 0;
 }
 
 .orbit-card {
@@ -76,7 +85,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     scale(var(--orbit-scale));
   transform-origin: center center;
   opacity: var(--orbit-opacity);
-  transition: opacity 100ms linear, transform 70ms linear;
+  transition: opacity 100ms linear;
   box-shadow: 0 22px 72px rgba(0,0,0,.16);
 }
 
@@ -104,8 +113,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
   .orbit-set {
-    gap: 8px;
-    padding: 16px 10px;
+    gap: 2px;
+    padding: 16px 0;
   }
 
   .orbit-card {
@@ -296,22 +305,25 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const cardCenter = rect.left + rect.width / 2;
         const normalized = (cardCenter - center) / Math.max(1, viewport.clientWidth);
 
-        // Treat the viewport center as the front of a cylinder.
-        // Map horizontal displacement to an angular position around that cylinder.
-        const theta = Math.max(-1.28, Math.min(1.28, normalized * 1.65));
+        // INSIDE-CYLINDER VIEW:
+        // The viewer is conceptually at the cylinder's center looking outward.
+        // Side panels rotate AWAY from the viewer while wrapping around them.
+        const theta = Math.max(-1.34, Math.min(1.34, normalized * 1.75));
         const absTheta = Math.abs(theta);
 
-        // Circular depth: center = z 0; sides recede strongly.
-        const z = -520 * (1 - Math.cos(theta));
+        // Panels on the sides move outward toward the viewer's peripheral field
+        // rather than receding behind a cylinder surface.
+        const z = 360 * (1 - Math.cos(theta));
 
-        // Tangential rotation makes each card face toward the viewer along the curve.
-        const rotate = -(theta * 180 / Math.PI) * 0.92;
+        // Invert the tangential rotation used by the outside-cylinder model.
+        // Left panel turns left, right panel turns right, as viewed from inside.
+        const rotate = (theta * 180 / Math.PI) * 0.96;
 
-        // Small lateral correction from the circular path itself.
-        const orbitX = Math.sin(theta) * 110;
+        // Keep panels wrapped closely around the viewer.
+        const orbitX = Math.sin(theta) * 72;
 
-        const scale = 1 - Math.min(0.22, absTheta * 0.13);
-        const opacity = 1 - Math.min(0.46, absTheta * 0.25);
+        const scale = 1 - Math.min(0.12, absTheta * 0.07);
+        const opacity = 1 - Math.min(0.30, absTheta * 0.17);
 
         card.style.setProperty('--orbit-rotate', `${rotate}deg`);
         card.style.setProperty('--orbit-scale', scale.toFixed(3));
@@ -351,6 +363,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     }
 
     function moveBy(delta, smooth = true) {
+      if (!ready) return;
       target = wrap(target + delta);
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => render(!smooth));
@@ -410,14 +423,31 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     prev?.addEventListener('click', () => moveBy(-cardPitch(), true));
     next?.addEventListener('click', () => moveBy(cardPitch(), true));
 
-    window.addEventListener('resize', measure, { passive: true });
-    window.addEventListener('load', measure, { once: true });
+    let ready = false;
 
-    measure();
+    function initializeOrbit() {
+      measure();
+      requestAnimationFrame(() => {
+        measure();
+        ready = true;
+        viewport.classList.add('orbit-ready');
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      if (!ready) return;
+      measure();
+    }, { passive: true });
+
+    if (document.readyState === 'complete') {
+      initializeOrbit();
+    } else {
+      window.addEventListener('load', initializeOrbit, { once: true });
+    }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v59 orbit</div>
-  <script src="particles.js?v=59"></script>
+  <div class="build-marker" aria-hidden="true">v60 orbit</div>
+  <script src="particles.js?v=60"></script>
 </body>
 </html>

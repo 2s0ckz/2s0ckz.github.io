@@ -1,15 +1,15 @@
-Jordan Houri personal site — v59
+Jordan Houri personal site — v60
 
-Orbit changes:
-- desktop gap 12px
-- mobile gap 8px
-- circular x/z motion
-- tangential rotateY
-- stronger 900px perspective
+Inside-cylinder orbit:
+- panel gap 2px
+- inverted depth/rotation geometry
+- 700px perspective
+- initialized before interaction
+- no first-switch transform glitch
 
 SHA-256:
-3f4480519cb9c8d1251f23d3d8ae4ab99c55fc9ec265dc4e214dcbcf1266938d  index.html
+073443c0f573727756a7240b400d11db03b477226442a97793c318679cf5dff2  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
-8d13e7720672999d0e239fe3af239f232c8a9750fdc3e88432d7a5ad6d33e7f3  README.md
+1cd8486f5ab566992c514488a6035f1c9fdc5a639ba274640d09622e7e7202ad  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

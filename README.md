@@ -1,12 +1,12 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 59 makes the horizontal layout read more like an orbit and less like a slider.
+Version 60 changes the horizontal orbit to an inside-cylinder viewpoint.
 
-Changes:
-- adjacent panels now have only 12 px gap on desktop and 8 px on mobile
-- panel centers follow a circular/sinusoidal x-z path
-- side panels recede in depth using a cosine curve
-- cards rotate tangentially to the curve rather than simply tilting linearly
-- viewport perspective reduced to 900 px for stronger depth
+- viewer is treated as standing at the center of the cylinder
+- side panels rotate away toward the viewer's peripheral field
+- depth sign is inverted from the outside-cylinder model
+- panel gap reduced to 2 px on desktop and mobile
+- viewport perspective strengthened to 700 px
+- initial orbit state is fully measured before interaction is enabled
+- first panel-switch glitch removed by eliminating transform transition during initialization
 - active panel remains centered and up to 1440 px wide
-- GitHub and X remain @2s0ckz
