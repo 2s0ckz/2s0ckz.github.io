@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v69-1440-cap-slower-arrows" />
+  <meta name="site-build" content="v70-cylindrical-particle-surface" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -279,6 +279,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       const viewportCenterX = viewport.clientWidth / 2;
       const viewportCenterY = viewport.clientHeight / 2;
 
+      // Shared rotation state for the cylindrical particle background.
+      window.__orbitPhase = phase;
+      window.__orbitStep = step;
+
       let nearest = { distance: Infinity, index: 0 };
 
       cards.forEach((card, index) => {
@@ -449,7 +453,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v69 orbit</div>
-  <script src="particles.js?v=69"></script>
+  <div class="build-marker" aria-hidden="true">v70 orbit</div>
+  <script src="particles.js?v=70"></script>
 </body>
 </html>

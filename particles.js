@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v52-photon-linear-max3";
+  window.__particleBuild = "v70-inner-cylinder-surface";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -124,25 +124,13 @@
 
   function spawnPrimary() {
     const familyId = createFamily();
-    const originMode = Math.random();
 
-    let x;
-    let y;
-    let angle;
-
-    if (originMode < 0.50) {
-      x = rand(width * 0.02, width * 0.98);
-      y = -20;
-      angle = rand(Math.PI * 0.30, Math.PI * 0.70);
-    } else if (originMode < 0.75) {
-      x = -20;
-      y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.16, Math.PI * 0.44);
-    } else {
-      x = width + 20;
-      y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.56, Math.PI * 0.84);
-    }
+    // Cylindrical surface coordinates:
+    // x spans one full 360-degree circumference and y runs vertically.
+    // Primaries now enter only from the top edge of that surface.
+    const x = rand(0, width);
+    const y = -20;
+    const angle = rand(Math.PI * 0.30, Math.PI * 0.70);
 
     addTrack("proton", x, y, angle, familyId, {
       stepLength: rand(height * 0.30, height * 0.72)
@@ -500,9 +488,10 @@
       track.trail.push({ x: track.x, y: track.y });
 
       const margin = 220;
+
+      // Horizontal position is periodic around the cylinder, so crossing the
+      // left/right edge is not leaving the simulation surface.
       const outside =
-        track.x < -margin ||
-        track.x > width + margin ||
         track.y < -margin ||
         track.y > height + margin;
 
@@ -514,6 +503,53 @@
     }
 
     removeFadedFamilies(now);
+  }
+
+  function wrapAngle(angle) {
+    return Math.atan2(Math.sin(angle), Math.cos(angle));
+  }
+
+  function projectCylinderPoint(point) {
+    if (!width || !height) return null;
+
+    // One canvas-width in simulation space represents one full circumference.
+    const surfaceAngle = ((point.x / width) - 0.5) * Math.PI * 2;
+
+    // Rotate the particle surface by the exact same angular phase as the cards.
+    const orbitPhase = Number.isFinite(window.__orbitPhase) ? window.__orbitPhase : 0;
+    const orbitStep = Number.isFinite(window.__orbitStep)
+      ? window.__orbitStep
+      : (Math.PI * 2) / 6;
+
+    const theta = wrapAngle(surfaceAngle - orbitPhase * orbitStep);
+
+    // Only the inner wall in front of/peripheral to the viewer is visible.
+    // Near +/- 90 degrees the perspective tends to infinity, so clip before it.
+    const maxVisible = Math.PI * 0.43;
+    if (Math.abs(theta) >= maxVisible) return null;
+
+    // Pinhole projection from the CENTER of a vertical cylinder.
+    // x = f tan(theta)
+    // vertical distances expand by 1/cos(theta) toward the peripheral wall.
+    const focal = Math.max(520, Math.min(1100, width * 0.72));
+    const cosine = Math.max(0.24, Math.cos(theta));
+    const screenX = width * 0.5 + focal * Math.tan(theta);
+    const screenY = height * 0.5 + (point.y - height * 0.5) / cosine;
+
+    if (
+      screenX < -180 ||
+      screenX > width + 180 ||
+      screenY < -240 ||
+      screenY > height + 240
+    ) {
+      return null;
+    }
+
+    return {
+      x: screenX,
+      y: screenY,
+      peripheral: Math.abs(theta) / maxVisible
+    };
   }
 
   function drawTrack(track, now, isActive) {
@@ -540,11 +576,33 @@
     const lineWidth =
       track.kind === "proton" ? 1.55 : track.kind === "electron" ? 1.15 : 1.05;
 
-    ctx.beginPath();
-    ctx.moveTo(track.trail[0].x, track.trail[0].y);
+    let drawing = false;
+    let previous = null;
 
-    for (let i = 1; i < track.trail.length; i++) {
-      ctx.lineTo(track.trail[i].x, track.trail[i].y);
+    ctx.beginPath();
+
+    for (let i = 0; i < track.trail.length; i++) {
+      const projected = projectCylinderPoint(track.trail[i]);
+
+      if (!projected) {
+        drawing = false;
+        previous = null;
+        continue;
+      }
+
+      // Split the path if projection crosses the cylindrical seam/peripheral clip.
+      const discontinuity =
+        previous &&
+        Math.abs(projected.x - previous.x) > width * 0.42;
+
+      if (!drawing || discontinuity) {
+        ctx.moveTo(projected.x, projected.y);
+        drawing = true;
+      } else {
+        ctx.lineTo(projected.x, projected.y);
+      }
+
+      previous = projected;
     }
 
     ctx.strokeStyle =
