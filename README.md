@@ -1,17 +1,18 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 45 is a strict isolation build.
+Version 47 restores the normal particle system after the diagnostic builds.
 
-All daughter generation is disabled:
-- proton scatter vertices: no daughters
-- terminal proton interactions: no daughters
-- electron interactions: no daughters
-- photon interactions: no daughters
+Restored:
+- terminal proton interactions (`spawnFromProton`)
+- normal electron cascades
+- normal photon cascades
+- electron/photon creation in `addTrack`
 
-Only primary blue proton tracks should appear.
+Intermediate proton multiple-scatter secondaries:
+- 9.5% probability per scatter vertex
+- explicit integer draw: 0–999, emit only for values below 95
+- scatter-produced daughters remain terminal (`maxGeneration: 0`)
+- proton continues after emission
 
 Runtime marker:
-`window.__particleBuild === "v45-blue-protons-only-diagnostic"`
-
-If any red or green tracks appear in this build, they are not being generated
-by the current `particles.js` secondary-production code.
+`window.__particleBuild === "v47-restored-terminal-probabilistic-scatter"`

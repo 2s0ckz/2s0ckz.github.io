@@ -32,7 +32,7 @@
     }
   };
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v45-blue-protons-only-diagnostic";
+  window.__particleBuild = "v47-restored-terminal-probabilistic-scatter";
 
   function randomInt1000() {
     if (window.crypto && window.crypto.getRandomValues) {
@@ -295,8 +295,11 @@
   }
 
   function finishTrack(index, track, generateSecondaries) {
-    // DIAGNOSTIC v45: all daughter generation is disabled.
-    // Tracks simply terminate; no proton/electron/photon can spawn children.
+    if (generateSecondaries) {
+      if (track.kind === "proton") spawnFromProton(track);
+      if (track.kind === "electron") spawnElectronChildren(track);
+      if (track.kind === "photon") spawnPhotonChildren(track);
+    }
 
     completedTracks.push({
       kind: track.kind,
@@ -365,10 +368,15 @@
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
 
-          // DIAGNOSTIC v44:
-          // Proton multiple-scattering vertices are deliberately forbidden
-          // from producing any daughter particles.
           particleDebug.protonScatterVertices += 1;
+
+          // Intermediate proton scatter-secondary production:
+          // exactly 95 successful draws out of 1000 = 9.5% per vertex.
+          const scatterDraw = randomInt1000();
+          if (scatterDraw < 95) {
+            particleDebug.protonScatterEmissions += 1;
+            spawnAtProtonScatter(track);
+          }
 
           // Proton always continues after the scatter vertex.
         }

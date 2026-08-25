@@ -1,13 +1,19 @@
-Jordan Houri personal site — v45
+Jordan Houri personal site — v47
 
-STRICT DIAGNOSTIC:
-- all secondary-generation call paths disabled
-- only primary blue proton tracks can be created
-- runtime marker: v45-blue-protons-only-diagnostic
+Restored normal terminal behavior:
+- terminal proton daughters enabled
+- electron/photon cascades enabled
+- addTrack accepts all particle types
+
+Intermediate proton scatter:
+- 9.5% probability per vertex
+- integer random gate (<95 of 1000)
+- one scatter helper call site
+- scatter daughters terminal
 
 SHA-256:
-e4f167e2badcd85171cd022494ade20201089e39aabb0dde2e7a9f58194dbdf7  index.html
+51d7b8ec62746585828b85deb78ef89147184ac8785ec30c9549c467773b79a0  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-e80ad7d367f09643a698e6b87eafa62669c759ecd9e3cbc3c1c01f0814286cd0  particles.js
-98fb9d69d0f2d13de75dda50ef6e041ffad18da2a8327beb3d36b2c979b36fa9  README.md
+42335be41c2030024ee1730bc8c1dd0d02be76373f2ba08dfff4b35739621c09  particles.js
+ca576b674122d098c9848794f5d28a3b2e4a94c40825c86dfcfb639bb7bba945  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
