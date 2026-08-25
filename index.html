@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v99-arrow-spacing-selection-fix" />
+  <meta name="site-build" content="v100-v97-arrows-text-selection" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -108,27 +108,20 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   justify-content:space-between;
   width:var(--panel-width-vw);
   max-width:1440px;
-  margin:0 auto;
-  padding:0;
-  min-height:22px;
-  line-height:1;
+  margin:0 auto 2px;
   z-index:30;
   pointer-events:none;
 }
-.orbit-controls button {
-  pointer-events:auto;
-  padding:1px 10px;
-  min-height:20px;
-  line-height:1;
-}
+.orbit-controls button { pointer-events:auto; width:46px; height:38px; border:1px solid var(--line); border-radius:8px; background:rgba(12,15,26,.76);
+  color:var(--text); font:inherit; cursor:pointer; }
 .orbit-controls button:hover,.orbit-controls button:focus-visible { color:var(--accent); border-color:rgba(232,191,40,.4); outline:none; }
 .orbit-controls span { color:rgba(169,200,200,.58); text-align:center; font-size:.69rem; letter-spacing:.18em; text-transform:uppercase; }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
   .orbit-controls {
-    padding-bottom:6px;
-    min-height:24px;
+    width:var(--panel-width-vw);
+    max-width:1440px;
   }
   .orbit-card::after {
     content:"";
@@ -183,10 +176,30 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   pointer-events:none;
 }
 
-body.orbit-drag-active,
-body.orbit-drag-active * {
-  user-select:none !important;
-  -webkit-user-select:none !important;
+
+.orbit-card p,
+.orbit-card h1,
+.orbit-card h2,
+.orbit-card h3,
+.orbit-card h4,
+.orbit-card h5,
+.orbit-card h6,
+.orbit-card li,
+.orbit-card dt,
+.orbit-card dd,
+.orbit-card span,
+.orbit-card strong,
+.orbit-card em,
+.orbit-card time,
+.orbit-card a {
+  cursor:text;
+  user-select:text;
+  -webkit-user-select:text;
+}
+
+.orbit-card a,
+.orbit-card button {
+  cursor:pointer;
 }
 
 </style>
@@ -571,8 +584,44 @@ body.orbit-drag-active * {
       wheelAccum = 0;
     }, { passive: false });
 
+    function pointerIsOverSelectableText(event) {
+      const el = event.target instanceof Element ? event.target : null;
+      if (!el) return false;
+
+      // Never turn text/links/form controls into orbit drag handles.
+      if (el.closest('a, button, input, textarea, select, option, label, code, pre')) {
+        return true;
+      }
+
+      // For ordinary text elements, treat the pointer as selection-first when
+      // it is directly over rendered text rather than empty padding/background.
+      const range =
+        document.caretRangeFromPoint?.(event.clientX, event.clientY) ||
+        document.caretPositionFromPoint?.(event.clientX, event.clientY);
+
+      let node = null;
+      if (range) {
+        node = range.startContainer || range.offsetNode || null;
+      }
+
+      if (node && node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
+        return true;
+      }
+
+      return !!el.closest('p, h1, h2, h3, h4, h5, h6, li, dt, dd, span, strong, em, time');
+    }
+
     viewport.addEventListener('pointerdown', event => {
       if (event.button !== 0 || !ready) return;
+
+      // Over text/content, preserve native text selection and disable orbit drag.
+      if (pointerIsOverSelectableText(event)) {
+        pendingDrag = false;
+        dragging = false;
+        activePointerId = null;
+        viewport.classList.remove('is-dragging');
+        return;
+      }
 
       activePointerId = event.pointerId;
       pointerStart = event.clientX;
@@ -585,8 +634,7 @@ body.orbit-drag-active * {
         pendingDrag = false;
         viewport.setPointerCapture(event.pointerId);
         viewport.classList.add('is-dragging');
-        document.body.classList.add('orbit-drag-active');
-      } else {
+              } else {
         // Touch/pen starts undecided. Do NOT capture the pointer yet:
         // native vertical panel scrolling must remain available.
         pendingDrag = true;
@@ -608,8 +656,7 @@ body.orbit-drag-active * {
         if (absY > 8 && absY > absX * 1.15) {
           pendingDrag = false;
           activePointerId = null;
-          document.body.classList.remove('orbit-drag-active');
-          return;
+                    return;
         }
 
         // Only promote touch/pen into orbit dragging once movement is clearly horizontal.
@@ -618,13 +665,17 @@ body.orbit-drag-active * {
           dragging = true;
           viewport.setPointerCapture(event.pointerId);
           viewport.classList.add('is-dragging');
-        document.body.classList.add('orbit-drag-active');
-        } else {
+                } else {
           return;
         }
       }
 
       if (!dragging) return;
+
+      // Once this has become an orbit drag, suppress selection/drag side effects
+      // for the active movement only. Normal text selection remains untouched
+      // outside an actual orbit drag.
+      event.preventDefault();
 
       targetPhase =
         phaseStart -
@@ -640,16 +691,14 @@ body.orbit-drag-active * {
       if (!dragging) {
         pendingDrag = false;
         activePointerId = null;
-        document.body.classList.remove('orbit-drag-active');
-        return;
+                return;
       }
 
       dragging = false;
       pendingDrag = false;
       activePointerId = null;
       viewport.classList.remove('is-dragging');
-      document.body.classList.remove('orbit-drag-active');
-
+      
       if (viewport.hasPointerCapture(event.pointerId)) {
         viewport.releasePointerCapture(event.pointerId);
       }
@@ -670,8 +719,7 @@ body.orbit-drag-active * {
       pendingDrag = false;
       activePointerId = null;
       viewport.classList.remove('is-dragging');
-      document.body.classList.remove('orbit-drag-active');
-    });
+          });
 
     viewport.addEventListener('keydown', event => {
       if (event.key === 'ArrowRight') {
@@ -707,7 +755,7 @@ body.orbit-drag-active * {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v99 orbit</div>
-  <script src="particles.js?v=99"></script>
+  <div class="build-marker" aria-hidden="true">v100 orbit</div>
+  <script src="particles.js?v=100"></script>
 </body>
 </html>

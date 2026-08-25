@@ -1,14 +1,14 @@
-Jordan Houri personal site — v99
+Jordan Houri personal site — v100
 
-FIXES:
-- tighter desktop arrow-row vertical spacing
-- mobile arrow bottom spacing = 6px
-- text selection disabled only during active orbit drag
-- robust drag-selection cleanup
+CHANGES:
+- arrow styling/spacing restored from v97
+- text remains selectable normally
+- drag disabled when pointer is directly over text/content
+- drag selection suppression only during actual movement
 
 SHA-256:
-f1e25a2d54fba333dbe65805f696bc14d738fd40768b1c3dde7bb0b92cacf9f8  index.html
+e47629f35afe30b6e853b95233b3b51e10cde9f09d2f5009f469fc5bee6695db  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-9ec6318493920937ed60307d5c25b81250efc472519cfbf66b61b99cc3f9c27d  README.md
+7e68895e579b78737a0ba05a10aa4cbaab11a73af10addcdc6143bc64a5e83da  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
