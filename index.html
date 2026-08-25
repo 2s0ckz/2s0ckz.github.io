@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v109-opaque-symmetric-chevrons" />
+  <meta name="site-build" content="v110-visible-right-chevron-recenter" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -242,10 +242,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   clip-path:polygon(0% 0%, 100% 0%, 50% 100%);
 }
 
-.orbit-edge-nav-prev::before { transform:translateX(-9px) rotate(9deg); }
-.orbit-edge-nav-prev::after  { transform:translateX(-9px) rotate(-9deg); }
-.orbit-edge-nav-next::before { transform:translateX(8px) rotate(-9deg); }
-.orbit-edge-nav-next::after  { transform:translateX(8px) rotate(9deg); }
+.orbit-edge-nav-prev::before { transform:translateX(-6px) rotate(9deg); }
+.orbit-edge-nav-prev::after  { transform:translateX(-6px) rotate(-9deg); }
+.orbit-edge-nav-next::before { transform:translateX(6px) rotate(-9deg); }
+.orbit-edge-nav-next::after  { transform:translateX(6px) rotate(9deg); }
 
 .orbit-edge-nav:hover,
 .orbit-edge-nav:focus-visible {
@@ -545,10 +545,11 @@ const status = document.getElementById('orbitStatus');
         const gap = window.innerWidth <= 760 ? 4 : 10;
         const prevWidth = edgePrev.offsetWidth || 63;
 
-        // Keep the controls fully outside the active panel, hugging its edges.
-        // The right chevron gets a 1px inward nudge for visual centering symmetry.
+        // Keep the controls outside the active panel while balancing their
+        // visible position around the panel. The right control is pulled inward
+        // by 14px because its previous placement read too far toward the viewport edge.
         edgePrev.style.left = `${activeRect.left - viewportRect.left - prevWidth - gap}px`;
-        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap - 1}px`;
+        edgeNext.style.left = `${activeRect.right - viewportRect.left + gap - 14}px`;
       }
 
       if (status) status.textContent = labels[nearest.index] || 'About';
@@ -892,7 +893,7 @@ function initialize() {
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v109 orbit</div>
-  <script src="particles.js?v=109"></script>
+  <div class="build-marker" aria-hidden="true">v110 orbit</div>
+  <script src="particles.js?v=110"></script>
 </body>
 </html>

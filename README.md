@@ -1,12 +1,11 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 109 refines the external orbit chevrons.
+Version 110 makes the right-chevron repositioning visibly meaningful.
 
-Changes:
-- chevrons are now fully opaque
-- this removes visible overlap/transparency artifacts at the center joint
-- the right chevron is nudged slightly inward for better symmetry with the left
-- the right chevron's wedge geometry is also shifted inward by 1px so it reads as
-  centered relative to the panel edge
+- the previous 1px adjustment was too small to perceive
+- the right control is now pulled 14px inward toward the active panel
+- both visible chevron shapes are re-centered within their control boxes
+- left/right internal shape offsets are now equal and mirrored at ±6px
+- fully opaque tapered styling is retained
 
-All other orbit, particle, and layout behavior remains unchanged.
+No orbit geometry, scrolling, particles, or panel layout changed.

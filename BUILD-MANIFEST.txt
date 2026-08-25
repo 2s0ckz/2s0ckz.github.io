@@ -1,13 +1,13 @@
-Jordan Houri personal site — v109
+Jordan Houri personal site — v110
 
-CHEVRON REFINEMENTS:
-- fully opaque arrows
-- right arrow nudged 1px inward
-- right wedge geometry shifted 1px inward
+CHEVRON POSITION:
+- right control moved 14px inward
+- internal visible chevrons re-centered symmetrically
+- mirrored offsets = +/-6px
 
 SHA-256:
-56e302bea265c4ab7f39f32942d3deb9ed2211a81106458f9d1985931117a67f  index.html
+e7b89989459f13512d9e79a036b23a051460b674857626cf61e8b98722116062  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-ce5531956d68a15d3c4a518895da6b3a2c5a51e9f3f08c63e7f1b9f769979577  README.md
+aedd9e60206557214f57b00608f6cff9b10902e80d139be0aa85a8e4c58e585a  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
