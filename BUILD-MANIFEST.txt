@@ -1,15 +1,16 @@
-Jordan Houri personal site — v48
+Jordan Houri personal site — v50
 
-CLEAN PARTICLE ENGINE REBUILD
-- terminal proton secondaries restored
-- electron/photon cascade generation bounds fixed
-- intermediate scatter emission = 9.5% per vertex
-- scatter daughters terminal
-- proton continues after scatter emission
+Intermediate-secondary cascades:
+- proton scatter emission: 1% per vertex
+- intermediate daughter cascade mode: linear 1->1
+- electron can become photon
+- photon can become electron
+- no branching from intermediate daughter chains
+- terminal proton cascades unchanged
 
 SHA-256:
-a553a5bc39806bd2416a20b097a46e83f5b584f4e1d3164e365b0fb270856365  index.html
+dc03b2167c77f8f02772389583c0b81ed844e92164baa88bcd6390e020ec4227  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-b2bb3e2489cffb0b5e6c1aa8bb7273777d14e277666e6d28699f18a854723821  particles.js
-113dc10bbd488302d1ded2c02d76a7a5ee9f89b9c4ba7419615cea128a11c4df  README.md
+8dd27608b2e3b5ca37dd21ccba9643425843999a53bd3a774e0101200227065d  particles.js
+3bf47d326c6a434b568514576e91c00e144c6a9449b727391a2459838663a496  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

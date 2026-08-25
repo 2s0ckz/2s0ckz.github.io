@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v48-clean-particle-engine";
+  window.__particleBuild = "v50-linear-intermediate-cascades";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -115,6 +115,7 @@
       distanceLeft: options.stepLength ?? defaults.stepLength,
       generation: options.generation ?? defaults.generation,
       maxGeneration: options.maxGeneration ?? defaults.maxGeneration,
+      cascadeMode: options.cascadeMode ?? "normal",
       scatterSigma: options.scatterSigma ?? defaults.scatterSigma,
       scatterClock: rand(0.055, 0.14),
       trail: [{ x, y }]
@@ -189,7 +190,7 @@
   // Intermediate proton multiple-scattering interaction.
   // Called only when the per-vertex probability gate succeeds.
   function spawnAtProtonScatter(track) {
-    const electronFraction = 0.08 / 0.095;
+    const electronFraction = 0.85;
 
     if (Math.random() < electronFraction) {
       addTrack(
@@ -200,7 +201,8 @@
         track.familyId,
         {
           generation: 0,
-          maxGeneration: 0,
+          maxGeneration: 5,
+          cascadeMode: "linear",
           stepLength: rand(24, 50),
           speed: rand(90, 122.5)
         }
@@ -214,9 +216,90 @@
         track.familyId,
         {
           generation: 0,
-          maxGeneration: 0,
+          maxGeneration: 2,
+          cascadeMode: "linear",
           stepLength: rand(350, 725),
           speed: rand(85, 115)
+        }
+      );
+    }
+  }
+
+  function spawnLinearElectronChild(track) {
+    if (track.generation >= track.maxGeneration) return;
+
+    const nextGeneration = track.generation + 1;
+
+    // Linear 1->1 chain: an electron either remains an electron or radiates
+    // into a photon. Never create both from the same interaction.
+    if (Math.random() < 0.12) {
+      addTrack(
+        "photon",
+        track.x,
+        track.y,
+        track.angle + rand(-0.9, 0.9),
+        track.familyId,
+        {
+          generation: nextGeneration,
+          maxGeneration: track.maxGeneration,
+          cascadeMode: "linear",
+          stepLength: rand(60, 125),
+          speed: rand(85, 115)
+        }
+      );
+    } else {
+      addTrack(
+        "electron",
+        track.x,
+        track.y,
+        track.angle + gaussianish() * 0.78,
+        track.familyId,
+        {
+          generation: nextGeneration,
+          maxGeneration: track.maxGeneration,
+          cascadeMode: "linear",
+          stepLength: rand(14, 34),
+          speed: Math.max(62.5, track.speed * rand(0.90, 0.98))
+        }
+      );
+    }
+  }
+
+  function spawnLinearPhotonChild(track) {
+    if (track.generation >= track.maxGeneration) return;
+
+    const nextGeneration = track.generation + 1;
+
+    // Linear 1->1 chain: a photon either scatters onward or converts to one
+    // electron track. Never create two descendants from one interaction.
+    if (Math.random() < 0.25) {
+      addTrack(
+        "electron",
+        track.x,
+        track.y,
+        track.angle + rand(-2.0, 2.0),
+        track.familyId,
+        {
+          generation: nextGeneration,
+          maxGeneration: track.maxGeneration,
+          cascadeMode: "linear",
+          stepLength: rand(15, 34),
+          speed: rand(82.5, 110)
+        }
+      );
+    } else {
+      addTrack(
+        "photon",
+        track.x,
+        track.y,
+        track.angle + rand(-2.5, 2.5),
+        track.familyId,
+        {
+          generation: nextGeneration,
+          maxGeneration: track.maxGeneration,
+          cascadeMode: "linear",
+          stepLength: rand(55, 115),
+          speed: Math.max(57.5, track.speed * rand(0.84, 0.95))
         }
       );
     }
@@ -311,9 +394,17 @@
 
   function finishTrack(index, track, generateSecondaries) {
     if (generateSecondaries) {
-      if (track.kind === "proton") spawnFromProton(track);
-      else if (track.kind === "electron") spawnElectronChildren(track);
-      else if (track.kind === "photon") spawnPhotonChildren(track);
+      if (track.kind === "proton") {
+        spawnFromProton(track);
+      } else if (track.cascadeMode === "linear" && track.kind === "electron") {
+        spawnLinearElectronChild(track);
+      } else if (track.cascadeMode === "linear" && track.kind === "photon") {
+        spawnLinearPhotonChild(track);
+      } else if (track.kind === "electron") {
+        spawnElectronChildren(track);
+      } else if (track.kind === "photon") {
+        spawnPhotonChildren(track);
+      }
     }
 
     completedTracks.push({
@@ -393,9 +484,9 @@
           particleDebug.protonScatterVertices += 1;
 
           // Exactly one independent probability draw for this vertex.
-          // 95 successful integer values out of 1000 = 9.5%.
+          // 10 successful integer values out of 1000 = 1%.
           const scatterDraw = Math.floor(Math.random() * 1000);
-          if (scatterDraw < 95) {
+          if (scatterDraw < 10) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
           }
