@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v24-virtual-arc-canvas" />
+  <meta name="site-build" content="v25-actual-scroll-range" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=24" />
+  <link rel="stylesheet" href="style.css?v=25" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
@@ -163,18 +163,20 @@
       const vh = window.innerHeight;
       const scrollY = window.scrollY || window.pageYOffset || 0;
 
-      const panelRect = panel.getBoundingClientRect();
-      const panelTopDoc = panelRect.top + scrollY;
-      const contentBottomDoc = panelTopDoc + panel.offsetHeight;
-
-      // Real scroll distance based ONLY on the content panel.
-      const realScrollableDistance = Math.max(0, contentBottomDoc - vh);
+      // Use the browser's ACTUAL scrollable document distance.
+      // This exactly matches how far the user can really scroll, regardless
+      // of panel offsets, margins, borders, or browser layout details.
+      const doc = document.documentElement;
+      const realScrollableDistance = Math.max(
+        0,
+        doc.scrollHeight - vh
+      );
 
       // Virtual arc canvas:
-      // initial viewport + half of the real page-scroll distance.
+      // initial viewport + half of the actual page-scroll distance.
       //
-      // Example: 2160px content, 1080px viewport:
-      // real scroll = 2160 - 1080 = 1080
+      // Example: 2160px document, 1080px viewport:
+      // real scroll = 1080
       // virtual height = 1080 + 0.5*1080 = 1620
       const virtualHeight = vh + 0.5 * realScrollableDistance;
 
@@ -243,11 +245,17 @@
     }
 
     update();
+
+    // Recalculate after first paint and after all fonts/resources have
+    // finalized layout, so scrollHeight cannot be sampled too early.
+    requestAnimationFrame(update);
+    window.addEventListener('load', update, { once: true });
+
     window.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', requestUpdate, { passive: true });
   })();
   </script>
 
-  <script src="particles.js?v=24"></script>
+  <script src="particles.js?v=25"></script>
 </body>
 </html>

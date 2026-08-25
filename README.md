@@ -1,19 +1,19 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 24 uses a true virtual parallax arc canvas.
+Version 25 fixes arc-count calculation by using the browser's actual scroll range.
 
 Formula:
-- realScrollableDistance = content-panel bottom - viewport height
-- virtualHeight = viewport height + 0.5 * realScrollableDistance
+- realScrollableDistance = document.documentElement.scrollHeight - window.innerHeight
+- virtualHeight = window.innerHeight + 0.5 * realScrollableDistance
 - arcCount = ceil((virtualHeight / 1080) * 3)
 
-Example:
-- content = 2160px
-- viewport = 1080px
-- real scroll = 1080px
-- virtual arc height = 1620px
-- arc count = ceil(1620/1080*3) = 5
+This means any genuinely scrollable page taller than one 1080px viewport will
+produce more than three arcs.
 
-The arc field is fixed, so its virtual height does not increase document height.
-All arcs are distributed through the reachable virtual canvas, and the whole
-field translates upward at exactly 50% of normal page scroll speed.
+The layout is recalculated:
+- immediately
+- on the next animation frame
+- after window load
+- on resize and scroll
+
+The arc field remains fixed and contributes zero document height.

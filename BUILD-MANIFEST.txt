@@ -1,18 +1,16 @@
-Jordan Houri personal site — v24
+Jordan Houri personal site — v25
 
 Verified:
-- exactly 1 arc field
-- 12-element arc pool
-- 0 arcs inside content panel
-- virtualHeight = vh + 0.5*realScrollableDistance
-- count = ceil((virtualHeight/1080)*3)
-- fixed field height set dynamically
-- 50% parallax
-- fixed field contributes zero document height
+- actual scroll range = documentElement.scrollHeight - innerHeight
+- virtualHeight = innerHeight + 0.5 * actual scroll range
+- count = ceil((virtualHeight / 1080) * 3)
+- recalculates after first paint and window load
+- one arc field / zero content arcs
+- fixed field / zero decorative document height
 
 SHA-256:
-ef22c192a8d1ee8918585f1be9023fcfa21cc5db9d7d8de34d24ee083b026fe0  index.html
+78141f4e70151991260e74eb903f7e2da6f6cc8f4117149b78e31f3bf519ff63  index.html
 af0f312dde391f572c28725bef74101ddcb947de11e21f2e4a06d9905011f647  style.css
 95fc29468a671e89191b445db8cf905ef7fe6bf4b8df1d57b25717e633ffc555  particles.js
-77cb568b68110e855e146b7393d8a7a025dae6b40d4d679999edc4b0efcb29f9  README.md
+96865c27a70ce5aa4cbd2e930b24c369eacebee7df6afc874bd6a03991845bc3  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
