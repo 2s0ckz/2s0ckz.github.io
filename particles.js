@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v71-full-360-sixfold";
+  window.__particleBuild = "v77-mobile-camera-tuned";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -534,8 +534,11 @@
     // Pinhole projection from the CENTER of a vertical cylinder.
     // x = f tan(theta)
     // vertical distances expand by 1/cos(theta) toward the peripheral wall.
-    const focal = Math.max(520, Math.min(1100, width * 0.72));
-    const cosine = Math.max(0.24, Math.cos(theta));
+    const mobileCamera = window.__orbitMobile === true;
+    const focal = mobileCamera
+      ? Math.max(900, width * 2.4)
+      : Math.max(520, Math.min(1100, width * 0.72));
+    const cosine = Math.max(mobileCamera ? 0.42 : 0.24, Math.cos(theta));
     const screenX = width * 0.5 + focal * Math.tan(theta);
     const screenY = height * 0.5 + (point.y - height * 0.5) / cosine;
 

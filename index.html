@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v75-panel-wheel-gesture-isolation" />
+  <meta name="site-build" content="v77-mobile-inside-cylinder-camera" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -21,7 +21,7 @@ a { color:var(--muted); text-decoration:none; transition:color 160ms ease,border
 a:hover,a:focus-visible,a:active { color:var(--accent); }
 #particle-background { position:fixed; inset:0; width:100%; height:100%; background:transparent; pointer-events:none; z-index:1; }
 .topbar { position:fixed; inset:0 0 auto 0; z-index:20; height:var(--nav-height); border-bottom:1px solid var(--line);
-  background:rgba(12,15,26,.5625); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); }
+  background:rgba(12,15,26,.5625); backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px); }
 .topbar-inner { width:min(1440px,calc(100% - 48px)); height:100%; margin:0 auto; display:flex; align-items:center; gap:32px; }
 .identity { display:inline-flex; align-items:center; gap:16px; min-width:0; color:var(--heading); }
 .profile-photo { width:72px; height:72px; flex:0 0 72px; border-radius:50%; object-fit:cover;
@@ -113,6 +113,10 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
+  .orbit-viewport {
+    perspective:2200px;
+  }
+
   .orbit-card {
     width: calc(100vw - 20px);
     height: calc(100% - 14px);
@@ -136,6 +140,15 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .orbit-controls { width:calc(100% - 24px); padding-bottom:12px; }
 }
 @media (prefers-reduced-motion:reduce) { .orbit-card,a { transition:none; } }
+
+#particleCanvas {
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh;
+  z-index:1;
+  pointer-events:none;
+}
 </style>
 </head>
 <body>
@@ -294,6 +307,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       // Shared rotation state for the cylindrical particle background.
       window.__orbitPhase = phase;
       window.__orbitStep = step;
+      window.__orbitMobile = window.innerWidth <= 760;
 
       let nearest = { distance: Infinity, index: 0 };
 
@@ -304,21 +318,24 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const theta = wrappedAngle(rawTheta);
 
         // VIEWER-CENTERED INSIDE CYLINDER:
-        // theta=0 is the panel directly in front of the viewer.
-        // As a panel moves toward the viewer's sides, its center comes FORWARD
-        // in CSS z-space rather than receding into a rotation center behind the page.
-        let x = radius * Math.sin(theta);
-        const z = radius * (1 - Math.cos(theta));
+        // Desktop keeps the full geometry. Mobile uses a gentler camera model
+        // because near-full-width cards otherwise loom toward the viewer enough
+        // to make the cylinder read perceptually as outside-facing.
+        const isMobile = window.innerWidth <= 760;
+        const xFactor = isMobile ? 0.82 : 1;
+        const zFactor = isMobile ? 0.22 : 1;
+        const rotationFactor = isMobile ? 0.62 : 1;
+
+        let x = radius * Math.sin(theta) * xFactor;
+        const z = radius * (1 - Math.cos(theta)) * zFactor;
 
         // Snap the flat/front-facing panel exactly to the viewport center.
         if (Math.abs(theta) < 1e-6) x = 0;
 
-        // The panel's front face points inward toward the viewer at the cylinder center.
-        // This is the opposite sign from an outside-facing carousel/rolodex.
-        const rotateY = -theta * 180 / Math.PI;
+        // Faces still point inward toward the viewer; mobile merely softens
+        // the tangent angle rather than changing its direction.
+        const rotateY = -theta * 180 / Math.PI * rotationFactor;
 
-        // Do not fake cylindrical depth with shrinking. The actual x/z placement
-        // and CSS perspective provide the depth cue.
         const scale = 1;
 
         // Only fade very peripheral/back-facing panels a little.
@@ -522,7 +539,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v75 orbit</div>
-  <script src="particles.js?v=75"></script>
+  <div class="build-marker" aria-hidden="true">v77 orbit</div>
+  <script src="particles.js?v=77"></script>
 </body>
 </html>

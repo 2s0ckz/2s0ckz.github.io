@@ -1,16 +1,17 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 75 improves wheel gesture separation and title-bar translucency.
+Version 77 is a mobile-only visual correction.
 
-Wheel behavior
-- vertical scrolling inside a scrollable panel owns the entire wheel/trackpad gesture
-- after that panel reaches its top or bottom, remaining momentum from the same
-  gesture is consumed rather than being passed to orbit navigation
-- orbit navigation is re-enabled only after 330 ms with no wheel events
-- orbit switching still requires the 260-unit threshold
-- wheel-triggered orbit transitions still use arrowEase = 0.075
+Desktop behavior is intentionally unchanged.
 
-Visual changes
-- removed the “Scroll, drag, or use the arrows…” instruction text
-- title bar now uses the same rgba(12,15,26,0.5625) translucent background as
-  the content panels, allowing particle tracks to remain visible behind it
+On screens <= 760 px:
+- CSS perspective is relaxed to 2200 px
+- cylindrical x displacement is reduced to 82%
+- forward z displacement is reduced to 22%
+- panel rotateY strength is reduced to 62%
+- rotation direction remains inward-facing
+- particle cylindrical projection uses a longer focal distance so its curvature
+  matches the gentler mobile panel camera
+
+All navigation thresholds, snapping, particle generation frequency, physics,
+panel opacity, and desktop geometry remain unchanged.

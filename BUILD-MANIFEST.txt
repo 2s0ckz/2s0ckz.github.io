@@ -1,19 +1,16 @@
-Jordan Houri personal site — v75
+Jordan Houri personal site — v77
 
-WHEEL GESTURE FIX:
-- panel vertical scroll owns whole gesture
-- same-gesture boundary momentum cannot trigger orbit
-- requires 330ms of zero wheel events before orbit unlock
-- orbit threshold remains 260
-- orbit transition easing remains 0.075
-
-VISUAL:
-- instruction text removed
-- topbar alpha matches panels at 0.5625
+MOBILE-ONLY CAMERA FIX:
+- desktop untouched
+- mobile perspective 2200px
+- mobile x factor 0.82
+- mobile z factor 0.22
+- mobile rotate factor 0.62
+- mobile particle focal length softened
 
 SHA-256:
-5d2c802007a9f5c5eb17add2773356b9c05dbd936dc5f1d5eea5f7f17437c254  index.html
+064449de8a728759e9caabf0a4d66518b91644e924c7b3d026a8fed3b815f094  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-8e8f288b95f79f467f397a1e44307b10bc5758b454912436b178efa94881b3e7  particles.js
-5d0f907e03ed4c351efa592d32f1bb38a916c3f80670e8dca011f91e3d770335  README.md
+759f151520e8e92065608b0a297b98a21bcb450364819ded4826606fdbc8dd97  particles.js
+2228fc4d86ade4a48f7c480f45d65131407b34dfb492ec1b969f5f486d8587b2  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
