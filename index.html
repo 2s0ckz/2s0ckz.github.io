@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v53-arc-parallax-25pct" />
+  <meta name="site-build" content="v54-stable-25pct-arc-parallax" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
-  <link rel="stylesheet" href="style.css?v=53" />
+  <link rel="stylesheet" href="style.css?v=54" />
 </head>
 <body>
   <div class="ct-arc-field" aria-hidden="true">
@@ -161,8 +161,6 @@
     function layoutArcs() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-
       // Use the browser's ACTUAL scrollable document distance.
       // This exactly matches how far the user can really scroll, regardless
       // of panel offsets, margins, borders, or browser layout details.
@@ -173,20 +171,18 @@
       );
 
       // Virtual arc canvas:
-      // initial viewport + half of the actual page-scroll distance.
+      // initial viewport + 25% of the actual page-scroll distance.
       //
       // Example: 2160px document, 1080px viewport:
       // real scroll = 1080
-      // virtual height = 1080 + 0.5*1080 = 1620
+      // virtual height = 1080 + 0.25*1080 = 1350
       const virtualHeight = vh + 0.25 * realScrollableDistance;
 
       // Fixed layer gets a real virtual height but contributes zero layout height.
       field.style.height = `${virtualHeight}px`;
 
-      // Exactly the requested density:
-      // 3 arcs per 1080 virtual vertical pixels, rounded up.
       // Keep arc density at ~3 arcs per 1080px of the 25%-parallax virtual field.
-    const requestedCount = Math.ceil((virtualHeight / 1080) * 3);
+      const requestedCount = Math.ceil((virtualHeight / 1080) * 3);
       const count = Math.min(arcs.length, Math.max(1, requestedCount));
 
       arcs.forEach(arc => {
@@ -233,30 +229,35 @@
       field.style.transform = `translate3d(0, ${-0.25 * scrollY}px, 0)`;
     }
 
-    function update() {
+    function updateLayout() {
       layoutArcs();
       applyParallax();
       ticking = false;
     }
 
-    function requestUpdate() {
+    function requestLayoutUpdate() {
       if (ticking) return;
       ticking = true;
-      requestAnimationFrame(update);
+      requestAnimationFrame(updateLayout);
     }
 
-    update();
+    function onScroll() {
+      // Important: scrolling must not recalculate arc positions or virtual
+      // height. Only the 25% translation changes during scroll.
+      applyParallax();
+    }
 
-    // Recalculate after first paint and after all fonts/resources have
-    // finalized layout, so scrollHeight cannot be sampled too early.
-    requestAnimationFrame(update);
-    window.addEventListener('load', update, { once: true });
+    updateLayout();
 
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate, { passive: true });
+    // Recalculate after first paint and after fonts/resources finalize layout.
+    requestAnimationFrame(updateLayout);
+    window.addEventListener('load', updateLayout, { once: true });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', requestLayoutUpdate, { passive: true });
   })();
   </script>
 
-  <script src="particles.js?v=53"></script>
+  <script src="particles.js?v=54"></script>
 </body>
 </html>

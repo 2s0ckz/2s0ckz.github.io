@@ -67,7 +67,7 @@ a {
 
 /* Single virtual CT reconstruction canvas.
    JavaScript sets its height from:
-   viewport height + 50% of the real content scroll distance.
+   viewport height + 25% of the real content scroll distance.
    Because it is fixed, it contributes zero document height. */
 .ct-arc-field {
   position: fixed;

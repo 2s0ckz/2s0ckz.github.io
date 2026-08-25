@@ -1,17 +1,15 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 53 changes the CT reconstruction arc parallax from 50% to 25%.
+Version 54 fixes the effective CT-arc parallax behavior.
 
-Arc parallax math:
-- real scroll distance = document scroll height - viewport height
-- arc virtual height = viewport height + 0.25 * real scroll distance
-- arc translation = -0.25 * window scrollY
-- density remains ~3 arcs per 1080 px of the updated virtual arc field
+The nominal parallax remains 25%, but the previous version recalculated the
+entire arc layout on every scroll event. On browsers where viewport height
+changes while scrolling, that moved arc centers in addition to the 25%
+translation and made the apparent parallax much faster.
 
-Example:
-- viewport = 1080 px
-- document = 2160 px
-- real scroll distance = 1080 px
-- 25% parallax travel = 270 px
-- virtual arc field = 1350 px
-- target arc count = ceil(1350 / 1080 * 3) = 4 arcs
+v54:
+- scroll only applies `translateY(-0.25 * scrollY)`
+- arc layout and density are not recomputed while scrolling
+- virtual height remains `viewport + 0.25 * real scroll distance`
+- density remains ~3 arcs per 1080 px of that virtual field
+- layout is recomputed only on initial load and resize
