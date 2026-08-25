@@ -81,6 +81,7 @@ a:focus-visible {
 .content-panel {
   position: relative;
   z-index: 1;
+  isolation: isolate;
   overflow: hidden;
   border: 1px solid var(--panel-border);
   border-radius: 20px;
@@ -88,6 +89,14 @@ a:focus-visible {
   backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
   box-shadow: 0 16px 60px rgba(0, 0, 0, 0.18);
+}
+
+
+.content-panel > .hero,
+.content-panel > .section,
+.content-panel > .footer {
+  position: relative;
+  z-index: 2;
 }
 
 .hero,
@@ -224,13 +233,15 @@ strong {
 
 
 
-/* CT reconstruction arcs:
-   multiple, non-overlapping, varying-size arcs that scroll with the page.
-   Opacity stays intentionally subtle, in roughly the 6–10% range. */
+
+/* CT reconstruction arcs.
+   They now live INSIDE the translucent content panel:
+   above the panel fill, below the text. This prevents the panel from
+   washing out an already-subtle 6–10% decoration. */
 .ct-arc-field {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
 }
@@ -238,60 +249,64 @@ strong {
 .ct-recon-arc {
   position: absolute;
   border-radius: 50%;
-  border: 1px solid rgba(169, 200, 200, 0.080);
+  border: 1px solid rgba(169, 200, 200, 0.085);
   box-shadow:
-    0 0 0 28px rgba(169, 200, 200, 0.065),
-    0 0 0 62px rgba(169, 200, 200, 0.050),
-    0 0 0 108px rgba(169, 200, 200, 0.038);
+    0 0 0 26px rgba(169, 200, 200, 0.070),
+    0 0 0 58px rgba(169, 200, 200, 0.055),
+    0 0 0 96px rgba(169, 200, 200, 0.040);
 }
 
+/* Alternating sides and large vertical gaps keep the motifs distinct. */
 .arc-1 {
-  width: 330px;
-  height: 330px;
-  left: -170px;
-  top: 70px;
-  opacity: 0.92;
+  width: 300px;
+  height: 300px;
+  left: -155px;
+  top: 90px;
 }
 
 .arc-2 {
-  width: 470px;
-  height: 470px;
-  right: -240px;
-  top: 430px;
-  opacity: 0.88;
+  width: 430px;
+  height: 430px;
+  right: -220px;
+  top: 560px;
 }
 
 .arc-3 {
-  width: 280px;
-  height: 280px;
-  left: -145px;
-  top: 930px;
-  opacity: 0.84;
+  width: 235px;
+  height: 235px;
+  left: -115px;
+  top: 1110px;
 }
 
 .arc-4 {
-  width: 390px;
-  height: 390px;
-  right: -195px;
-  top: 1320px;
-  opacity: 0.90;
+  width: 350px;
+  height: 350px;
+  right: -175px;
+  top: 1560px;
 }
 
 .arc-5 {
-  width: 245px;
-  height: 245px;
-  left: -120px;
-  top: 1700px;
-  opacity: 0.80;
+  width: 275px;
+  height: 275px;
+  left: -135px;
+  top: 2070px;
+}
+
+.arc-6 {
+  width: 390px;
+  height: 390px;
+  right: -200px;
+  top: 2520px;
 }
 
 @media (max-width: 820px) {
-  .arc-1 { width: 250px; height: 250px; left: -150px; top: 90px; }
-  .arc-2 { width: 320px; height: 320px; right: -180px; top: 520px; }
-  .arc-3 { width: 220px; height: 220px; left: -130px; top: 980px; }
-  .arc-4 { width: 280px; height: 280px; right: -150px; top: 1400px; }
-  .arc-5 { width: 200px; height: 200px; left: -110px; top: 1820px; }
-  .page-shell {
+  .arc-1 { width: 230px; height: 230px; left: -125px; top: 100px; }
+  .arc-2 { width: 300px; height: 300px; right: -165px; top: 600px; }
+  .arc-3 { width: 190px; height: 190px; left: -100px; top: 1160px; }
+  .arc-4 { width: 260px; height: 260px; right: -140px; top: 1660px; }
+  .arc-5 { width: 215px; height: 215px; left: -112px; top: 2180px; }
+  .arc-6 { width: 280px; height: 280px; right: -150px; top: 2660px; }
+.page-shell {
     width: min(100% - 18px, 1440px);
     padding-top: 10px;
     padding-bottom: 20px;

@@ -1,19 +1,14 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 8 refines the CT arc treatment.
+Version 10 fixes the broken v9 markup.
 
-## CT arc updates
-- arcs are toned back down into roughly the 6–10% opacity range
-- multiple arcs of varying sizes
+## Verified CT arc behavior
+- six arc elements are actually present in `index.html`
+- varying sizes
+- alternating left/right placement
+- no overlap by design
 - arcs scroll with the page
-- arcs are spaced to avoid overlapping one another
-- no voxel grid
-- no reconstruction streaks
-
-## Layering
-- particle canvas remains behind everything
-- scrolling CT arc field sits above the particle canvas
-- content panel sits above the arcs
-
-## Cache-busting
-- CSS/JS updated to `?v=8`
+- arcs sit above the translucent panel fill and below all text
+- arc colors remain in the subtle ~6–10% opacity range
+- no grid or streak layers
+- cache-busting updated to `?v=10`
