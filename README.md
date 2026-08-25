@@ -1,15 +1,17 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 102 replaces the old top orbit controls with minimalist side arrows.
+Version 103 fixes the v102 side-arrow layout regression.
 
-Changes:
-- removed the entire top arrow/control row
-- removed the centered panel/status text between those arrows
-- added a tall, narrow `<` control on the left edge of the orbit viewport
-- added a tall, narrow `>` control on the right edge
-- controls are borderless and transparent
-- hover/focus keeps the existing yellow accent
-- controls are positioned inside the viewport and do not change panel geometry
+Root causes:
+- the top controls row was removed, but `.orbit-shell` still had three grid rows:
+  heading / controls / viewport
+- with no controls row, the viewport landed in the auto-sized middle row and collapsed
+- the new side arrows also lacked the legacy `orbitPrev` / `orbitNext` IDs used by the existing JS
 
-All orbit geometry, responsive sizing, text-selection behavior, mobile scrolling,
-particle behavior, blur, and panel styling remain unchanged.
+Fixes:
+- shell grid is now `auto minmax(0,1fr)` for heading + viewport
+- side arrows retain the minimalist v102 appearance
+- left arrow has id `orbitPrev`
+- right arrow has id `orbitNext`
+
+No orbit geometry, text-selection logic, responsive sizing, particles, or panel styling changed.

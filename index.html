@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v102-side-orbit-arrows" />
+  <meta name="site-build" content="v103-side-arrow-layout-fix" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -35,7 +35,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .social-grid a { min-height:34px; display:flex; align-items:center; padding:0 10px; border:1px solid var(--line); border-radius:7px;
   background:rgba(255,255,255,.018); font-size:.72rem; letter-spacing:.07em; text-transform:uppercase; }
 .social-grid a:hover,.social-grid a:focus-visible { border-color:rgba(232,191,40,.4); }
-.orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto auto minmax(0,1fr); }
+.orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr); }
 .orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
 .orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1400px; perspective-origin:50% 50%; cursor:grab; outline:none; touch-action:pan-y; }
@@ -275,8 +275,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       
     </div>
 <div class="orbit-viewport" id="orbitViewport" tabindex="0" aria-label="Horizontal looping portfolio">
-      <button class="orbit-side-arrow orbit-side-arrow-left" type="button" aria-label="Previous panel">&lt;</button>
-      <button class="orbit-side-arrow orbit-side-arrow-right" type="button" aria-label="Next panel">&gt;</button>
+      <button class="orbit-side-arrow orbit-side-arrow-left" id="orbitPrev" type="button" aria-label="Previous panel">&lt;</button>
+      <button class="orbit-side-arrow orbit-side-arrow-right" id="orbitNext" type="button" aria-label="Next panel">&gt;</button>
 
       <div class="orbit-track" id="orbitTrack">
         <div class="orbit-set" id="orbitSet">
@@ -832,7 +832,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v102 orbit</div>
-  <script src="particles.js?v=102"></script>
+  <div class="build-marker" aria-hidden="true">v103 orbit</div>
+  <script src="particles.js?v=103"></script>
 </body>
 </html>
