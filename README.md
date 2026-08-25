@@ -1,25 +1,15 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 43 makes proton scatter-secondary probability directly auditable.
+Version 44 is a diagnostic isolation build.
 
-The scatter emission gate no longer uses a floating-point `Math.random() < 0.095`
-comparison.
+Proton multiple-scattering vertex daughter production is set to exactly ZERO.
 
-At each proton scatter vertex:
-- increment `window.__particleDebug.protonScatterVertices`
-- generate an integer from 0 through 999 using `crypto.getRandomValues()`
-  (falling back to `Math.random()` only if Web Crypto is unavailable)
-- emit only if the integer is below 95
-- increment `window.__particleDebug.protonScatterEmissions` only when emission occurs
+- proton scattering/kinks remain
+- NO call to `spawnAtProtonScatter()` occurs anywhere
+- terminal proton interaction (`spawnFromProton`) remains unchanged
+- electron/photon interactions remain unchanged
+- `window.__particleBuild` reports `v44-zero-scatter-emission`
+- `window.__particleDebug.protonScatterEmissions` must remain 0
 
-This is exactly 95 / 1000 = 9.5%.
-
-You can inspect the live values in the browser console:
-`window.__particleDebug`
-
-It exposes:
-- `protonScatterVertices`
-- `protonScatterEmissions`
-- `protonScatterEmissionRate`
-
-Scatter daughters remain terminal and the proton continues after emission.
+If intermediate proton vertices still visibly produce daughters in this build,
+those daughters are not coming from the proton-scatter emission path.

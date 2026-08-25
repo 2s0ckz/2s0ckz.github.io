@@ -32,6 +32,7 @@
     }
   };
   window.__particleDebug = particleDebug;
+  window.__particleBuild = "v44-zero-scatter-emission";
 
   function randomInt1000() {
     if (window.crypto && window.crypto.getRandomValues) {
@@ -367,16 +368,10 @@
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
 
-          // Decide exactly once whether THIS scatter vertex is productive.
-          // Draw an integer in [0, 999]; 0..94 means emission = exactly 9.5%.
+          // DIAGNOSTIC v44:
+          // Proton multiple-scattering vertices are deliberately forbidden
+          // from producing any daughter particles.
           particleDebug.protonScatterVertices += 1;
-          const scatterDraw = randomInt1000();
-          const emitsSecondary = scatterDraw < 95;
-
-          if (emitsSecondary) {
-            particleDebug.protonScatterEmissions += 1;
-            spawnAtProtonScatter(track);
-          }
 
           // Proton always continues after the scatter vertex.
         }

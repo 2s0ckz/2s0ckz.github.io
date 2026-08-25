@@ -1,15 +1,14 @@
-Jordan Houri personal site — v43
+Jordan Houri personal site — v44
 
-Auditable scatter emission gate:
-- crypto-backed integer draw 0..999
-- emit on draw < 95
-- exact nominal probability 9.5%
-- live counters exposed at window.__particleDebug
-- one scatter-emission call site
+DIAGNOSTIC:
+- proton scatter secondary call sites: 0
+- proton scatter emission probability: 0%
+- terminal proton interactions unchanged
+- window.__particleBuild = v44-zero-scatter-emission
 
 SHA-256:
-39d46c77a489fdeeff9904af8f01c86989257fadffa828b9ff139e54292f480f  index.html
+2229ae81f9f001519cd0472dd57af43517c5896929995e062142962e31db5c37  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-8b03ab0d24f1262474aacd610508db25f93493b7b7fcdc6924f2f20b6537f0b0  particles.js
-8a1ca08e9c8f380d7c14a7dba01836797b537569cddeb9877606fcdf4966b059  README.md
+a1579146f3a0052ab4998572bc3ba52e32c2db1aa2f1133d92c54fd34ca6b3b6  particles.js
+4edd31ae3e0fa2fb6f41307bd68ec2c6116eb589220c0ee35d34910752a71d23  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
