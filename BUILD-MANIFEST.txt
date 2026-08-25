@@ -1,12 +1,15 @@
-Jordan Houri personal site — v111
+Jordan Houri personal site — v112
 
-ARROW POSITION:
-- left: 3px farther left
-- right: 7px farther right
+PARTICLES:
+- proton scatter emission draw = floor(random * 10.0), 10%
+- primary spawn frequency scales with particle-cylinder circumference
+- 1920px-wide viewport is the baseline appearance/rate
+- six-panel 1920 baseline particle radius = 1274.789394px
+- six-panel 1920 baseline circumference = 8009.737992px
 
 SHA-256:
-d29143cfa2d31afd91b03476a0e1a13ff35f1c675dbe1ec0681983116a791fcc  index.html
+d34a4e22d76347c8f3a2614f020a7dad2849465a96310700b7a1aabfa9e0dda6  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
-4f07846267acc2d44ae090ca6a6c0557872307d389ec198ebafdc09f255d5f77  particles.js
-9e86c22526c68c91cf72d21c491427c1f36b848873304a915dbc4510429bc1e5  README.md
+93cb39ec765dfdb7297b3a8167d2753effc6fba541e6a01b7ba95334f04c5244  particles.js
+8adfb1a9f4343335a560679709c9056c5c288f8135e085cd5c4df1c10162242d  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
