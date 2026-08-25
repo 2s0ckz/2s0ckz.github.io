@@ -1,17 +1,25 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 42 restructures proton scatter-secondary emission.
+Version 43 makes proton scatter-secondary probability directly auditable.
 
-The emission probability is no longer hidden inside a function that is invoked
-at every scatter vertex.
+The scatter emission gate no longer uses a floating-point `Math.random() < 0.095`
+comparison.
 
 At each proton scatter vertex:
-- `emitsSecondary` is decided exactly once with `Math.random() < 0.095`
-- only if that boolean is true is `spawnAtProtonScatter()` called
-- among productive vertices, the daughter mix preserves the previous
-  8% electron / 1.5% photon overall proportions
-- scatter daughters remain terminal (`maxGeneration: 0`)
-- proton always continues
+- increment `window.__particleDebug.protonScatterVertices`
+- generate an integer from 0 through 999 using `crypto.getRandomValues()`
+  (falling back to `Math.random()` only if Web Crypto is unavailable)
+- emit only if the integer is below 95
+- increment `window.__particleDebug.protonScatterEmissions` only when emission occurs
 
-This makes the control flow explicit: non-productive vertices never invoke the
-secondary spawning function at all.
+This is exactly 95 / 1000 = 9.5%.
+
+You can inspect the live values in the browser console:
+`window.__particleDebug`
+
+It exposes:
+- `protonScatterVertices`
+- `protonScatterEmissions`
+- `protonScatterEmissionRate`
+
+Scatter daughters remain terminal and the proton continues after emission.

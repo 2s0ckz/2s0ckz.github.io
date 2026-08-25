@@ -22,6 +22,26 @@
   const completedTracks = [];
   const families = new Map();
 
+  const particleDebug = {
+    protonScatterVertices: 0,
+    protonScatterEmissions: 0,
+    get protonScatterEmissionRate() {
+      return this.protonScatterVertices
+        ? this.protonScatterEmissions / this.protonScatterVertices
+        : 0;
+    }
+  };
+  window.__particleDebug = particleDebug;
+
+  function randomInt1000() {
+    if (window.crypto && window.crypto.getRandomValues) {
+      const value = new Uint32Array(1);
+      window.crypto.getRandomValues(value);
+      return value[0] % 1000;
+    }
+    return Math.floor(Math.random() * 1000);
+  }
+
   const rand = (a, b) => a + Math.random() * (b - a);
 
   function gaussianish() {
@@ -348,9 +368,13 @@
           track.scatterClock = rand(0.055, 0.13);
 
           // Decide exactly once whether THIS scatter vertex is productive.
-          // 9.5% total: 8% electron-equivalent + 1.5% photon-equivalent.
-          const emitsSecondary = Math.random() < 0.095;
+          // Draw an integer in [0, 999]; 0..94 means emission = exactly 9.5%.
+          particleDebug.protonScatterVertices += 1;
+          const scatterDraw = randomInt1000();
+          const emitsSecondary = scatterDraw < 95;
+
           if (emitsSecondary) {
+            particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
           }
 
