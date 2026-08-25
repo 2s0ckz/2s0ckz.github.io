@@ -1,12 +1,21 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 60 changes the horizontal orbit to an inside-cylinder viewpoint.
+Version 61 replaces the horizontal flex-track implementation with a true
+inside-cylinder orbit.
 
-- viewer is treated as standing at the center of the cylinder
-- side panels rotate away toward the viewer's peripheral field
-- depth sign is inverted from the outside-cylinder model
-- panel gap reduced to 2 px on desktop and mobile
-- viewport perspective strengthened to 700 px
-- initial orbit state is fully measured before interaction is enabled
-- first panel-switch glitch removed by eliminating transform transition during initialization
+Key architectural change:
+- panels are no longer laid out in a horizontal strip
+- there is no cloned periodic track
+- every panel is absolutely positioned from cylindrical coordinates
+- the viewer is treated as being at the cylinder center
+- adjacent panel angular spacing is computed from panel width and cylinder radius
+  so visible edges are approximately 4 px apart
+- scroll changes angular phase, not horizontal translation
 - active panel remains centered and up to 1440 px wide
+
+First-scroll fix:
+- phase starts exactly at 0
+- no measured initial horizontal offset
+- no wrap correction
+- no cloned-set seam
+- first interaction uses the same phase model as every later interaction

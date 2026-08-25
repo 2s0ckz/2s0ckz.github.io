@@ -1,15 +1,16 @@
-Jordan Houri personal site — v60
+Jordan Houri personal site — v61
 
-Inside-cylinder orbit:
-- panel gap 2px
-- inverted depth/rotation geometry
-- 700px perspective
-- initialized before interaction
-- no first-switch transform glitch
+TRUE INSIDE-CYLINDER REBUILD:
+- no horizontal flex strip
+- no cloned periodic track
+- absolute cylindrical panel coordinates
+- scroll drives angular phase
+- ~4px desired apparent adjacent edge spacing
+- first-scroll offset/wrap system removed
 
 SHA-256:
-073443c0f573727756a7240b400d11db03b477226442a97793c318679cf5dff2  index.html
+b5eb5ebb85e908871a712577b8ebce11c5a113ccd5823d2477007e9abadc6bfb  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
-1cd8486f5ab566992c514488a6035f1c9fdc5a639ba274640d09622e7e7202ad  README.md
+2ccb4c2c4ee8ac888102c315a5fda1d79c4e36edb83c78a276df2ae54c3bffea  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
