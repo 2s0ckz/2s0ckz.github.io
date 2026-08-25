@@ -355,8 +355,7 @@
   }
 
   function render(now) {
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width, height);
     for (const track of completedTracks) drawTrack(track, now, false);
     for (const track of activeTracks) drawTrack(track, now, true);
   }
