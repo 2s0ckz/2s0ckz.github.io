@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v68-fix-cylinder-coordinate-origin" />
+  <meta name="site-build" content="v69-1440-cap-slower-arrows" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -250,6 +250,12 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     const wheelThreshold = 85;
     const wheelSettleMs = 170;
 
+    // Animation responsiveness. Arrow-button navigation intentionally uses a
+    // slower easing rate than wheel/keyboard snapping.
+    let animationEase = 0.16;
+    const normalEase = 0.16;
+    const arrowEase = 0.075;
+
     function wrappedAngle(angle) {
       return Math.atan2(Math.sin(angle), Math.cos(angle));
     }
@@ -317,7 +323,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
     function animate() {
       const delta = targetPhase - phase;
-      phase += delta * 0.16;
+      phase += delta * animationEase;
 
       if (Math.abs(delta) < 0.001) phase = targetPhase;
       render();
@@ -326,11 +332,13 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         raf = requestAnimationFrame(animate);
       } else {
         raf = 0;
+        animationEase = normalEase;
       }
     }
 
-    function moveByPanels(amount) {
+    function moveByPanels(amount, ease = normalEase) {
       if (!ready) return;
+      animationEase = ease;
       targetPhase += amount;
 
       if (!raf) raf = requestAnimationFrame(animate);
@@ -419,8 +427,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
       }
     });
 
-    prev?.addEventListener('click', () => moveByPanels(-1));
-    next?.addEventListener('click', () => moveByPanels(1));
+    prev?.addEventListener('click', () => moveByPanels(-1, arrowEase));
+    next?.addEventListener('click', () => moveByPanels(1, arrowEase));
 
     function initialize() {
       phase = 0;
@@ -441,7 +449,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v68 orbit</div>
-  <script src="particles.js?v=68"></script>
+  <div class="build-marker" aria-hidden="true">v69 orbit</div>
+  <script src="particles.js?v=69"></script>
 </body>
 </html>
