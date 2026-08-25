@@ -1,14 +1,15 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 10 fixes the broken v9 markup.
+Version 12 fixes the decorative stacking order.
 
-## Verified CT arc behavior
-- six arc elements are actually present in `index.html`
-- varying sizes
-- alternating left/right placement
-- no overlap by design
-- arcs scroll with the page
-- arcs sit above the translucent panel fill and below all text
-- arc colors remain in the subtle ~6–10% opacity range
-- no grid or streak layers
-- cache-busting updated to `?v=10`
+## Layering
+- black background
+- CT reconstruction arcs
+- particle canvas
+- content panel and text
+
+## Notes
+- particles now pass in front of the arcs
+- arcs remain outside the content panel so they are not clipped
+- arc parallax remains at 50% scroll rate
+- cache-busting updated to `?v=12`
