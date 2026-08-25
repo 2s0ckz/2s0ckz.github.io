@@ -1,19 +1,11 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 55 replaces the CT reconstruction arcs with a periodic horizontal
-portfolio layout.
+Version 56 is a cache-proof horizontal orbit redesign.
 
-- fixed top navigation bar
-- GitHub profile avatar
-- Jordan Houri + "Physici-an/st (in training)"
-- 2x2 grid for Google Scholar, GitHub, LinkedIn, and X
-- infinitely wrapping horizontal content track
-- vertical wheel input maps to horizontal motion
-- drag, keyboard arrows, and on-screen arrows supported
-- subtle perspective rotation creates a cylindrical/orbital feel
-- particle background retained
-- CT arc layer removed
-
-GitHub and LinkedIn are direct profile links.
-Google Scholar currently uses an exact-name search.
-X currently links to x.com until the personal X URL is supplied.
+- No external stylesheet is loaded.
+- All layout CSS is embedded directly in `index.html`.
+- CT arcs are absent.
+- Fixed profile/social navigation is present.
+- Main content loops horizontally with a stronger cylindrical perspective.
+- Particle background remains.
+- A temporary `v56 orbit` marker at bottom-right confirms this exact build.
