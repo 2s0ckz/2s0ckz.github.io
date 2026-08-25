@@ -1,19 +1,13 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 98:
-- disables text selection while an orbit drag is active
-- reduces vertical spacing around the arrow controls further
-- changes the tagline to:
-  Radiation Physisi[an/st] (in training)
-- increases mobile bottom-scroll clearance so the end of a panel can be reached
+Version 99 fixes arrow spacing and text-selection behavior.
 
-Mobile scroll changes:
-- height/max-height = calc(100% - 12px)
-- overflow-y: scroll
-- overscroll-behavior-y: auto
-- bottom padding = 120px
-- scroll-padding-bottom = 120px
-- extra 48px end spacer
+- desktop arrow row is explicitly reduced to a compact 22px minimum height
+- desktop row has zero vertical margin/padding
+- arrow buttons use 1px vertical padding and 20px minimum height
+- mobile retains 6px bottom breathing room around the arrow row
+- text selection is disabled only while a real orbit drag is active
+- normal text selection is restored on pointer release/cancel, vertical-touch exit, and window blur
 
-Orbit geometry, responsive width, snapping, timing, particle-cylinder behavior,
-2px blur, and sharp corners remain unchanged.
+All orbit geometry, responsive sizing, mobile panel scrolling, particles, blur,
+sharp corners, snapping, and transition timing remain unchanged.
