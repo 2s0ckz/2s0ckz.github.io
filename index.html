@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v57-centered-1440-rotational-orbit" />
+  <meta name="site-build" content="v58-clean-canonical-orbit-css" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
 <style>
-
 * { box-sizing: border-box; }
 :root {
   --bg:#000; --panel:rgba(12,15,26,.66); --text:#a9c8c8; --heading:#f2f5f5;
@@ -41,37 +40,46 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
 .orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
+
+
 .orbit-set {
-  display:flex;
-  align-items:center;
-  gap:clamp(110px,14vw,260px);
-  height:100%;
-  padding:20px max(7vw,28px);
+  display: flex;
+  align-items: center;
+  gap: clamp(120px, 14vw, 280px);
+  height: 100%;
+  padding: 20px max(6vw, 32px);
 }
+
 .orbit-card {
-  --orbit-rotate:0deg;
-  --orbit-scale:1;
-  --orbit-opacity:1;
-  --orbit-z:0px;
-  flex:0 0 min(var(--panel-max), calc(100vw - 64px));
-  width:min(var(--panel-max), calc(100vw - 64px));
-  height:min(680px, calc(100% - 24px));
-  padding:clamp(32px,4vw,64px);
-  overflow-y:auto;
-  overscroll-behavior:contain;
-  scrollbar-width:thin;
-  scrollbar-color:rgba(169,200,200,.22) transparent;
-  border:1px solid rgba(169,200,200,.12);
-  border-radius:16px;
-  background:var(--panel);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  transform:translateZ(var(--orbit-z)) rotateY(var(--orbit-rotate)) scale(var(--orbit-scale));
-  transform-origin:center center;
-  opacity:var(--orbit-opacity);
-  transition:opacity 100ms linear;
-  box-shadow:0 22px 72px rgba(0,0,0,.16);
+  --orbit-rotate: 0deg;
+  --orbit-scale: 1;
+  --orbit-opacity: 1;
+  --orbit-z: 0px;
+  --orbit-x: 0px;
+  flex: 0 0 min(1440px, calc(100vw - 64px));
+  width: min(1440px, calc(100vw - 64px));
+  height: min(680px, calc(100% - 24px));
+  padding: clamp(32px, 4vw, 64px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(169,200,200,.22) transparent;
+  border: 1px solid rgba(169,200,200,.12);
+  border-radius: 16px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform:
+    translateX(var(--orbit-x))
+    translateZ(var(--orbit-z))
+    rotateY(var(--orbit-rotate))
+    scale(var(--orbit-scale));
+  transform-origin: center center;
+  opacity: var(--orbit-opacity);
+  transition: opacity 100ms linear;
+  box-shadow: 0 22px 72px rgba(0,0,0,.16);
 }
+
 .orbit-card h1,.orbit-card h2,.orbit-card h3,.orbit-card p { max-width:62ch; }
 .orbit-card h1 { margin:10px 0 18px; color:#fff; font-size:clamp(2.5rem,4.8vw,5rem); line-height:.94; letter-spacing:-.045em; font-weight:600; }
 .orbit-card h2 { margin:8px 0 26px; color:var(--heading); font-size:clamp(1.55rem,2.5vw,2.45rem); line-height:1.08; font-weight:500; letter-spacing:-.025em; }
@@ -95,6 +103,19 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
+  .orbit-set {
+    gap: 28px;
+    padding: 16px 14px;
+  }
+
+  .orbit-card {
+    flex-basis: calc(100vw - 28px);
+    width: calc(100vw - 28px);
+    height: calc(100% - 14px);
+    padding: 26px 24px;
+    border-radius: 13px;
+  }
+
   :root { --nav-height:154px; }
   .topbar-inner { width:min(100% - 24px,1440px); gap:16px; }
   .profile-photo { width:58px; height:58px; flex-basis:58px; }
@@ -105,12 +126,11 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   .social-grid a { min-height:32px; padding:0 7px; font-size:.59rem; letter-spacing:.045em; }
   .orbit-heading { width:calc(100% - 24px); padding-top:12px; }
   .orbit-heading p { font-size:.6rem; letter-spacing:.09em; }
-  .orbit-set { gap:16px; padding:20px 16px 20px 6vw; }
-  .orbit-card { flex-basis:calc(100vw - 28px); width:calc(100vw - 28px); height:calc(100% - 14px); padding:26px 24px; border-radius:13px; }
+  
+  
   .orbit-controls { width:calc(100% - 24px); padding-bottom:12px; }
 }
 @media (prefers-reduced-motion:reduce) { .orbit-card,a { transition:none; } }
-
 </style>
 </head>
 <body>
@@ -276,12 +296,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const cardCenter = rect.left + rect.width / 2;
         const normalized = (cardCenter - center) / Math.max(1, viewport.clientWidth);
         const distance = Math.min(1.35, Math.abs(normalized));
-        const rotate = Math.max(-78, Math.min(78, normalized * -78));
-        const scale = 1 - Math.min(0.30, distance * 0.22);
-        const z = -Math.min(520, distance * 440);
+        const rotate = Math.max(-82, Math.min(82, normalized * -82));
+        const scale = 1 - Math.min(0.34, distance * 0.24);
+        const z = -Math.min(620, distance * 520);
         card.style.setProperty('--orbit-rotate', `${rotate}deg`);
         card.style.setProperty('--orbit-scale', scale.toFixed(3));
         card.style.setProperty('--orbit-z', `${z}px`);
+        const orbitX = normalized * 70;
+        card.style.setProperty('--orbit-x', `${orbitX}px`);
         card.style.setProperty('--orbit-opacity', (1 - Math.min(0.62, distance * 0.46)).toFixed(3));
 
         if (Math.abs(cardCenter - center) < nearest.d) {
@@ -382,7 +404,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v57 orbit</div>
-  <script src="particles.js?v=57"></script>
+  <div class="build-marker" aria-hidden="true">v58 orbit</div>
+  <script src="particles.js?v=58"></script>
 </body>
 </html>

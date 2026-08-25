@@ -1,15 +1,16 @@
-Jordan Houri personal site — v57
+Jordan Houri personal site — v58
 
-Centered rotational orbit:
-- active panel centered
-- max panel width 1440px
-- stronger rotateY/translateZ/scale
-- GitHub @2s0ckz
-- X @2s0ckz
+Canonical orbit CSS:
+- 1 desktop .orbit-card definition
+- 1 mobile .orbit-card override
+- 1 desktop .orbit-set definition
+- 1 mobile .orbit-set override
+- active panel max width 1440px
+- translateX + translateZ + rotateY + scale
 
 SHA-256:
-92f0bc07dfdf148ca7ff6a76ed61ded8987238006423d4f52efb2e4b0ae640a6  index.html
+5c61ffef532f98381545a245958978030e49a895f86720f1b611a8b42ac79541  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
-b3ee7a4150e21423da1a94082cc5e4f6dfccaa7d8d91cd9520f208a895237464  README.md
+75f4a14bfad085f8a54050eb341c0d9087e8fa664a4ef1d391507efed154a9d3  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
