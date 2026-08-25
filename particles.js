@@ -93,6 +93,8 @@
       maxGeneration: options.maxGeneration ?? defaults.maxGeneration,
       scatterSigma: options.scatterSigma ?? defaults.scatterSigma,
       scatterClock: rand(0.055, 0.14),
+      scatterCount: 0,
+      nextScatterSecondary: kind === "proton" ? Math.floor(rand(3, 6)) : null,
       trail: [{ x, y }]
     });
   }
@@ -156,29 +158,29 @@
 
 
   function spawnAtProtonScatter(track) {
-    // Most proton multiple-scattering vertices remain purely elastic-looking.
-    // Occasionally, treat the vertex as an ionizing interaction and emit a
-    // sparse visible secondary. Delta-like electrons are more common than
-    // radiative photons.
-    const roll = Math.random();
+    // This is deliberately tied to a proton's scatter count rather than a
+    // per-vertex random chance. That makes the behavior auditable and ensures
+    // sufficiently long proton tracks really do produce visible daughters.
+    if (track.scatterCount < track.nextScatterSecondary) return false;
 
-    if (roll < 0.085) {
+    // Schedule the next emission several scatter vertices later.
+    track.nextScatterSecondary += Math.floor(rand(4, 8));
+
+    // Mostly delta-like electrons; occasional photon.
+    if (Math.random() < 0.82) {
       addTrack(
         "electron",
         track.x,
         track.y,
-        track.angle + rand(-1.15, 1.15),
+        track.angle + rand(-1.2, 1.2),
         track.familyId,
         {
           generation: 0,
-          stepLength: rand(16, 38),
+          stepLength: rand(34, 72),
           speed: rand(90, 122.5)
         }
       );
-      return true;
-    }
-
-    if (roll < 0.100) {
+    } else {
       addTrack(
         "photon",
         track.x,
@@ -187,15 +189,13 @@
         track.familyId,
         {
           generation: 0,
-          // Keep the current long photon mean-free-path treatment.
           stepLength: rand(350, 725),
           speed: rand(85, 115)
         }
       );
-      return true;
     }
 
-    return false;
+    return true;
   }
 
   function spawnElectronChildren(track) {
@@ -351,10 +351,10 @@
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
+          track.scatterCount += 1;
 
-          // Sparse ionizing/radiative secondaries can originate exactly at
-          // this multiple-scattering vertex. The proton continues afterward;
-          // these emissions do not terminate the primary track.
+          // Visible secondary production is scheduled by scatter number.
+          // The proton always continues after the vertex.
           spawnAtProtonScatter(track);
         }
       }
