@@ -156,13 +156,13 @@
 
 
   function spawnAtProtonScatter(track) {
-    if (track.kind !== "proton") return false;
+    if (track.kind !== "proton") return;
 
-    // Independent per-vertex probability.
-    // Keep this modest so most multiple-scattering vertices do not emit.
-    const roll = Math.random();
+    // This function is called ONLY for vertices already selected to emit.
+    // Decide daughter species separately from the emission gate.
+    const electronFraction = 0.08 / 0.095;
 
-    if (roll < 0.08) {
+    if (Math.random() < electronFraction) {
       addTrack(
         "electron",
         track.x,
@@ -176,10 +176,7 @@
           speed: rand(90, 122.5)
         }
       );
-      return true;
-    }
-
-    if (roll < 0.095) {
+    } else {
       addTrack(
         "photon",
         track.x,
@@ -193,10 +190,7 @@
           speed: rand(85, 115)
         }
       );
-      return true;
     }
-
-    return false;
   }
 
   function spawnElectronChildren(track) {
@@ -352,9 +346,15 @@
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
-          // Sparse probabilistic secondary production at this scatter vertex.
-          // The proton always continues after the vertex.
-          spawnAtProtonScatter(track);
+
+          // Decide exactly once whether THIS scatter vertex is productive.
+          // 9.5% total: 8% electron-equivalent + 1.5% photon-equivalent.
+          const emitsSecondary = Math.random() < 0.095;
+          if (emitsSecondary) {
+            spawnAtProtonScatter(track);
+          }
+
+          // Proton always continues after the scatter vertex.
         }
       }
 

@@ -1,16 +1,16 @@
-Jordan Houri personal site — v41
+Jordan Houri personal site — v42
 
-Proton scatter-secondary model:
-- electron: 8% per scatter vertex
-- photon: 1.5% per scatter vertex
-- no daughter: 90.5%
+Verified proton scatter emission flow:
+- exactly one Bernoulli emission decision per scatter vertex
+- spawn helper called only when emitsSecondary is true
+- 9.5% productive vertices
+- overall species mix equivalent to 8% electron / 1.5% photon
+- terminal scatter daughters
 - proton continues
-- scatter daughters terminal
-- no scheduled counter state
 
 SHA-256:
-481cb6fe7d34c7c681e1bff881647a607f4f6612dac17237af2e028f74da5dae  index.html
+fc83850fde0a88f82cb1a06f809bf923d78f416c192297b1ccbd249ebed9aca1  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-a9b6a25b9301eb491db928acbc49613ff9436f83407b2c9169278e71c11ff4f4  particles.js
-49149c96cd0c92516e9d33e26799dfb766188380933934f9551bf1ef7f303ad8  README.md
+93531adcbb238c4d52a9c4672c01c225b970f67e2850feeed5c2a661b453903d  particles.js
+e0d303e48abce533923353f84c18cfb672062ed84f32ac4e5a75beee9c88db15  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
