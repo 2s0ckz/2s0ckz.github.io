@@ -1,15 +1,19 @@
-# Jordan Houri — GitHub Pages starter
+# Jordan Houri — GitHub Pages personal site
 
-Version 54 fixes the effective CT-arc parallax behavior.
+Version 55 replaces the CT reconstruction arcs with a periodic horizontal
+portfolio layout.
 
-The nominal parallax remains 25%, but the previous version recalculated the
-entire arc layout on every scroll event. On browsers where viewport height
-changes while scrolling, that moved arc centers in addition to the 25%
-translation and made the apparent parallax much faster.
+- fixed top navigation bar
+- GitHub profile avatar
+- Jordan Houri + "Physici-an/st (in training)"
+- 2x2 grid for Google Scholar, GitHub, LinkedIn, and X
+- infinitely wrapping horizontal content track
+- vertical wheel input maps to horizontal motion
+- drag, keyboard arrows, and on-screen arrows supported
+- subtle perspective rotation creates a cylindrical/orbital feel
+- particle background retained
+- CT arc layer removed
 
-v54:
-- scroll only applies `translateY(-0.25 * scrollY)`
-- arc layout and density are not recomputed while scrolling
-- virtual height remains `viewport + 0.25 * real scroll distance`
-- density remains ~3 arcs per 1080 px of that virtual field
-- layout is recomputed only on initial load and resize
+GitHub and LinkedIn are direct profile links.
+Google Scholar currently uses an exact-name search.
+X currently links to x.com until the personal X URL is supplied.

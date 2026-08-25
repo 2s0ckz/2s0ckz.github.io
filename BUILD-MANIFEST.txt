@@ -1,15 +1,16 @@
-Jordan Houri personal site — v54
+Jordan Houri personal site — v55
 
-Arc parallax fix:
-- transform factor: 25%
-- scroll handler performs transform only
-- no arc relayout on scroll
-- virtualHeight = vh + 0.25 * realScrollableDistance
-- density = ceil((virtualHeight / 1080) * 3)
+Major redesign:
+- CT arc layer removed
+- periodic horizontal looping content
+- cylindrical perspective treatment
+- fixed top profile/social navigation
+- GitHub avatar sourced from JordanHouri profile
+- particle background retained
 
 SHA-256:
-42b6273c25d7f724a9599b1206ffe7f7b3368a2a56a1cfda91447980678a8558  index.html
-042cafcd15446ada7106ee2326d1ce04492a6fb9c946c47814eb13d898d6abf8  style.css
+77ef467a27487222505fb938a7ab248150949d4303d96b7f63998f43ad611d27  index.html
+7c48ef9adf639720ab77c43a7c4ee1feced4aa8ff36257d2c1cacf1fdfe49c26  style.css
 2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
-08fbff4d48bc03a053fa845f1763d77eb7f1d2e50f98ba2ee43f6578d8b42e4c  README.md
+1193da9e479f1abb53ec8f6849717ac49ab817743c3a5f4f7906dc5561a9f4ad  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
