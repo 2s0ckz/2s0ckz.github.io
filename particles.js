@@ -59,20 +59,20 @@
   function addTrack(kind, x, y, angle, familyId, options = {}) {
     const defaults = {
       proton: {
-        speed: rand(34, 46),
+        speed: rand(42.5, 57.5),  // 25% faster than 34-46
         stepLength: rand(height * 0.32, height * 0.72),
         generation: 0,
         maxGeneration: 0,
         scatterSigma: 0.045
       },
       electron: {
-        speed: rand(72, 98),
+        speed: rand(90, 122.5),   // 25% faster than 72-98
         stepLength: rand(20, 44),
         generation: 0,
         maxGeneration: 4
       },
       photon: {
-        speed: rand(68, 92),
+        speed: rand(85, 115),     // 25% faster than 68-92
         stepLength: rand(70, 145),
         generation: 0,
         maxGeneration: 2
@@ -102,10 +102,28 @@
 
   function spawnPrimary() {
     const familyId = createFamily();
-    const x = rand(width * 0.04, width * 0.96);
-    const angle = rand(Math.PI * 0.39, Math.PI * 0.61);
+    const originMode = Math.random();
+    let x, y, angle;
 
-    addTrack("proton", x, -20, angle, familyId, {
+    // Wider angle range from above, plus side-born primaries that still travel downward.
+    if (originMode < 0.60) {
+      // From above
+      x = rand(width * 0.02, width * 0.98);
+      y = -20;
+      angle = rand(Math.PI * 0.30, Math.PI * 0.70);
+    } else if (originMode < 0.80) {
+      // From left side, still going downward
+      x = -20;
+      y = rand(height * 0.02, height * 0.55);
+      angle = rand(Math.PI * 0.16, Math.PI * 0.44);
+    } else {
+      // From right side, still going downward
+      x = width + 20;
+      y = rand(height * 0.02, height * 0.55);
+      angle = rand(Math.PI * 0.56, Math.PI * 0.84);
+    }
+
+    addTrack("proton", x, y, angle, familyId, {
       stepLength: rand(height * 0.30, height * 0.72)
     });
   }
@@ -148,7 +166,6 @@
 
     const nextGeneration = track.generation + 1;
 
-    // Main electron branch: short mean free path and medium-angle scattering.
     addTrack(
       "electron",
       track.x,
@@ -158,11 +175,10 @@
       {
         generation: nextGeneration,
         stepLength: rand(14, 34),
-        speed: Math.max(50, track.speed * rand(0.90, 0.98))
+        speed: Math.max(62.5, track.speed * rand(0.90, 0.98))
       }
     );
 
-    // Keep rare extra branches sparse enough for a portfolio background.
     if (Math.random() < 0.09 && nextGeneration < track.maxGeneration) {
       addTrack(
         "electron",
@@ -173,7 +189,7 @@
         {
           generation: nextGeneration,
           stepLength: rand(10, 25),
-          speed: rand(62, 82)
+          speed: rand(77.5, 102.5)
         }
       );
     }
@@ -198,7 +214,6 @@
 
     const nextGeneration = track.generation + 1;
 
-    // Photon branch: at most two generations with large angular deflections.
     addTrack(
       "photon",
       track.x,
@@ -208,7 +223,7 @@
       {
         generation: nextGeneration,
         stepLength: rand(55, 115),
-        speed: Math.max(46, track.speed * rand(0.84, 0.95))
+        speed: Math.max(57.5, track.speed * rand(0.84, 0.95))
       }
     );
 
@@ -222,7 +237,7 @@
         {
           generation: 0,
           stepLength: rand(15, 34),
-          speed: rand(66, 88)
+          speed: rand(82.5, 110)
         }
       );
     }
@@ -235,8 +250,6 @@
       if (track.kind === "photon") spawnPhotonChildren(track);
     }
 
-    // Retain every completed primary/daughter path until the last member of
-    // the family is finished, then fade the whole event together.
     completedTracks.push({
       kind: track.kind,
       familyId: track.familyId,
@@ -299,8 +312,8 @@
   function update(dt, now) {
     spawnClock += dt;
 
-    // Occasional primaries: intentionally sparse.
-    if (spawnClock > rand(3.8, 6.0)) {
+    // 25% higher frequency than the previous 3.8-6.0 s interval.
+    if (spawnClock > rand(3.04, 4.8)) {
       spawnClock = 0;
       spawnPrimary();
     }
@@ -418,7 +431,6 @@
   spawnPrimary();
 
   if (reduceMotion) {
-    // Produce one static event display rather than continuous motion.
     for (let i = 0; i < 280; i++) {
       update(1 / 60, performance.now());
     }
