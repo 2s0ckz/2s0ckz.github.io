@@ -1,46 +1,33 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="v22-single-background-arc-layer" name="site-build"/>
-<meta content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." name="description"/>
-<title>Jordan Houri</title>
-<link href="style.css?v=23" rel="stylesheet"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="site-build" content="v24-virtual-arc-canvas" />
+  <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
+  <title>Jordan Houri</title>
+  <link rel="stylesheet" href="style.css?v=24" />
 </head>
-<body><div aria-hidden="true" class="ct-arc-field"><div class="ct-recon-arc arc-1"></div><div class="ct-recon-arc arc-2"></div><div class="ct-recon-arc arc-3"></div><div class="ct-recon-arc arc-4"></div><div class="ct-recon-arc arc-5"></div><div class="ct-recon-arc arc-6"></div></div>
+<body>
+  <div class="ct-arc-field" aria-hidden="true">
+    <div class="ct-recon-arc arc-1"></div>
+    <div class="ct-recon-arc arc-2"></div>
+    <div class="ct-recon-arc arc-3"></div>
+    <div class="ct-recon-arc arc-4"></div>
+    <div class="ct-recon-arc arc-5"></div>
+    <div class="ct-recon-arc arc-6"></div>
+    <div class="ct-recon-arc arc-7"></div>
+    <div class="ct-recon-arc arc-8"></div>
+    <div class="ct-recon-arc arc-9"></div>
+    <div class="ct-recon-arc arc-10"></div>
+    <div class="ct-recon-arc arc-11"></div>
+    <div class="ct-recon-arc arc-12"></div>
+  </div>
 
-<div class="ct-recon-arc arc-2"></div>
-<div class="ct-recon-arc arc-3"></div>
-<div class="ct-recon-arc arc-4"></div>
-<div class="ct-recon-arc arc-5"></div>
-<div class="ct-recon-arc arc-6"></div>
-<div class="ct-recon-arc arc-7"></div>
-<div class="ct-recon-arc arc-8"></div>
-<div class="ct-recon-arc arc-9"></div>
+  <canvas id="particle-background" aria-hidden="true"></canvas>
 
-<div class="ct-recon-arc arc-2"></div>
-<div class="ct-recon-arc arc-3"></div>
-<div class="ct-recon-arc arc-4"></div>
-<div class="ct-recon-arc arc-5"></div>
-<div class="ct-recon-arc arc-6"></div>
-
-<div class="ct-recon-arc arc-2"></div>
-<div class="ct-recon-arc arc-3"></div>
-<div class="ct-recon-arc arc-4"></div>
-<div class="ct-recon-arc arc-5"></div>
-<div class="ct-recon-arc arc-6"></div>
-<div class="ct-recon-arc arc-7"></div>
-<div class="ct-recon-arc arc-8"></div>
-
-<div class="ct-recon-arc arc-2"></div>
-<div class="ct-recon-arc arc-3"></div>
-<div class="ct-recon-arc arc-4"></div>
-
-<canvas aria-hidden="true" id="particle-background"></canvas>
-<main class="page-shell">
-<section class="content-panel">
+  <main class="page-shell">
+    <section class="content-panel">
 <header class="hero" id="about">
 <p class="eyebrow">Researcher · Engineer · Scientist</p>
 <h1>Jordan Houri</h1>
@@ -156,114 +143,111 @@
 <p><a href="mailto:jordanhouri@gmail.com">jordanhouri@gmail.com</a></p>
 </footer>
 </section>
-</main>
+  </main>
 
+  <script>
+  (() => {
+    const field = document.querySelector('.ct-arc-field');
+    const panel = document.querySelector('.content-panel');
+    if (!field || !panel) return;
 
+    const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
+    let ticking = false;
 
+    // 5:1 diameter range.
+    const sizes = [400, 80, 235, 125, 320, 165, 275, 105, 355, 190, 145, 300];
+    const xFractions = [0.11, 0.52, 0.86, 0.28, 0.72, 0.93, 0.18, 0.61, 0.40, 0.81, 0.07, 0.67];
 
+    function layoutArcs() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
 
-<script>
-(() => {
-  const field = document.querySelector('.ct-arc-field');
-  const panel = document.querySelector('.content-panel');
-  if (!field || !panel) return;
+      const panelRect = panel.getBoundingClientRect();
+      const panelTopDoc = panelRect.top + scrollY;
+      const contentBottomDoc = panelTopDoc + panel.offsetHeight;
 
-  const arcs = Array.from(field.querySelectorAll('.ct-recon-arc'));
-  let ticking = false;
+      // Real scroll distance based ONLY on the content panel.
+      const realScrollableDistance = Math.max(0, contentBottomDoc - vh);
 
-  function layoutArcs() {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const scrollY = window.scrollY || window.pageYOffset || 0;
+      // Virtual arc canvas:
+      // initial viewport + half of the real page-scroll distance.
+      //
+      // Example: 2160px content, 1080px viewport:
+      // real scroll = 2160 - 1080 = 1080
+      // virtual height = 1080 + 0.5*1080 = 1620
+      const virtualHeight = vh + 0.5 * realScrollableDistance;
 
-    const panelRect = panel.getBoundingClientRect();
-    const panelTopDoc = panelRect.top + scrollY;
-    const panelBottomDoc = panelTopDoc + panel.offsetHeight;
-    const maxScroll = Math.max(0, panelBottomDoc - vh);
+      // Fixed layer gets a real virtual height but contributes zero layout height.
+      field.style.height = `${virtualHeight}px`;
 
-    // At 50% parallax, the field can move upward by only half the page's
-    // total scroll distance. This is the exact travel range we can use.
-    const parallaxTravel = maxScroll * 0.5;
-    const virtualHeight = vh + parallaxTravel;
+      // Exactly the requested density:
+      // 3 arcs per 1080 virtual vertical pixels, rounded up.
+      const requestedCount = Math.ceil((virtualHeight / 1080) * 3);
+      const count = Math.min(arcs.length, Math.max(1, requestedCount));
 
-    // First three are visible near load. The next three are deliberately
-    // placed within the reachable parallax range so they enter later.
-    const sizes = [400, 80, 210, 120, 300, 170];
-    const x = [0.12, 0.53, 0.85, 0.22, 0.70, 0.90];
-
-    // Group 1 occupies the initial viewport.
-    const firstGroupY = [0.18 * vh, 0.50 * vh, 0.80 * vh];
-
-    // Group 2 is distributed across the actual reachable lower portion.
-    // If travel is short, hide this group rather than placing it beyond reach.
-    const secondStart = vh + Math.max(80, parallaxTravel * 0.18);
-    const secondEnd = vh + Math.max(120, parallaxTravel * 0.88);
-
-    const secondGroupY = [
-      secondStart,
-      secondStart + (secondEnd - secondStart) * 0.50,
-      secondEnd
-    ];
-
-    arcs.forEach((arc, i) => {
-      const isSecondGroup = i >= 3;
-
-      // Only show later arcs if there is enough real parallax travel for them
-      // to actually enter the viewport before the page ends.
-      if (isSecondGroup && parallaxTravel < 260) {
+      arcs.forEach(arc => {
         arc.style.display = 'none';
-        return;
-      }
-
-      arc.style.display = 'block';
-
-      let size = sizes[i];
-
-      // Preserve the 5:1 size contrast while scaling down on narrower screens.
-      const scale = Math.min(1, Math.max(0.58, vw / 1500));
-      size *= scale;
+      });
 
       const echoPad = 62;
-      const r = size / 2 + echoPad;
+      const edgePad = 12;
 
-      let cx = vw * x[i];
-      let cy = isSecondGroup ? secondGroupY[i - 3] : firstGroupY[i];
+      // Distribute centers evenly through the full virtual canvas.
+      // Every arc is therefore in reachable parallax space.
+      for (let i = 0; i < count; i++) {
+        const arc = arcs[i];
 
-      cx = Math.max(r + 10, Math.min(vw - r - 10, cx));
+        let size = sizes[i % sizes.length];
+        const widthScale = Math.min(1, Math.max(0.58, vw / 1500));
+        size *= widthScale;
 
-      // Make sure every later arc is still inside the reachable virtual range.
-      cy = Math.max(r + 10, Math.min(virtualHeight - r - 10, cy));
+        const outerR = size / 2 + echoPad;
+        const slotH = virtualHeight / count;
 
-      arc.style.width = `${size}px`;
-      arc.style.height = `${size}px`;
-      arc.style.left = `${cx - size / 2}px`;
-      arc.style.top = `${cy - size / 2}px`;
-    });
-  }
+        let cy = slotH * (i + 0.5);
+        cy = Math.max(
+          outerR + edgePad,
+          Math.min(virtualHeight - outerR - edgePad, cy)
+        );
 
-  function applyParallax() {
-    const scrollY = window.scrollY || window.pageYOffset || 0;
-    field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
-  }
+        let cx = vw * xFractions[i % xFractions.length];
+        cx = Math.max(
+          outerR + edgePad,
+          Math.min(vw - outerR - edgePad, cx)
+        );
 
-  function update() {
-    layoutArcs();
-    applyParallax();
-    ticking = false;
-  }
+        arc.style.display = 'block';
+        arc.style.width = `${size}px`;
+        arc.style.height = `${size}px`;
+        arc.style.left = `${cx - size / 2}px`;
+        arc.style.top = `${cy - size / 2}px`;
+      }
+    }
 
-  function requestUpdate() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(update);
-  }
+    function applyParallax() {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      field.style.transform = `translate3d(0, ${-0.5 * scrollY}px, 0)`;
+    }
 
-  update();
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate, { passive: true });
-})();
-</script>
+    function update() {
+      layoutArcs();
+      applyParallax();
+      ticking = false;
+    }
 
-<script src="particles.js?v=23"></script>
+    function requestUpdate() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate, { passive: true });
+  })();
+  </script>
+
+  <script src="particles.js?v=24"></script>
 </body>
 </html>

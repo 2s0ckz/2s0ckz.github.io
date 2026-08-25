@@ -58,15 +58,20 @@ a:focus-visible {
   color: var(--bone-86);
 }
 
-/* Single background CT reconstruction arc layer.
-   This is the only arc layer in the site.
-   It may pass beneath the translucent content panel and parallax-scrolls at 50%. */
+
+/* Single virtual CT reconstruction canvas.
+   JavaScript sets its height from:
+   viewport height + 50% of the real content scroll distance.
+   Because it is fixed, it contributes zero document height. */
 .ct-arc-field {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
   will-change: transform;
 }
 
