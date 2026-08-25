@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v85-explicit-1440-max-width" />
+  <meta name="site-build" content="v86-responsive-panel-width" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -54,7 +54,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   left: 50%;
   top: 50%;
   box-sizing: border-box;
-  width:calc(100vw - 48px);
+  width:75vw;
   max-width:1440px;
   height: min(680px, calc(100% - 24px));
   padding: clamp(32px, 4vw, 64px);
@@ -105,7 +105,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   display:flex;
   align-items:center;
   justify-content:space-between;
-  width:calc(100vw - 48px);
+  width:75vw;
   max-width:1440px;
   margin:0 auto 8px;
   z-index:30;
@@ -118,13 +118,18 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .build-marker { position:fixed; right:10px; bottom:8px; z-index:99; padding:4px 7px; border:1px solid rgba(232,191,40,.28);
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
+  .orbit-controls {
+    width:95vw;
+    max-width:1440px;
+  }
+
   .orbit-viewport {
     padding-bottom:12px;
   }
 
 
   .orbit-card {
-    width:calc(100vw - 24px);
+    width:95vw;
     max-width:1440px;
     height:calc(100% - 24px);
     max-height:none;
@@ -643,7 +648,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v85 orbit</div>
-  <script src="particles.js?v=85"></script>
+  <div class="build-marker" aria-hidden="true">v86 orbit</div>
+  <script src="particles.js?v=86"></script>
 </body>
 </html>

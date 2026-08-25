@@ -1,14 +1,13 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 85 makes the 1440 px panel cap explicit.
+Version 86 updates responsive panel sizing.
 
-Panel sizing:
-- desktop: width = calc(100vw - 48px), max-width = 1440px
-- mobile: width = calc(100vw - 24px), max-width = 1440px
-- box-sizing remains border-box, so padding and borders are included inside 1440px
-- the orbit geometry now measures the actual rendered card width with
-  getBoundingClientRect() and caps that measurement at 1440px
-- the arrow-control row also uses an explicit max-width: 1440px
+- desktop/tablet panel width: 75vw
+- desktop/tablet max panel width: 1440px
+- mobile panel width (<=760px): 95vw
+- mobile max panel width: 1440px
+- arrow controls use the same responsive width model
+- orbit geometry continues to measure the actual rendered card width
 
-All regular-prism geometry, spacing, mobile scrolling fixes, snapping, timing,
-particles, and opacity remain unchanged.
+All prism geometry, particle behavior, scrolling fixes, snapping, timing, spacing,
+and translucency remain unchanged.
