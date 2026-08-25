@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v67-restored-panel-opacity" />
+  <meta name="site-build" content="v68-fix-cylinder-coordinate-origin" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -40,7 +40,14 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
 
-.orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
+.orbit-track {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  pointer-events:none;
+}
 
 .orbit-card {
   position: absolute;
@@ -66,10 +73,12 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 
 
 .orbit-set {
-  position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  pointer-events: none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  pointer-events:none;
 }
 
 .orbit-card h1,.orbit-card h2,.orbit-card h3,.orbit-card p { max-width:62ch; }
@@ -432,7 +441,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v67 orbit</div>
-  <script src="particles.js?v=67"></script>
+  <div class="build-marker" aria-hidden="true">v68 orbit</div>
+  <script src="particles.js?v=68"></script>
 </body>
 </html>
