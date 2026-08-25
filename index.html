@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="site-build" content="v58-clean-canonical-orbit-css" />
+  <meta name="site-build" content="v59-tight-circular-orbit" />
   <meta name="description" content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." />
   <title>Jordan Houri</title>
 
@@ -36,7 +36,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-shell { position:relative; z-index:5; height:100vh; padding-top:var(--nav-height); display:grid; grid-template-rows:auto minmax(0,1fr) auto; }
 .orbit-heading { width:min(1440px,calc(100% - 48px)); margin:0 auto; padding:18px 0 8px; }
 .orbit-heading p { margin:0; color:rgba(169,200,200,.48); font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; }
-.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:1200px; cursor:grab; outline:none; touch-action:pan-y; }
+.orbit-viewport { position:relative; min-height:0; overflow:hidden; perspective:900px; cursor:grab; outline:none; touch-action:pan-y; }
 .orbit-viewport:focus-visible { box-shadow:inset 0 0 0 1px rgba(232,191,40,.46); }
 .orbit-viewport.is-dragging { cursor:grabbing; }
 .orbit-track { position:absolute; inset:0 auto 0 0; display:flex; align-items:center; width:max-content; height:100%; will-change:transform; transform-style:preserve-3d; }
@@ -45,9 +45,9 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
 .orbit-set {
   display: flex;
   align-items: center;
-  gap: clamp(120px, 14vw, 280px);
+  gap: 12px;
   height: 100%;
-  padding: 20px max(6vw, 32px);
+  padding: 20px 24px;
 }
 
 .orbit-card {
@@ -76,7 +76,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
     scale(var(--orbit-scale));
   transform-origin: center center;
   opacity: var(--orbit-opacity);
-  transition: opacity 100ms linear;
+  transition: opacity 100ms linear, transform 70ms linear;
   box-shadow: 0 22px 72px rgba(0,0,0,.16);
 }
 
@@ -104,8 +104,8 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   border-radius:5px; background:rgba(0,0,0,.72); color:rgba(232,191,40,.72); font-size:9px; letter-spacing:.12em; text-transform:uppercase; pointer-events:none; }
 @media (max-width:760px) {
   .orbit-set {
-    gap: 28px;
-    padding: 16px 14px;
+    gap: 8px;
+    padding: 16px 10px;
   }
 
   .orbit-card {
@@ -295,16 +295,29 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.left + rect.width / 2;
         const normalized = (cardCenter - center) / Math.max(1, viewport.clientWidth);
-        const distance = Math.min(1.35, Math.abs(normalized));
-        const rotate = Math.max(-82, Math.min(82, normalized * -82));
-        const scale = 1 - Math.min(0.34, distance * 0.24);
-        const z = -Math.min(620, distance * 520);
+
+        // Treat the viewport center as the front of a cylinder.
+        // Map horizontal displacement to an angular position around that cylinder.
+        const theta = Math.max(-1.28, Math.min(1.28, normalized * 1.65));
+        const absTheta = Math.abs(theta);
+
+        // Circular depth: center = z 0; sides recede strongly.
+        const z = -520 * (1 - Math.cos(theta));
+
+        // Tangential rotation makes each card face toward the viewer along the curve.
+        const rotate = -(theta * 180 / Math.PI) * 0.92;
+
+        // Small lateral correction from the circular path itself.
+        const orbitX = Math.sin(theta) * 110;
+
+        const scale = 1 - Math.min(0.22, absTheta * 0.13);
+        const opacity = 1 - Math.min(0.46, absTheta * 0.25);
+
         card.style.setProperty('--orbit-rotate', `${rotate}deg`);
         card.style.setProperty('--orbit-scale', scale.toFixed(3));
         card.style.setProperty('--orbit-z', `${z}px`);
-        const orbitX = normalized * 70;
         card.style.setProperty('--orbit-x', `${orbitX}px`);
-        card.style.setProperty('--orbit-opacity', (1 - Math.min(0.62, distance * 0.46)).toFixed(3));
+        card.style.setProperty('--orbit-opacity', opacity.toFixed(3));
 
         if (Math.abs(cardCenter - center) < nearest.d) {
           nearest = { d: Math.abs(cardCenter - center), label: labels[i % labels.length] };
@@ -404,7 +417,7 @@ a:hover,a:focus-visible,a:active { color:var(--accent); }
   })();
   </script>
 
-  <div class="build-marker" aria-hidden="true">v58 orbit</div>
-  <script src="particles.js?v=58"></script>
+  <div class="build-marker" aria-hidden="true">v59 orbit</div>
+  <script src="particles.js?v=59"></script>
 </body>
 </html>

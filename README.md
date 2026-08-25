@@ -1,12 +1,12 @@
 # Jordan Houri — GitHub Pages personal site
 
-Version 58 cleans the orbit layout so the intended changes actually take effect.
+Version 59 makes the horizontal layout read more like an orbit and less like a slider.
 
-Fixes:
-- removed duplicate `.orbit-set` CSS definitions
-- removed duplicate `.orbit-card` CSS definitions
-- one canonical desktop panel rule: centered, up to 1440 px wide
-- one canonical mobile panel override
-- one transform path combining translateX, translateZ, rotateY, and scale
-- stronger off-axis rotation/depth so navigation reads as rotation around a cylinder
+Changes:
+- adjacent panels now have only 12 px gap on desktop and 8 px on mobile
+- panel centers follow a circular/sinusoidal x-z path
+- side panels recede in depth using a cosine curve
+- cards rotate tangentially to the curve rather than simply tilting linearly
+- viewport perspective reduced to 900 px for stronger depth
+- active panel remains centered and up to 1440 px wide
 - GitHub and X remain @2s0ckz
