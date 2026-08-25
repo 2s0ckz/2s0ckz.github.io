@@ -38,7 +38,6 @@
     width = window.innerWidth;
     height = window.innerHeight;
     dpr = Math.min(2, window.devicePixelRatio || 1);
-
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -46,33 +45,31 @@
 
   function createFamily() {
     const id = nextFamilyId++;
-
     families.set(id, {
       activeCount: 0,
       fadeStart: null,
       fadeDuration: rand(1300, 2200)
     });
-
     return id;
   }
 
   function addTrack(kind, x, y, angle, familyId, options = {}) {
     const defaults = {
       proton: {
-        speed: rand(42.5, 57.5),  // 25% faster than 34-46
+        speed: rand(42.5, 57.5),
         stepLength: rand(height * 0.32, height * 0.72),
         generation: 0,
         maxGeneration: 0,
         scatterSigma: 0.045
       },
       electron: {
-        speed: rand(90, 122.5),   // 25% faster than 72-98
+        speed: rand(90, 122.5),
         stepLength: rand(20, 44),
         generation: 0,
         maxGeneration: 4
       },
       photon: {
-        speed: rand(85, 115),     // 25% faster than 68-92
+        speed: rand(85, 115),
         stepLength: rand(70, 145),
         generation: 0,
         maxGeneration: 2
@@ -105,22 +102,18 @@
     const originMode = Math.random();
     let x, y, angle;
 
-    // Wider angle range from above, plus side-born primaries that still travel downward.
     if (originMode < 0.50) {
-      // From above
       x = rand(width * 0.02, width * 0.98);
       y = -20;
-      angle = rand(Math.PI * 0.20, Math.PI * 0.80);
+      angle = rand(Math.PI * 0.30, Math.PI * 0.70);
     } else if (originMode < 0.75) {
-      // From left side, still going downward
       x = -20;
       y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.14, Math.PI * 0.42);
+      angle = rand(Math.PI * 0.16, Math.PI * 0.44);
     } else {
-      // From right side, still going downward
       x = width + 20;
       y = rand(height * 0.02, height * 0.55);
-      angle = rand(Math.PI * 0.58, Math.PI * 0.86);
+      angle = rand(Math.PI * 0.56, Math.PI * 0.84);
     }
 
     addTrack("proton", x, y, angle, familyId, {
@@ -163,7 +156,6 @@
 
   function spawnElectronChildren(track) {
     if (track.generation >= track.maxGeneration) return;
-
     const nextGeneration = track.generation + 1;
 
     addTrack(
@@ -211,7 +203,6 @@
 
   function spawnPhotonChildren(track) {
     if (track.generation >= track.maxGeneration) return;
-
     const nextGeneration = track.generation + 1;
 
     addTrack(
@@ -271,15 +262,8 @@
 
   function familyOpacity(familyId, now) {
     const family = families.get(familyId);
-
-    if (!family || family.fadeStart === null || now < family.fadeStart) {
-      return 1;
-    }
-
-    return Math.max(
-      0,
-      1 - (now - family.fadeStart) / family.fadeDuration
-    );
+    if (!family || family.fadeStart === null || now < family.fadeStart) return 1;
+    return Math.max(0, 1 - (now - family.fadeStart) / family.fadeDuration);
   }
 
   function removeFadedFamilies(now) {
@@ -290,7 +274,6 @@
         family.activeCount === 0 &&
         family.fadeStart !== null &&
         now >= family.fadeStart + family.fadeDuration;
-
       if (done) expired.push(id);
     }
 
@@ -299,20 +282,15 @@
     const expiredSet = new Set(expired);
 
     for (let i = completedTracks.length - 1; i >= 0; i--) {
-      if (expiredSet.has(completedTracks[i].familyId)) {
-        completedTracks.splice(i, 1);
-      }
+      if (expiredSet.has(completedTracks[i].familyId)) completedTracks.splice(i, 1);
     }
 
-    for (const id of expired) {
-      families.delete(id);
-    }
+    for (const id of expired) families.delete(id);
   }
 
   function update(dt, now) {
     spawnClock += dt;
 
-    // 25% higher frequency than the previous 3.8-6.0 s interval.
     if (spawnClock > rand(3.04, 4.8)) {
       spawnClock = 0;
       spawnPrimary();
@@ -326,7 +304,6 @@
 
       if (track.kind === "proton") {
         track.scatterClock -= dt;
-
         if (track.scatterClock <= 0) {
           track.angle += gaussianish() * track.scatterSigma;
           track.scatterClock = rand(0.055, 0.13);
@@ -334,7 +311,6 @@
       }
 
       const step = Math.min(track.speed * dt, track.distanceLeft);
-
       track.x += Math.cos(track.angle) * step;
       track.y += Math.sin(track.angle) * step;
       track.distanceLeft -= step;
@@ -347,11 +323,8 @@
         track.y < -margin ||
         track.y > height + margin;
 
-      if (track.distanceLeft <= 0) {
-        finishTrack(i, track, true);
-      } else if (outside) {
-        finishTrack(i, track, false);
-      }
+      if (track.distanceLeft <= 0) finishTrack(i, track, true);
+      else if (outside) finishTrack(i, track, false);
     }
 
     removeFadedFamilies(now);
@@ -364,36 +337,17 @@
     if (eventAlpha <= 0) return;
 
     const rgb = COLORS[track.kind];
-
     const baseAlpha = isActive
-      ? track.kind === "proton"
-        ? 0.90
-        : track.kind === "electron"
-          ? 0.80
-          : 0.76
-      : track.kind === "proton"
-        ? 0.76
-        : track.kind === "electron"
-          ? 0.66
-          : 0.62;
+      ? track.kind === "proton" ? 0.90 : track.kind === "electron" ? 0.80 : 0.76
+      : track.kind === "proton" ? 0.76 : track.kind === "electron" ? 0.66 : 0.62;
 
-    const lineWidth =
-      track.kind === "proton"
-        ? 1.55
-        : track.kind === "electron"
-          ? 1.15
-          : 1.05;
+    const lineWidth = track.kind === "proton" ? 1.55 : track.kind === "electron" ? 1.15 : 1.05;
 
     ctx.beginPath();
     ctx.moveTo(track.trail[0].x, track.trail[0].y);
+    for (let i = 1; i < track.trail.length; i++) ctx.lineTo(track.trail[i].x, track.trail[i].y);
 
-    for (let i = 1; i < track.trail.length; i++) {
-      ctx.lineTo(track.trail[i].x, track.trail[i].y);
-    }
-
-    ctx.strokeStyle =
-      `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${baseAlpha * eventAlpha})`;
-
+    ctx.strokeStyle = `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${baseAlpha * eventAlpha})`;
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -403,37 +357,24 @@
   function render(now) {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, width, height);
-
-    for (const track of completedTracks) {
-      drawTrack(track, now, false);
-    }
-
-    for (const track of activeTracks) {
-      drawTrack(track, now, true);
-    }
+    for (const track of completedTracks) drawTrack(track, now, false);
+    for (const track of activeTracks) drawTrack(track, now, true);
   }
 
   function frame(now) {
     const dt = Math.min(0.034, (now - last) / 1000);
     last = now;
-
-    if (!reduceMotion) {
-      update(dt, now);
-    }
-
+    if (!reduceMotion) update(dt, now);
     render(now);
     requestAnimationFrame(frame);
   }
 
   window.addEventListener("resize", resize, { passive: true });
-
   resize();
   spawnPrimary();
 
   if (reduceMotion) {
-    for (let i = 0; i < 280; i++) {
-      update(1 / 60, performance.now());
-    }
+    for (let i = 0; i < 280; i++) update(1 / 60, performance.now());
     render(performance.now());
   } else {
     requestAnimationFrame(frame);
