@@ -1,16 +1,15 @@
-Jordan Houri personal site — v93
+Jordan Houri personal site — v95
 
-RESPONSIVE FIX:
-- update responsive width before every geometry measurement
-- update responsive width explicitly on resize
-
-PANEL STYLE RESTORE:
-- rgba(12,15,26,0.5625) retained
-- backdrop blur restored to original 1px
+SCALE-INVARIANT CYLINDER:
+- gap proportional to panel width
+- 320px geometry floor removed
+- radius scales directly with rendered card width
+- perspective remains equal to radius
+- explicit 50% 50% perspective origin
 
 SHA-256:
-ae1d1d03a6c56169f91e93800435bd55d69f14ca32f3b5bbcb8fd93f6ea512d3  index.html
+15aaec85f190f3016e36c30dc170e68ff5b1d5ce67e57cb0566ab54000da0bac  index.html
 9d1203c8e35a5787fc969023aecc8760f3feda926e7b42bc64aeef1aa5307130  style.css
 5fa7c8e93dad1ac0931044971a36236631c95ce36baa5d6fe7d6d3ab0db29cba  particles.js
-cf725c41ace5b982c7baa7a32c54a572cdb9997689494e7789b63559329b2318  README.md
+4e7dd521fa37d291bec87e661222a294cd62f0eef4d2c768649964aaf64075af  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
