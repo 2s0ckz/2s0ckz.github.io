@@ -36,7 +36,7 @@
   };
 
   window.__particleDebug = particleDebug;
-  window.__particleBuild = "v50-linear-intermediate-cascades";
+  window.__particleBuild = "v52-photon-linear-max3";
 
   const rand = (a, b) => a + Math.random() * (b - a);
 
@@ -216,9 +216,9 @@
         track.familyId,
         {
           generation: 0,
-          maxGeneration: 2,
+          maxGeneration: 3,
           cascadeMode: "linear",
-          stepLength: rand(350, 725),
+          stepLength: rand(70, 140),
           speed: rand(85, 115)
         }
       );
@@ -243,7 +243,7 @@
           generation: nextGeneration,
           maxGeneration: track.maxGeneration,
           cascadeMode: "linear",
-          stepLength: rand(60, 125),
+          stepLength: rand(55, 105),
           speed: rand(85, 115)
         }
       );
@@ -252,13 +252,13 @@
         "electron",
         track.x,
         track.y,
-        track.angle + gaussianish() * 0.78,
+        track.angle + gaussianish() * 1.05,
         track.familyId,
         {
           generation: nextGeneration,
           maxGeneration: track.maxGeneration,
           cascadeMode: "linear",
-          stepLength: rand(14, 34),
+          stepLength: rand(24, 48),
           speed: Math.max(62.5, track.speed * rand(0.90, 0.98))
         }
       );
@@ -283,7 +283,7 @@
           generation: nextGeneration,
           maxGeneration: track.maxGeneration,
           cascadeMode: "linear",
-          stepLength: rand(15, 34),
+          stepLength: rand(24, 48),
           speed: rand(82.5, 110)
         }
       );
@@ -292,13 +292,13 @@
         "photon",
         track.x,
         track.y,
-        track.angle + rand(-2.5, 2.5),
+        track.angle + rand(-2.2, 2.2),
         track.familyId,
         {
           generation: nextGeneration,
           maxGeneration: track.maxGeneration,
           cascadeMode: "linear",
-          stepLength: rand(55, 115),
+          stepLength: rand(55, 105),
           speed: Math.max(57.5, track.speed * rand(0.84, 0.95))
         }
       );
@@ -484,9 +484,9 @@
           particleDebug.protonScatterVertices += 1;
 
           // Exactly one independent probability draw for this vertex.
-          // 10 successful integer values out of 1000 = 1%.
+          // 1 successful integer value out of 1000 = 0.1%.
           const scatterDraw = Math.floor(Math.random() * 1000);
-          if (scatterDraw < 10) {
+          if (scatterDraw < 1) {
             particleDebug.protonScatterEmissions += 1;
             spawnAtProtonScatter(track);
           }

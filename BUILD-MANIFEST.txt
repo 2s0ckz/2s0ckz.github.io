@@ -1,16 +1,13 @@
-Jordan Houri personal site — v50
+Jordan Houri personal site — v52
 
-Intermediate-secondary cascades:
-- proton scatter emission: 1% per vertex
-- intermediate daughter cascade mode: linear 1->1
-- electron can become photon
-- photon can become electron
-- no branching from intermediate daughter chains
-- terminal proton cascades unchanged
+Intermediate linear cascade limits:
+- electron-origin: max 5 generations
+- photon-origin: max 3 generations
+- proton intermediate emission: 0.1%
 
 SHA-256:
-dc03b2167c77f8f02772389583c0b81ed844e92164baa88bcd6390e020ec4227  index.html
+b9ad7fd7505bcb81f343b42b5c268be28d6e92e4ba8894bc9e253a9742b1f26d  index.html
 c6b2bfe4ea044bf4db90a6a194e5c33872efda553fbe8adca1a10d4fef10a931  style.css
-8dd27608b2e3b5ca37dd21ccba9643425843999a53bd3a774e0101200227065d  particles.js
-3bf47d326c6a434b568514576e91c00e144c6a9449b727391a2459838663a496  README.md
+2eacfa332265cedce187f031bf274d9cacd85a90c35fe26fd1d0b2e72b49667c  particles.js
+ebd3216bd095f44b0fbee57741771f2b2ac30905c3e4b1ca83cb3611c7b5d676  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf
