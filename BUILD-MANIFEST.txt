@@ -1,18 +1,16 @@
-Jordan Houri personal site — v22
+Jordan Houri personal site — v23
 
-Verified architecture:
-- exactly 1 ct-arc-field
-- exactly 6 background arc elements
-- 0 arc fields/elements inside content panel
-- 0 mask elements/rules
-- arcs z-index 0
-- particles z-index 1
-- content z-index 2
+Verified:
+- one background arc field
+- six total arc elements
+- first group visible initially
+- second group positioned within actual parallax travel range
+- zero arcs inside content panel
 - parallax = -0.5 * scrollY
 
 SHA-256:
-e57237a6cd7ce99adc4a11e6425ef32d0a5e0548288fd013a6acc53af513e877  index.html
+460cf44dc9779ad7c371679d01b0ff3907259b93d6b62f7108237b30d47bf87e  index.html
 9922be780869b75a3df1b1ede422cbe35c9464715fbe17f102e5decdb0ecf71e  style.css
 95fc29468a671e89191b445db8cf905ef7fe6bf4b8df1d57b25717e633ffc555  particles.js
-5f9f93317827357e5f0f7ba73ab52a735fd63c63883bf3ae016fc42b596d110c  README.md
+44644937433beba64750a8de1688dd8be1ab21acc092d60f93eb59c76dadb320  README.md
 4e078da1624ae17381a21f3caa0d3e1b67ad8b6efd953a5427458713bf6f4d04  assets/Jordan_Houri_CV.pdf

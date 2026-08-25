@@ -7,7 +7,7 @@
 <meta content="v22-single-background-arc-layer" name="site-build"/>
 <meta content="Jordan Houri — physician-scientist in training working across medical physics, radiation science, computational imaging, and spaceflight." name="description"/>
 <title>Jordan Houri</title>
-<link href="style.css?v=22" rel="stylesheet"/>
+<link href="style.css?v=23" rel="stylesheet"/>
 </head>
 <body><div aria-hidden="true" class="ct-arc-field"><div class="ct-recon-arc arc-1"></div><div class="ct-recon-arc arc-2"></div><div class="ct-recon-arc arc-3"></div><div class="ct-recon-arc arc-4"></div><div class="ct-recon-arc arc-5"></div><div class="ct-recon-arc arc-6"></div></div>
 
@@ -159,6 +159,9 @@
 </main>
 
 
+
+
+
 <script>
 (() => {
   const field = document.querySelector('.ct-arc-field');
@@ -178,25 +181,36 @@
     const panelBottomDoc = panelTopDoc + panel.offsetHeight;
     const maxScroll = Math.max(0, panelBottomDoc - vh);
 
-    // At 50% parallax, this is the full vertical range of the background field
-    // that can ever become visible while the real page scrolls.
-    const virtualHeight = vh + 0.5 * maxScroll;
+    // At 50% parallax, the field can move upward by only half the page's
+    // total scroll distance. This is the exact travel range we can use.
+    const parallaxTravel = maxScroll * 0.5;
+    const virtualHeight = vh + parallaxTravel;
 
-    // Exactly 3 motifs per 1080px band, never duplicated elsewhere.
-    // Use a second band only when the content-derived virtual height needs it.
-    const bandH = 1080;
-    const neededBands = Math.max(1, Math.min(2, Math.ceil(virtualHeight / bandH)));
-
-    // Wide size range: 80px to 400px (5:1).
+    // First three are visible near load. The next three are deliberately
+    // placed within the reachable parallax range so they enter later.
     const sizes = [400, 80, 210, 120, 300, 170];
     const x = [0.12, 0.53, 0.85, 0.22, 0.70, 0.90];
-    const localY = [0.18, 0.50, 0.80];
+
+    // Group 1 occupies the initial viewport.
+    const firstGroupY = [0.18 * vh, 0.50 * vh, 0.80 * vh];
+
+    // Group 2 is distributed across the actual reachable lower portion.
+    // If travel is short, hide this group rather than placing it beyond reach.
+    const secondStart = vh + Math.max(80, parallaxTravel * 0.18);
+    const secondEnd = vh + Math.max(120, parallaxTravel * 0.88);
+
+    const secondGroupY = [
+      secondStart,
+      secondStart + (secondEnd - secondStart) * 0.50,
+      secondEnd
+    ];
 
     arcs.forEach((arc, i) => {
-      const band = i < 3 ? 0 : 1;
-      const j = i % 3;
+      const isSecondGroup = i >= 3;
 
-      if (band >= neededBands) {
+      // Only show later arcs if there is enough real parallax travel for them
+      // to actually enter the viewport before the page ends.
+      if (isSecondGroup && parallaxTravel < 260) {
         arc.style.display = 'none';
         return;
       }
@@ -205,7 +219,7 @@
 
       let size = sizes[i];
 
-      // Preserve the large size contrast on narrower screens.
+      // Preserve the 5:1 size contrast while scaling down on narrower screens.
       const scale = Math.min(1, Math.max(0.58, vw / 1500));
       size *= scale;
 
@@ -213,9 +227,12 @@
       const r = size / 2 + echoPad;
 
       let cx = vw * x[i];
-      let cy = band * bandH + bandH * localY[j];
+      let cy = isSecondGroup ? secondGroupY[i - 3] : firstGroupY[i];
 
       cx = Math.max(r + 10, Math.min(vw - r - 10, cx));
+
+      // Make sure every later arc is still inside the reachable virtual range.
+      cy = Math.max(r + 10, Math.min(virtualHeight - r - 10, cy));
 
       arc.style.width = `${size}px`;
       arc.style.height = `${size}px`;
@@ -247,6 +264,6 @@
 })();
 </script>
 
-<script src="particles.js?v=22"></script>
+<script src="particles.js?v=23"></script>
 </body>
 </html>
