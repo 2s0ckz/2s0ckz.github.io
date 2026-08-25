@@ -29,6 +29,8 @@ html {
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   min-width: 320px;
   background: var(--page-bg);
@@ -64,13 +66,13 @@ a:focus-visible {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: -2;
   background: #000;
 }
 
 .page-shell {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   width: min(100% - 34px, 1440px);
   margin: 0 auto;
   padding: 56px 0 72px;
@@ -219,31 +221,32 @@ strong {
 }
 
 
-/* Subtle CT reconstruction arcs: intentionally restrained at ~6–10% opacity. */
+/* Subtle CT reconstruction arcs.
+   These sit above the particle canvas and below the content panel. */
 .ct-recon-arc {
   position: fixed;
-  z-index: 0;
-  width: 440px;
-  height: 440px;
+  z-index: -1;
+  width: 460px;
+  height: 460px;
   border-radius: 50%;
   pointer-events: none;
-  border: 1px solid rgba(169, 200, 200, 0.10);
+  border: 1px solid rgba(169, 200, 200, 0.11);
   box-shadow:
-    0 0 0 34px rgba(169, 200, 200, 0.08),
-    0 0 0 76px rgba(169, 200, 200, 0.065),
-    0 0 0 126px rgba(169, 200, 200, 0.050);
+    0 0 0 36px rgba(169, 200, 200, 0.09),
+    0 0 0 80px rgba(169, 200, 200, 0.075),
+    0 0 0 132px rgba(169, 200, 200, 0.060);
 }
 
 .ct-recon-arc-left {
-  left: -220px;
-  top: 110px;
+  left: -205px;
+  top: 95px;
 }
 
 .ct-recon-arc-right {
-  right: -250px;
-  bottom: 70px;
-  transform: scale(0.84);
-  opacity: 0.9;
+  right: -225px;
+  bottom: 55px;
+  transform: scale(0.86);
+  opacity: 0.95;
 }
 
 @media (max-width: 820px) {

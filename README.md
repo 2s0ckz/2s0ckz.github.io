@@ -1,16 +1,11 @@
 # Jordan Houri — GitHub Pages starter
 
-Version 6 keeps the v5 layout and particle system, and adds only subtle CT reconstruction arcs.
+Version 7 fixes the CT arc visibility.
 
-## CT theme
-- two large reconstruction-style arc/ring motifs
-- approximately 6–10% opacity
-- no voxel grid
-- no reconstruction streaks
-- particles remain the only animated visual layer
-
-## Visual system
-- page max width: 1440px
-- content panel: approximately `bone(0.05)` at 25% opacity
-- body text around `bone(0.75)`, with headings progressively lighter
-- hyperlinks around `bone(0.50)`
+## Fix
+- particle canvas moved to `z-index: -2`
+- CT arcs moved to `z-index: -1`
+- content panel remains above both layers
+- `body` now creates an isolated stacking context so the negative z-index layers remain visible above the black page background
+- arc opacity slightly increased while remaining subtle
+- cache-busting updated to `?v=7`
