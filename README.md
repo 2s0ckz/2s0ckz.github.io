@@ -1,17 +1,9 @@
 # Jordan Houri — GitHub Pages starter
 
-This revision restores a cleaner, simpler layout closer to the earlier in-place prototype while preserving the CV-based content.
+Version 5 adjusts the site to be much closer to the screenshot style:
 
-## Updated visual changes
-
-- Main overlay panel darkened to approximately `bone(0.10)` at `25%` opacity
-- Typography and section styling simplified to better match the earlier prototype
-- Page max width remains `1440px`
-- CSS/JS cache-busting updated to `?v=4`
-
-## Files
-
-- `index.html` — page content
-- `style.css` — bone-inspired visual system
-- `particles.js` — Geant4-inspired animated particle background
-- `assets/Jordan_Houri_CV.pdf` — downloadable CV
+- darker panel at approximately `bone(0.05)` with `25%` opacity
+- lighter overall font weights
+- less aggressive bolding
+- typography and spacing tuned to better match the screenshot
+- CSS/JS cache-busting updated to `?v=5`
