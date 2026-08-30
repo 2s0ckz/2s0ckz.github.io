@@ -175,7 +175,7 @@
         "electron",
         track.x,
         track.y,
-        track.angle + rand(-1.35, 1.35),
+        track.angle + rand(-0.675, 0.675),
         track.familyId,
         {
           generation: 0,
@@ -190,7 +190,7 @@
         "photon",
         track.x,
         track.y,
-        track.angle + rand(-2.1, 2.1),
+        track.angle + rand(-1.05, 1.05),
         track.familyId,
         {
           generation: 0,
